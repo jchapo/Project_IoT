@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/usuarios_menu"
+        android:enabled="true"
+        android:icon="@drawable/selector_groups"
+        android:title="Usuarios"/>
+    <item
+        android:id="@+id/sitios_menu"
+        android:enabled="true"
+        android:icon="@drawable/selector_location"
+        android:title="Sitios"/>
+    <item
+        android:id="@+id/chat_menu"
+        android:enabled="true"
+        android:icon="@drawable/ic_chat_outline"
+        android:title="Chat"/>
+    <item
+        android:id="@+id/notificaciones_menu"
+        android:enabled="true"
+        android:icon="@drawable/ic_notification_outline"
+        android:title="Notificaciones"/>
+</menu>
+
+
