@@ -2,30 +2,25 @@ package com.example.myapplication.Admin;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Admin.items.ListAdapter;
-import com.example.myapplication.Admin.items.ListElement;
 import com.example.myapplication.R;
-import com.example.myapplication.databinding.ActivityMainBinding;
+import com.example.myapplication.databinding.ActivityMainNavigationAdminBinding;
 
-import java.util.ArrayList;
-import java.util.List;
+public class MainActivity_navigation_admin extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity {
-
-    ActivityMainBinding binding;
+    ActivityMainNavigationAdminBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityMainNavigationAdminBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new UsersFragment());
 
@@ -57,5 +52,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
+        int itemId = item.getItemId();
+        if (itemId == R.id.addUser) {
+            Intent intent = new Intent(MainActivity_navigation_admin.this, MainActivity_new_user_admin.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

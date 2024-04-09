@@ -12,13 +12,13 @@
     <item
         android:id="@+id/chat_menu"
         android:enabled="true"
-        android:icon="@drawable/ic_chat_outline"
-        android:title="Chat"/>
+        android:icon="@drawable/selector_chat"
+        android:title="Chats"/>
     <item
         android:id="@+id/notificaciones_menu"
         android:enabled="true"
-        android:icon="@drawable/ic_notification_outline"
-        android:title="Notificaciones"/>
+        android:icon="@drawable/selector_notification"
+        android:title="Alertas"/>
 </menu>
 
 
