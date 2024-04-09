@@ -1,10 +1,13 @@
 package com.example.myapplication.Admin;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -50,16 +53,5 @@ public class MainActivity_navigation_admin extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout,fragment);
         fragmentTransaction.commit();
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int itemId = item.getItemId();
-        if (itemId == R.id.addUser) {
-            Intent intent = new Intent(MainActivity_navigation_admin.this, MainActivity_new_user_admin.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
