@@ -2,9 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/addUser"
-        android:icon="@drawable/ic_addperson_outline"
+        android:id="@+id/createUser"
         app:showAsAction="ifRoom"
-        android:title="Agregar usuario" />
+        android:title="CREAR" />
 
 </menu>
