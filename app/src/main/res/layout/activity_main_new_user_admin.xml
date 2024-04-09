@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             app:menu="@menu/top_app_bar_admin_crear"
             app:navigationIcon="@drawable/ic_back_outline"
-            app:title="Lista de usuarios" />
+            app:title="Crear usuario" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -43,7 +43,6 @@ public class UsersFragment extends Fragment {
         int itemId = item.getItemId();
         if (itemId == R.id.addUser) {
             Intent intent = new Intent(requireContext(), MainActivity_new_user_admin.class);
-            System.out.println("entra a iniciar la actividad");
             startActivity(intent);
             return true;
         }
@@ -73,10 +72,21 @@ public class UsersFragment extends Fragment {
         elements.add(new ListElement("#771446", "Pedro", "Administrador", "Activo"));
         elements.add(new ListElement("#175445", "Pedro", "Administrador", "Activo"));
 
-        ListAdapter listAdapter = new ListAdapter(elements, getContext());
+        ListAdapter listAdapter = new ListAdapter(elements, getContext(), new ListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(ListElement item) {
+                moveToDescription(item);
+            }
+        });
         RecyclerView recyclerView = view.findViewById(R.id.listElements);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(listAdapter);
+    }
+
+    public void moveToDescription(ListElement item){
+        Intent intent = new Intent(getContext(),DescriptionActivity.class);
+        intent.putExtra("ListElement", item);
+        startActivity(intent);
     }
 }

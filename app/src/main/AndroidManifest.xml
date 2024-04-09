@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
+
+        <activity
+            android:name=".Admin.DescriptionActivity"
+            android:exported="false"
+            android:parentActivityName=".Admin.MainActivity_navigation_admin" />
         <activity
             android:name=".Admin.MainActivity_new_user_admin"
             android:exported="false"

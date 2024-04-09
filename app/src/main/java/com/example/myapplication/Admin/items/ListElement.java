@@ -1,6 +1,21 @@
 package com.example.myapplication.Admin.items;
 
-public class ListElement {
+import java.io.Serializable;
+
+public class ListElement implements Serializable {
+    public String color;
+    public String name;
+    public String user;
+    public String status;
+
+    public ListElement(String color, String name, String user, String status) {
+        this.color = color;
+        this.name = name;
+        this.user = user;
+        this.status = status;
+    }
+
+
     public String getColor() {
         return color;
     }
@@ -33,16 +48,8 @@ public class ListElement {
         this.status = status;
     }
 
-    public ListElement(String color, String name, String user, String status) {
-        this.color = color;
-        this.name = name;
-        this.user = user;
-        this.status = status;
-    }
 
-    public String color;
-    public String name;
-    public String user;
-    public String status;
+
+
 
 }
