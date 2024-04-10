@@ -21,7 +21,8 @@
             android:id="@+id/topAppBarUsers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_back_outline" />
+            app:navigationIcon="@drawable/ic_back_outline"
+            app:title="Perfil de usuario" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -42,16 +43,25 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:src="@drawable/default_profile"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/rounded_corner" />
 
         <TextView
             android:id="@+id/fullNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nombre y apellido"
-            android:layout_marginBottom="16dp"
             android:textStyle="bold"
             android:textSize="16sp"
+
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:id="@+id/cargoTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cargo"
+            android:layout_marginBottom="16dp"
 
             android:layout_gravity="center_horizontal"/>
 
@@ -244,7 +254,7 @@
                     android:id="@+id/iconDNI"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/delete"
+                    android:src="@drawable/ic_delete_outline"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="8dp" />
 
@@ -270,9 +280,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_back_outline"
+        android:src="@drawable/ic_edit_outline"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_marginr="16dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

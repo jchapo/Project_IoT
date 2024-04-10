@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,9 +25,14 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.topAppBarUsers);
         setSupportActionBar(toolbar);
 
-        // Habilitar el botón de retroceso en el toolbar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Aquí defines la nueva actividad a la que quieres navegar
+                Intent intent = new Intent(MainActivity_new_user_admin.this, MainActivity_navigation_admin.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

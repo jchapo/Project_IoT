@@ -24,19 +24,19 @@ public class DescriptionActivity extends AppCompatActivity {
      protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_description);
+        setContentView(R.layout.activity_main_userprofile_admin);
 
         ListElement element = (ListElement) getIntent().getSerializableExtra("ListElement");
-        titleDescriptionTextView = findViewById(R.id.titleDesciptionTextView);
-        userDescriptionTextView = findViewById(R.id.userDesciptionTextView);
-        statusDescriptionTextView = findViewById(R.id.statusDesciptionTextView);
+        titleDescriptionTextView = findViewById(R.id.fullNameTextView);
+        userDescriptionTextView = findViewById(R.id.cargoTextView);
+        //statusDescriptionTextView = findViewById(R.id.statusDesciptionTextView);
 
         titleDescriptionTextView.setText(element.getName());
         titleDescriptionTextView.setTextColor(Color.parseColor(element.getColor()));
 
         userDescriptionTextView.setText(element.getUser());
-        statusDescriptionTextView.setText(element.getStatus());
-        statusDescriptionTextView.setTextColor(Color.GREEN);
+        //statusDescriptionTextView.setText(element.getStatus());
+        //statusDescriptionTextView.setTextColor(Color.GREEN);
 
     }
 }
