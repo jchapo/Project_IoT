@@ -21,9 +21,6 @@
             android:name=".Admin.MainActivity_edit_user_admin"
             android:exported="false" />
 
-        <activity
-            android:name=".Admin.DescriptionActivity"
-            android:exported="false"/>
 
         <activity
             android:name=".Admin.MainActivity_new_user_admin"

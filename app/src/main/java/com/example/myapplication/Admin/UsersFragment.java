@@ -63,14 +63,27 @@ public class UsersFragment extends Fragment {
 
     public void init(View view) {
         elements = new ArrayList<>();
-        elements.add(new ListElement("#6744d7", "Pedro", "Administrador", "Activo"));
-        elements.add(new ListElement("#6744d7", "Pedro", "Administrador", "Activo"));
-        elements.add(new ListElement("#445447", "Pedro", "Administrador", "Activo"));
-        elements.add(new ListElement("#772647", "Pedro", "Administrador", "Activo"));
-        elements.add(new ListElement("#793447", "Pedro", "Administrador", "Activo"));
-        elements.add(new ListElement("#275447", "Pedro", "Administrador", "Activo"));
-        elements.add(new ListElement("#771446", "Pedro", "Administrador", "Activo"));
-        elements.add(new ListElement("#175445", "Pedro", "Administrador", "Activo"));
+        elements.add(new ListElement("74567890", "Pedro", "Administrador", "Activo", "pedro_correo@gmail.com","978675678", "Calle Manzana"));
+        elements.add(new ListElement("72903456", "Ana", "Supervisor", "Activo", "ana_correo@gmail.com","934567890", "Avenida Central"));
+        elements.add(new ListElement("70234567", "Juan", "Administrador", "Activo", "juan_correo@gmail.com","956783421", "Calle Primavera"));
+        elements.add(new ListElement("71234567", "María", "Supervisor", "Activo", "maria_correo@gmail.com","911234567", "Calle San José"));
+        elements.add(new ListElement("79908765", "Carlos", "Administrador", "Activo", "carlos_correo@gmail.com","978564321", "Avenida Libertad"));
+        elements.add(new ListElement("74895673", "Laura", "Supervisor", "Activo", "laura_correo@gmail.com","923456789", "Calle del Sol"));
+        elements.add(new ListElement("71234567", "Roberto", "Administrador", "Activo", "roberto_correo@gmail.com","989765432", "Avenida del Parque"));
+        elements.add(new ListElement("75789234", "Sofía", "Supervisor", "Activo", "sofia_correo@gmail.com","957684321", "Calle de la Luna"));
+        elements.add(new ListElement("72543019", "Fernando", "Administrador", "Activo", "fernando_correo@gmail.com","978932156", "Avenida Central"));
+        elements.add(new ListElement("70987654", "Ana", "Supervisor", "Activo", "ana_correo@gmail.com","976543218", "Calle de las Flores"));
+        elements.add(new ListElement("74891230", "Elena", "Administrador", "Activo", "elena_correo@gmail.com","923456789", "Avenida de la Paz"));
+        elements.add(new ListElement("71234567", "David", "Supervisor", "Activo", "david_correo@gmail.com","934567890", "Avenida del Bosque"));
+        elements.add(new ListElement("75678901", "Lucía", "Administrador", "Activo", "lucia_correo@gmail.com","956783421", "Calle del Río"));
+        elements.add(new ListElement("70234567", "Andrés", "Supervisor", "Activo", "andres_correo@gmail.com","911234567", "Calle de la Montaña"));
+        elements.add(new ListElement("79908765", "Marta", "Administrador", "Activo", "marta_correo@gmail.com","978564321", "Avenida de la Costa"));
+        elements.add(new ListElement("74895673", "Raquel", "Supervisor", "Activo", "raquel_correo@gmail.com","923456789", "Calle del Mar"));
+        elements.add(new ListElement("71234567", "José", "Administrador", "Activo", "jose_correo@gmail.com","989765432", "Avenida del Lago"));
+        elements.add(new ListElement("75789234", "Laura", "Supervisor", "Activo", "laura_correo@gmail.com","957684321", "Calle de la Playa"));
+        elements.add(new ListElement("72543019", "Isabel", "Administrador", "Activo", "isabel_correo@gmail.com","978932156", "Avenida del Sol"));
+        elements.add(new ListElement("70987654", "Roberto", "Supervisor", "Activo", "roberto_correo@gmail.com","976543218", "Calle de la Arena"));
+
 
         ListAdapter listAdapter = new ListAdapter(elements, getContext(), new ListAdapter.OnItemClickListener() {
             @Override
@@ -85,7 +98,7 @@ public class UsersFragment extends Fragment {
     }
 
     public void moveToDescription(ListElement item){
-        Intent intent = new Intent(getContext(),DescriptionActivity.class);
+        Intent intent = new Intent(getContext(),MainActivity_userprofile_admin.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);
     }

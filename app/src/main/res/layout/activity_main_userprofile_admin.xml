@@ -137,35 +137,82 @@
                 tools:layout_editor_absoluteX="176dp"
                 tools:layout_editor_absoluteY="234dp" />
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textViewDNI"
-                    android:layout_width="match_parent"
+                    android:id="@+id/textViewDNI1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="DNI" />
 
                 <TextView
-                    android:id="@+id/textViewMail"
-                    android:layout_width="match_parent"
+                    android:id="@+id/textViewDNI"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="DNI"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewMail1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Mail" />
 
                 <TextView
-                    android:id="@+id/textViewAddress"
-                    android:layout_width="match_parent"
+                    android:id="@+id/textViewMail"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="Mail"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewAddress1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Dirección" />
 
                 <TextView
-                    android:id="@+id/textViewPhone"
-                    android:layout_width="match_parent"
+                    android:id="@+id/textViewAddress"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="Dirección"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewPhone1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Teléfono" />
 
+                <TextView
+                    android:id="@+id/textViewPhone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="Teléfono"/>
             </LinearLayout>
 
 

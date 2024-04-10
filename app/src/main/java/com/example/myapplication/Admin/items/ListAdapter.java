@@ -54,7 +54,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView iconImage;
-        TextView name, user, status;
+        TextView name, user, status, dni;
 
         ViewHolder(View itemView){
             super(itemView);
@@ -65,7 +65,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         }
 
         void bindData(final ListElement item){
-            iconImage.setColorFilter(Color.parseColor(item.getColor()), PorterDuff.Mode.SRC_IN);
             name.setText(item.getName());
             user.setText(item.getUser());
             status.setText(item.getStatus());
