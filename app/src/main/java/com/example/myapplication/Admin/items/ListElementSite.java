@@ -11,11 +11,18 @@ public class ListElementSite implements Serializable {
     public String ubigeo;
     public String zonetype;
     public String sitetype;
+
     public String name;
     public String status;
 
+    private String latitud;
 
-    public ListElementSite(String department, String name, String status, String province, String district, String address, String location, String ubigeo, String zonetype, String sitetype) {
+    private String longitud;
+
+
+    public ListElementSite(String department, String name, String status, String province,
+                           String district, String address, String location, String ubigeo,
+                           String zonetype, String sitetype, String latitud, String longitud) {
         this.department = department;
         this.province = province;
         this.district = district;
@@ -26,6 +33,8 @@ public class ListElementSite implements Serializable {
         this.sitetype = sitetype;
         this.name = name;
         this.status = status;
+        this.setLatitud(latitud);
+        this.setLongitud(longitud);
     }
 
 
@@ -107,5 +116,21 @@ public class ListElementSite implements Serializable {
 
     public void setSitetype(String sitetype) {
         this.sitetype = sitetype;
+    }
+
+    public String getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(String latitud) {
+        this.latitud = latitud;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
     }
 }

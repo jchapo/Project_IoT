@@ -13,8 +13,12 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
-            android:name=".Supervisor.NavegacionSupervisor"
+            android:name=".Supervisor.SitiosFragment"
             android:exported="false" />
+        <activity
+            android:name=".Supervisor.NavegacionSupervisor"
+            android:exported="true" >
+        </activity>
         <activity
             android:name=".NavegacionInicial"
             android:exported="true">
@@ -43,8 +47,7 @@
         <activity
             android:name=".Admin.MainActivity_new_user_admin"
             android:exported="false"
-            android:parentActivityName=".Admin.MainActivity_navigation_admin"
-            />
+            android:parentActivityName=".Admin.MainActivity_navigation_admin" />
         <activity
             android:name=".Admin.MainActivity_navigation_admin"
             android:exported="false">
