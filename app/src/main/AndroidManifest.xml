@@ -42,9 +42,9 @@
             android:exported="false" />
         <activity
             android:name=".Admin.MainActivity_new_user_admin"
-            android:exported="false" />
             android:exported="false"
-            android:parentActivityName=".Admin.MainActivity_navigation_admin"/>
+            android:parentActivityName=".Admin.MainActivity_navigation_admin"
+            />
         <activity
             android:name=".Admin.MainActivity_navigation_admin"
             android:exported="false">
