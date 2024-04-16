@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_theme_background"
-    tools:context=".Admin.UsersFragment">
+    tools:context=".Admin.SitesFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,24 +17,40 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/md_theme_inverseOnSurface"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBarUsers"
+                android:id="@+id/topAppBarSite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                android:visibility="visible"
+                android:minHeight="?attr/actionBarSize"
                 app:menu="@menu/top_app_bar_admin_sites"
                 app:title="Lista de sitios" />
 
-            <com.google.android.material.search.SearchBar
-                android:id="@+id/search_bar"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:hint="Buscar" />
+                app:layout_constraintTop_toBottomOf="@id/topAppBarSite"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.tabs.TabItem
+                    android:text="Activos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:text="Inactivos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.tabs.TabLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -48,6 +64,17 @@
             app:layout_constraintVertical_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/appBarLayout"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/agregarSitiofloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_locationadd_outline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="Agregar" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
