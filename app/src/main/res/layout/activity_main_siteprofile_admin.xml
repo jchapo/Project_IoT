@@ -7,18 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".Admin.MainActivity_siteprofile_admin">
 
-    <androidx.constraintlayout.helper.widget.Layer
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="appBarLayout" />
-
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+        android:id="@+id/appBarLayoutSite"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/md_theme_inverseOnSurface"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"            app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -26,24 +21,22 @@
             android:id="@+id/topAppBarSitePerfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/top_app_bar_admin_sites_2"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="16dp"
-            app:navigationIcon="@drawable/ic_back_outline"
-            />
-
+            android:background="?attr/colorPrimary"
+            android:visibility="visible"
+            android:minHeight="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_back_outline_white" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:id="@+id/encabezadoLinearLayout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
+        app:layout_constraintTop_toBottomOf="@id/appBarLayoutSite">
+
 
         <ImageView
             android:id="@+id/imageViewProfile"
@@ -91,21 +84,29 @@
             </LinearLayout>
 
             <ImageButton
-                android:id="@+id/button"
+                android:id="@+id/buttonImagesSite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
 
                 android:background="@color/white"
                 android:layout_gravity="center"
+                android:src="@drawable/ic_photo_outline" />
+
+            <ImageButton
+                android:id="@+id/buttonMapSite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                android:layout_margin="16dp"
+                android:layout_weight="1"
+                android:background="@color/white"
                 android:src="@drawable/ic_map_outline" />
 
 
         </LinearLayout>
 
     </LinearLayout>
-
-
 
     <!-- Divider -->
     <View
@@ -128,12 +129,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
-
-
-
-
-
-
 
             <TextView
                 android:id="@+id/textViewDevider2"
@@ -251,7 +246,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="start"
+                app:layout_constraintStart_toStartOf="parent">
 
                 <ImageView
                     android:id="@+id/iconDNI"
@@ -259,19 +256,27 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_delete_outline"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="8dp" />
-
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="showConfirmationDialog" />
 
                 <TextView
                     android:id="@+id/deleteUser"
-                    android:layout_width="0dp"
-                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:textColor="@color/md_theme_error"
-                    android:text="Inhabilitar sitio"/>
+                    android:text="Inhabilitar sitio"
+                    android:padding="8dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:layout_gravity="center_vertical"
+                    android:focusable="true"
+                    android:onClick="showConfirmationDialog"
+                    android:gravity="start" />
 
             </LinearLayout>
+
+
 
         </LinearLayout>
 
