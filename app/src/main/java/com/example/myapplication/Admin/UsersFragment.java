@@ -17,15 +17,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Admin.items.ListAdapter;
-import com.example.myapplication.Admin.items.ListElement;
+import com.example.myapplication.Admin.items.ListAdapterUser;
+import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsersFragment extends Fragment {
-    List<ListElement> elements;
+    List<ListElementUser> elements;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,11 +42,6 @@ public class UsersFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.addUser) {
-            Intent intent = new Intent(requireContext(), MainActivity_new_user_admin.class);
-            startActivity(intent);
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -58,46 +54,52 @@ public class UsersFragment extends Fragment {
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         init(view);
+        FloatingActionButton agregarUsuarioButton = view.findViewById(R.id.agregarUsuariofloatingActionButton);
+        agregarUsuarioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Aquí cambia "NuevaActividad" por la clase de la actividad a la que deseas cambiar
+                Intent intent = new Intent(getActivity(), MainActivity_new_user_admin.class);
+                startActivity(intent);
+            }
+        });
+
+
         return view;
     }
 
     public void init(View view) {
         elements = new ArrayList<>();
-        elements.add(new ListElement("74567890", "Pedro", "Administrador", "Activo", "pedro_correo@gmail.com","978675678", "Calle Manzana"));
-        elements.add(new ListElement("72903456", "Ana", "Supervisor", "Activo", "ana_correo@gmail.com","934567890", "Avenida Central"));
-        elements.add(new ListElement("70234567", "Juan", "Administrador", "Activo", "juan_correo@gmail.com","956783421", "Calle Primavera"));
-        elements.add(new ListElement("71234567", "María", "Supervisor", "Activo", "maria_correo@gmail.com","911234567", "Calle San José"));
-        elements.add(new ListElement("79908765", "Carlos", "Administrador", "Activo", "carlos_correo@gmail.com","978564321", "Avenida Libertad"));
-        elements.add(new ListElement("74895673", "Laura", "Supervisor", "Activo", "laura_correo@gmail.com","923456789", "Calle del Sol"));
-        elements.add(new ListElement("71234567", "Roberto", "Administrador", "Activo", "roberto_correo@gmail.com","989765432", "Avenida del Parque"));
-        elements.add(new ListElement("75789234", "Sofía", "Supervisor", "Activo", "sofia_correo@gmail.com","957684321", "Calle de la Luna"));
-        elements.add(new ListElement("72543019", "Fernando", "Administrador", "Activo", "fernando_correo@gmail.com","978932156", "Avenida Central"));
-        elements.add(new ListElement("70987654", "Ana", "Supervisor", "Activo", "ana_correo@gmail.com","976543218", "Calle de las Flores"));
-        elements.add(new ListElement("74891230", "Elena", "Administrador", "Activo", "elena_correo@gmail.com","923456789", "Avenida de la Paz"));
-        elements.add(new ListElement("71234567", "David", "Supervisor", "Activo", "david_correo@gmail.com","934567890", "Avenida del Bosque"));
-        elements.add(new ListElement("75678901", "Lucía", "Administrador", "Activo", "lucia_correo@gmail.com","956783421", "Calle del Río"));
-        elements.add(new ListElement("70234567", "Andrés", "Supervisor", "Activo", "andres_correo@gmail.com","911234567", "Calle de la Montaña"));
-        elements.add(new ListElement("79908765", "Marta", "Administrador", "Activo", "marta_correo@gmail.com","978564321", "Avenida de la Costa"));
-        elements.add(new ListElement("74895673", "Raquel", "Supervisor", "Activo", "raquel_correo@gmail.com","923456789", "Calle del Mar"));
-        elements.add(new ListElement("71234567", "José", "Administrador", "Activo", "jose_correo@gmail.com","989765432", "Avenida del Lago"));
-        elements.add(new ListElement("75789234", "Laura", "Supervisor", "Activo", "laura_correo@gmail.com","957684321", "Calle de la Playa"));
-        elements.add(new ListElement("72543019", "Isabel", "Administrador", "Activo", "isabel_correo@gmail.com","978932156", "Avenida del Sol"));
-        elements.add(new ListElement("70987654", "Roberto", "Supervisor", "Activo", "roberto_correo@gmail.com","976543218", "Calle de la Arena"));
+        elements.add(new ListElementUser("74567890", "Pedro", "Suares","Administrador", "Activo", "pedro_correo@gmail.com","978675678", "Calle Manzana"));
+        elements.add(new ListElementUser("72903456", "Ana", "Suares","Supervisor", "Activo", "ana_correo@gmail.com","934567890", "Avenida Central"));
+        elements.add(new ListElementUser("70234567", "Juan","Suares", "Administrador", "Activo", "juan_correo@gmail.com","956783421", "Calle Primavera"));
+        elements.add(new ListElementUser("71234567", "María","Suares", "Supervisor", "Activo", "maria_correo@gmail.com","911234567", "Calle San José"));
+        elements.add(new ListElementUser("79908765", "Carlos", "Suares","Administrador", "Activo", "carlos_correo@gmail.com","978564321", "Avenida Libertad"));
+        elements.add(new ListElementUser("74895673", "Laura", "Suares","Supervisor", "Activo", "laura_correo@gmail.com","923456789", "Calle del Sol"));
+        elements.add(new ListElementUser("71234567", "Roberto","Suares", "Administrador", "Activo", "roberto_correo@gmail.com","989765432", "Avenida del Parque"));
+        elements.add(new ListElementUser("75789234", "Sofía", "Suares","Supervisor", "Activo", "sofia_correo@gmail.com","957684321", "Calle de la Luna"));
+        elements.add(new ListElementUser("72543019", "Fernando","Suares", "Administrador", "Activo", "fernando_correo@gmail.com","978932156", "Avenida Central"));
+        elements.add(new ListElementUser("70987654", "Ana","Suares", "Supervisor", "Activo", "ana_correo@gmail.com","976543218", "Calle de las Flores"));
+        elements.add(new ListElementUser("74891230", "Elena","Suares", "Administrador", "Activo", "elena_correo@gmail.com","923456789", "Avenida de la Paz"));
+        elements.add(new ListElementUser("71234567", "David","Suares", "Supervisor", "Activo", "david_correo@gmail.com","934567890", "Avenida del Bosque"));
+        elements.add(new ListElementUser("75678901", "Lucía", "Suares","Administrador", "Activo", "lucia_correo@gmail.com","956783421", "Calle del Río"));
+        elements.add(new ListElementUser("70234567", "Andrés", "Suares","Supervisor", "Activo", "andres_correo@gmail.com","911234567", "Calle de la Montaña"));
+        elements.add(new ListElementUser("79908765", "Marta", "Suares","Administrador", "Activo", "marta_correo@gmail.com","978564321", "Avenida de la Costa"));
+        elements.add(new ListElementUser("74895673", "Raquel", "Suares","Supervisor", "Activo", "raquel_correo@gmail.com","923456789", "Calle del Mar"));
+        elements.add(new ListElementUser("71234567", "José","Suares", "Administrador", "Activo", "jose_correo@gmail.com","989765432", "Avenida del Lago"));
+        elements.add(new ListElementUser("75789234", "Laura", "Suares","Supervisor", "Activo", "laura_correo@gmail.com","957684321", "Calle de la Playa"));
+        elements.add(new ListElementUser("72543019", "Isabel", "Suares","Administrador", "Activo", "isabel_correo@gmail.com","978932156", "Avenida del Sol"));
+        elements.add(new ListElementUser("70987654", "Roberto", "Suares","Supervisor", "Activo", "roberto_correo@gmail.com","976543218", "Calle de la Arena"));
 
 
-        ListAdapter listAdapter = new ListAdapter(elements, getContext(), new ListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(ListElement item) {
-                moveToDescription(item);
-            }
-        });
+        ListAdapterUser listAdapter = new ListAdapterUser(elements, getContext(), item -> moveToDescription(item));
         RecyclerView recyclerView = view.findViewById(R.id.listElements);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(listAdapter);
     }
 
-    public void moveToDescription(ListElement item){
+    public void moveToDescription(ListElementUser item){
         Intent intent = new Intent(getContext(),MainActivity_userprofile_admin.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);

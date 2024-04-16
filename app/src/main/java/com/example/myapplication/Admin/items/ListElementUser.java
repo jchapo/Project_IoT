@@ -2,8 +2,9 @@ package com.example.myapplication.Admin.items;
 
 import java.io.Serializable;
 
-public class ListElement implements Serializable {
+public class ListElementUser implements Serializable {
     public String name;
+    public String lastname;
     public String user;
     public String status;
     public String dni;
@@ -12,14 +13,23 @@ public class ListElement implements Serializable {
     public String address;
 
 
-    public ListElement(String dni, String name, String user, String status, String mail, String phone, String address) {
+    public ListElementUser(String dni, String name, String lastname, String user, String status, String mail, String phone, String address) {
         this.dni = dni;
         this.name = name;
+        this.lastname = lastname;
         this.user = user;
         this.status = status;
         this.mail = mail;
         this.phone = phone;
         this.address = address;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getPhone() {
