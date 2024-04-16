@@ -1,8 +1,6 @@
 package com.example.myapplication.Admin.items;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +13,17 @@ import com.example.myapplication.R;
 
 import java.util.List;
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
-    private List<ListElement> nData;
+public class ListAdapterUser extends RecyclerView.Adapter<ListAdapterUser.ViewHolder> {
+    private List<ListElementUser> nData;
     private LayoutInflater nInflater;
     private Context context;
-    final ListAdapter.OnItemClickListener listener;
+    final ListAdapterUser.OnItemClickListener listener;
 
     public interface  OnItemClickListener{
-        void onItemClick(ListElement item);
+        void onItemClick(ListElementUser item);
     }
 
-    public ListAdapter(List<ListElement> itemList, Context context, ListAdapter.OnItemClickListener listener) {
+    public ListAdapterUser(List<ListElementUser> itemList, Context context, ListAdapterUser.OnItemClickListener listener) {
         this.nInflater = LayoutInflater.from(context);
         this.context = context;
         this.nData = itemList;
@@ -34,27 +32,28 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public int getItemCount(){
+
         return nData.size();
     }
 
     @Override
-    public ListAdapter.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
+    public ListAdapterUser.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
         View view = nInflater.inflate(R.layout.lista_usuasios_admin, null);
-        return new ListAdapter.ViewHolder(view);
+        return new ListAdapterUser.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ListAdapter.ViewHolder holder, final int position){
+    public void onBindViewHolder(final ListAdapterUser.ViewHolder holder, final int position){
         holder.bindData(nData.get(position));
     }
 
-    public void setItems(List<ListElement> items) {
+    public void setItems(List<ListElementUser> items) {
         nData = items;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView iconImage;
-        TextView name, user, status, dni;
+        TextView name, user, status;
 
         ViewHolder(View itemView){
             super(itemView);
@@ -64,8 +63,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             status = itemView.findViewById(R.id.statusTextView);
         }
 
-        void bindData(final ListElement item){
-            name.setText(item.getName());
+        void bindData(final ListElementUser item){
+            String fullName = item.getName() + " " + item.getLastname();
+            name.setText(fullName);
             user.setText(item.getUser());
             status.setText(item.getStatus());
             itemView.setOnClickListener(new View.OnClickListener() {
