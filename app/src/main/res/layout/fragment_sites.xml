@@ -29,7 +29,6 @@
                 android:background="?attr/colorPrimary"
                 android:visibility="visible"
                 android:minHeight="?attr/actionBarSize"
-                app:menu="@menu/top_app_bar_admin_sites_2"
                 app:title="Lista de sitios" />
 
             <com.google.android.material.tabs.TabLayout

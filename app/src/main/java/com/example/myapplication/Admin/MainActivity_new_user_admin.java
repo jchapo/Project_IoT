@@ -28,9 +28,9 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
         editAddress = findViewById(R.id.editAddress);
         editPhone = findViewById(R.id.editPhone);
 
-        MaterialToolbar topAppBar = findViewById(R.id.topAppBarUsers);
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewUser);
         topAppBar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.createUser) {
+            if (item.getItemId() == R.id.createNewUser) {
                 if (areFieldsEmpty()) {
                     Toast.makeText(MainActivity_new_user_admin.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
                 } else {
@@ -61,19 +61,8 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_app_bar_admin_crear, menu);
+        getMenuInflater().inflate(R.menu.top_app_bar_admin_new_user, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            // Manejar el clic en el botón de navegación (en este caso, la flecha hacia atrás)
-            finish();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
     }
 
     private boolean areFieldsEmpty() {
