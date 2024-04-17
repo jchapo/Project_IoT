@@ -44,9 +44,7 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Aquí defines la nueva actividad a la que quieres navegar
-                Intent intent = new Intent(MainActivity_siteprofile_admin.this, MainActivity_navigation_admin.class);
-                startActivity(intent);
+                finish();
             }
         });
     }

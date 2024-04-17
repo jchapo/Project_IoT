@@ -40,15 +40,13 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
         phoneDescriptionTextView.setText(element.getPhone());
         addressDescriptionTextView.setText(element.getAddress());
 
-        Toolbar toolbar = findViewById(R.id.topAppBarUsersPerfil);
+        Toolbar toolbar = findViewById(R.id.topAppBarUserPerfil);
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Aquí defines la nueva actividad a la que quieres navegar
-                Intent intent = new Intent(MainActivity_userprofile_admin.this, MainActivity_navigation_admin.class);
-                startActivity(intent);
+                finish();
             }
         });
     }

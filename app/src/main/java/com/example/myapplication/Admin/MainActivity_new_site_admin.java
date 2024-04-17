@@ -3,19 +3,29 @@ package com.example.myapplication.Admin;
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.Admin.items.ListElementUser;
+import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.util.Locale;
+
 public class MainActivity_new_site_admin extends AppCompatActivity {
+
+    private EditText editDepartment, editProvince, editDistrict, editAddress, editUbigeo, editZoneType, editSiteType, editSiteLatitud, editSiteLongitud;
+    TextInputEditText textField = findViewById(R.id.editUbigeo);
+
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
@@ -25,29 +35,41 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_new_site_admin);
 
-        imageView = findViewById(R.id.imageViewProfile);
-
-        // Abre el navegador de archivos cuando se hace clic en la imagen
+        imageView = findViewById(R.id.imageViewNewSite);
         imageView.setOnClickListener(v -> openFileChooser());
 
-        MaterialToolbar topAppBar = findViewById(R.id.topAppBarSites);
+        editDepartment = findViewById(R.id.editDepartment);
+        editProvince = findViewById(R.id.editProvince);
+        editDistrict = findViewById(R.id.editDistrict);
+        editAddress = findViewById(R.id.editAddress);
+        editUbigeo = findViewById(R.id.editUbigeo);
+        editZoneType = findViewById(R.id.editZoneType);
+        editSiteType = findViewById(R.id.editSiteType);
+        editSiteLatitud = findViewById(R.id.editSiteType);
+        editSiteLongitud = findViewById(R.id.editSiteType);
+
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewSite);
         topAppBar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.createSite) {
+            if (item.getItemId() == R.id.createNewSite) {
                 if (areFieldsEmpty()) {
-                    Toast.makeText(MainActivity_new_user_admin.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity_new_site_admin.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
                 } else {
-                    String firstName = editFirstName.getText().toString();
-                    String lastName = editLastName.getText().toString();
-                    String dni = editDNI.getText().toString();
-                    String mail = editMail.getText().toString();
+                    String department = editDepartment.getText().toString();
+                    String province = editProvince.getText().toString();
+                    String district = editDistrict.getText().toString();
                     String address = editAddress.getText().toString();
-                    String phone = editPhone.getText().toString();
-                    String user = "Supervisor";
+                    String ubigeo = editUbigeo.getText().toString();
+                    String zonetype = editZoneType.getText().toString();
+                    String sitetype = editSiteType.getText().toString();
+                    String name = "NombreGeneradoAutomáticamente";
+                    String latitud = "NombreGeneradoAutomáticamente";
+                    String name2 = "NombreGeneradoAutomáticamente";
+                    String longitud = "Activo";
                     String status = "Activo";
 
-                    ListElementUser listElement = new ListElementUser(dni, firstName, lastName, user,status, mail, phone, address);
-
-                    Intent intent = new Intent(MainActivity_new_user_admin.this, MainActivity_userprofile_admin.class);
+                    ListElementSite listElement = new ListElementSite(department,name2, status, province, district, address,  ubigeo, zonetype, sitetype, latitud, longitud);
+                    
+                    Intent intent = new Intent(MainActivity_new_site_admin.this, MainActivity_siteprofile_admin.class);
                     intent.putExtra("ListElement", listElement);
                     startActivity(intent);
                 }
@@ -79,11 +101,16 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
     }
 
     private boolean areFieldsEmpty() {
-        return editFirstName.getText().toString().isEmpty() ||
-                editLastName.getText().toString().isEmpty() ||
-                editDNI.getText().toString().isEmpty() ||
-                editMail.getText().toString().isEmpty() ||
+        return editDepartment.getText().toString().isEmpty() ||
+                editProvince.getText().toString().isEmpty() ||
+                editDistrict.getText().toString().isEmpty() ||
                 editAddress.getText().toString().isEmpty() ||
-                editPhone.getText().toString().isEmpty();
+                editUbigeo.getText().toString().isEmpty() ||
+                editZoneType.getText().toString().isEmpty() ||
+                editSiteType.getText().toString().isEmpty();
     }
+
+
+
+
 }

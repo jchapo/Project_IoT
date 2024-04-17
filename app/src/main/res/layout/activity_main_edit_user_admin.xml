@@ -18,7 +18,7 @@ tools:context=".Admin.MainActivity_edit_user_admin">
 
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBarUsers"
+        android:id="@+id/topAppBarEditUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:menu="@menu/top_app_bar_admin_editar"

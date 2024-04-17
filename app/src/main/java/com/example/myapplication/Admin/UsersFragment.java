@@ -50,7 +50,7 @@ public class UsersFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_users, container, false);
-        Toolbar toolbar = view.findViewById(R.id.topAppBarUsers);
+        Toolbar toolbar = view.findViewById(R.id.topAppBarUserFragment);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         init(view);
