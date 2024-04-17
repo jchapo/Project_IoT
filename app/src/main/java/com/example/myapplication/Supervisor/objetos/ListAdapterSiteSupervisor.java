@@ -1,5 +1,4 @@
-package com.example.myapplication.Admin.items;
-
+package com.example.myapplication.Supervisor.objetos;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,21 +8,24 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.example.myapplication.Supervisor.objetos.ListAdapterSiteSupervisor;
+import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
 
 import java.util.List;
+public class ListAdapterSiteSupervisor extends RecyclerView.Adapter<ListAdapterSiteSupervisor.ViewHolder>{
 
-public class ListAdapterSite extends RecyclerView.Adapter<ListAdapterSite.ViewHolder> {
     private List<ListElementSite> nData;
     private LayoutInflater nInflater;
     private Context context;
-    final ListAdapterSite.OnItemClickListener listener;
+    final ListAdapterSiteSupervisor.OnItemClickListener listener;
 
     public interface  OnItemClickListener{
         void onItemClick(ListElementSite item);
     }
 
-    public ListAdapterSite(List<ListElementSite> itemList, Context context, ListAdapterSite.OnItemClickListener listener) {
+    public ListAdapterSiteSupervisor(List<ListElementSite> itemList, Context context, ListAdapterSiteSupervisor.OnItemClickListener listener) {
         this.nInflater = LayoutInflater.from(context);
         this.context = context;
         this.nData = itemList;
@@ -36,13 +38,13 @@ public class ListAdapterSite extends RecyclerView.Adapter<ListAdapterSite.ViewHo
     }
 
     @Override
-    public ListAdapterSite.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
-        View view = nInflater.inflate(R.layout.lista_sitios_admin, null);
-        return new ListAdapterSite.ViewHolder(view);
+    public ListAdapterSiteSupervisor.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_sitios_supervisor, parent, false);
+        return new ListAdapterSiteSupervisor.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ListAdapterSite.ViewHolder holder, final int position){
+    public void onBindViewHolder(final ListAdapterSiteSupervisor.ViewHolder holder, final int position){
         holder.bindDataSite(nData.get(position));
     }
 
@@ -52,23 +54,21 @@ public class ListAdapterSite extends RecyclerView.Adapter<ListAdapterSite.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView iconImage;
-        TextView name, direction, status;
+        TextView name, direction,tipositio;
 
         ViewHolder(View itemView){
             super(itemView);
             iconImage = itemView.findViewById(R.id.iconImageViewSite);
             name = itemView.findViewById(R.id.nameTextViewSite);
             direction = itemView.findViewById(R.id.directionTextViewSite);
-            status = itemView.findViewById(R.id.statusTextViewSite);
-
+            tipositio = itemView.findViewById(R.id.tipoSitioTextViewSite);
         }
 
         void bindDataSite(final ListElementSite item){
             String fullDirection = item.getDepartment() + " " + item.getProvince() + " " + item.getDistrict();
             direction.setText(fullDirection);
             name.setText(item.getName());
-            status.setText(item.getStatus());
-
+            tipositio.setText(item.getSitetype());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -78,5 +78,4 @@ public class ListAdapterSite extends RecyclerView.Adapter<ListAdapterSite.ViewHo
 
         }
     }
-
 }
