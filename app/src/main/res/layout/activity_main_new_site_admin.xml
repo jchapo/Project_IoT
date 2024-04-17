@@ -105,6 +105,8 @@
                     android:visibility="invisible"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/iconProvince"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
@@ -188,24 +190,21 @@
                     android:layout_marginEnd="8dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editUbigeo2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_pindrop_outline_black"
+                    app:endIconContentDescription="Elegir coordenadas">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editUbigeo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
-                        android:layout_marginEnd="8dp"
                         android:hint="Coordenadas" />
                 </com.google.android.material.textfield.TextInputLayout>
-                <Button
-                    android:id="@+id/btnSelectLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Seleccionar ubicación"
-                    android:onClick="openGoogleMaps" />
 
             </LinearLayout>
             <LinearLayout

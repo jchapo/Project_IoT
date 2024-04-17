@@ -3,9 +3,11 @@ package com.example.myapplication.Admin;
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -21,7 +23,9 @@ import java.util.Locale;
 
 public class MainActivity_new_site_admin extends AppCompatActivity {
 
-    private EditText editDepartment, editProvince, editDistrict, editAddress, editUbigeo, editZoneType, editSiteType;
+    private EditText editDepartment, editProvince, editDistrict, editAddress, editUbigeo, editZoneType, editSiteType, editSiteLatitud, editSiteLongitud;
+    TextInputEditText textField = findViewById(R.id.editUbigeo);
+
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
@@ -41,6 +45,8 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         editUbigeo = findViewById(R.id.editUbigeo);
         editZoneType = findViewById(R.id.editZoneType);
         editSiteType = findViewById(R.id.editSiteType);
+        editSiteLatitud = findViewById(R.id.editSiteType);
+        editSiteLongitud = findViewById(R.id.editSiteType);
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewSite);
         topAppBar.setOnMenuItemClickListener(item -> {
@@ -52,14 +58,16 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
                     String province = editProvince.getText().toString();
                     String district = editDistrict.getText().toString();
                     String address = editAddress.getText().toString();
-                    String location = "location";
                     String ubigeo = editUbigeo.getText().toString();
                     String zonetype = editZoneType.getText().toString();
                     String sitetype = editSiteType.getText().toString();
                     String name = "NombreGeneradoAutomáticamente";
+                    String latitud = "NombreGeneradoAutomáticamente";
+                    String name2 = "NombreGeneradoAutomáticamente";
+                    String longitud = "Activo";
                     String status = "Activo";
 
-                    ListElementSite listElement = new ListElementSite(department, province, district, address, location,  ubigeo, zonetype, sitetype,name, status);
+                    ListElementSite listElement = new ListElementSite(department,name2, status, province, district, address,  ubigeo, zonetype, sitetype, latitud, longitud);
                     
                     Intent intent = new Intent(MainActivity_new_site_admin.this, MainActivity_siteprofile_admin.class);
                     intent.putExtra("ListElement", listElement);
@@ -89,15 +97,6 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
             imageView.setImageURI(imageUri);
-        } else if (requestCode == MAP_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                // Obtener la ubicación seleccionada
-                double latitude = data.getDoubleExtra("latitude", 0.0);
-                double longitude = data.getDoubleExtra("longitude", 0.0);
-
-                // Actualizar el campo de texto con las coordenadas
-                editTextUbicacion.setText(String.format(Locale.getDefault(), "%f, %f", latitude, longitude));
-            }
         }
     }
 
@@ -111,19 +110,7 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
                 editSiteType.getText().toString().isEmpty();
     }
 
-    public void openGoogleMaps(View view) {
-        // Intent para abrir Google Maps
-        Uri gmmIntentUri = Uri.parse("geo:0,0?q=");
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        startActivityForResult(mapIntent, MAP_REQUEST_CODE);
-    }
 
-    public void onLocationSelected(double latitude, double longitude) {
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("latitude", latitude);
-        resultIntent.putExtra("longitude", longitude);
-        setResult(RESULT_OK, resultIntent);
-        finish();
-    }
+
+
 }
