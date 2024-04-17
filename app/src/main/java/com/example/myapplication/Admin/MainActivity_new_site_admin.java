@@ -23,9 +23,7 @@ import java.util.Locale;
 
 public class MainActivity_new_site_admin extends AppCompatActivity {
 
-    private EditText editDepartment, editProvince, editDistrict, editAddress, editUbigeo, editZoneType, editSiteType, editSiteLatitud, editSiteLongitud;
-    TextInputEditText textField = findViewById(R.id.editUbigeo);
-
+    private EditText editDepartment, editProvince, editDistrict, editAddress, editUbigeo, editZoneType, editSiteType, editSiteLatitud, editSiteLongitud, editSiteCoordenadas;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
@@ -34,6 +32,8 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_new_site_admin);
+        TextInputLayout textInputLayout = findViewById(R.id.textInputLayoutLongitud);
+
 
         imageView = findViewById(R.id.imageViewNewSite);
         imageView.setOnClickListener(v -> openFileChooser());
@@ -45,8 +45,8 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         editUbigeo = findViewById(R.id.editUbigeo);
         editZoneType = findViewById(R.id.editZoneType);
         editSiteType = findViewById(R.id.editSiteType);
-        editSiteLatitud = findViewById(R.id.editSiteType);
-        editSiteLongitud = findViewById(R.id.editSiteType);
+        editSiteCoordenadas = findViewById(R.id.editSiteType);
+
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewSite);
         topAppBar.setOnMenuItemClickListener(item -> {
@@ -80,6 +80,14 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         });
         topAppBar.setNavigationOnClickListener(v -> {
             finish();
+        });
+        textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Aquí puedes manejar la acción que deseas realizar cuando se presiona el ícono final
+                // Por ejemplo, podrías abrir un mapa para seleccionar coordenadas
+                // o realizar alguna otra acción relacionada con la selección de coordenadas.
+            }
         });
     }
 
