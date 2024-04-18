@@ -31,7 +31,7 @@
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
                 app:menu="@menu/top_app_bar_information"
-                app:navigationIcon="@drawable/ic_back_outline_white"
+                app:navigationIcon="@drawable/ic_back_outline_black"
                 app:title="Diego Corcuera Llamo" />
 
         </com.google.android.material.appbar.AppBarLayout>

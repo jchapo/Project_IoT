@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,6 +58,10 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Aquí puedes realizar la acción de inhabilitar el sitio
+                // Muestra un toast después de inhabilitar el sitio
+                Toast.makeText(MainActivity_siteprofile_admin.this, "El sitio ha sido inhabilitado", Toast.LENGTH_LONG).show();
+                // Termina la actividad actual y regresa a la actividad anterior
+                finish();
             }
         });
         builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
