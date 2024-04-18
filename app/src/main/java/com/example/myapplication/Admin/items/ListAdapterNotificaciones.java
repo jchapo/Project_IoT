@@ -41,6 +41,8 @@ public class ListAdapterNotificaciones extends RecyclerView.Adapter<ListAdapterN
         return new ListAdapterNotificaciones.ViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(final ListAdapterNotificaciones.ViewHolder holder, final int position){
         holder.bindDataChat(nData.get(position));

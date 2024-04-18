@@ -12,6 +12,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.Admin.MainActivity_navigation_admin;
+import com.example.myapplication.SuperAdmin.ListaUsuario;
+import com.example.myapplication.SuperAdmin.MainActivitySuperAdmin;
 import com.example.myapplication.Supervisor.NavegacionSupervisor;
 
 public class NavegacionInicial extends AppCompatActivity {
@@ -29,6 +31,7 @@ public class NavegacionInicial extends AppCompatActivity {
 
         Button supervButton = findViewById(R.id.Supervisor);
         Button adminButton = findViewById(R.id.Admin);
+        Button superaButton = findViewById(R.id.SuperAdmin);
         adminButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,7 +51,14 @@ public class NavegacionInicial extends AppCompatActivity {
         });
 
 
-
+        superaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Código para iniciar la actividad Admin
+                Intent intent = new Intent(NavegacionInicial.this, MainActivitySuperAdmin.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

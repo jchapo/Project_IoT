@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="Sistem.LoginActivity">
+    tools:context="Sistem.LoginActivityFirstTime">
 
     <TextView
         android:id="@+id/textAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TeleSolver    "
+        android:text="Bienvenido a TeleSolver!"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
@@ -57,7 +57,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Contraseña"
+        android:hint="Contraseña asignada"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textInputEmail"
@@ -74,28 +74,16 @@
 
     <!-- Botón de ingresar -->
     <Button
-    android:id="@+id/buttonLogin"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:text="Ingresar"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/textInputPassword"
-    android:layout_marginStart="24dp"
-    android:layout_marginEnd="24dp"
-    android:layout_marginTop="32dp"/>
-
-    <!-- Texto "olvidé mi contraseña" -->
-    <TextView
-        android:id="@+id/textForgotPassword"
-        android:layout_width="wrap_content"
+        android:id="@+id/buttonLogin"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="¿Olvidaste tu contraseña?"
-
-        android:textStyle="italic"
-        android:layout_marginTop="16dp"
+        android:text="Primer Ingreso"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonLogin"/>
+        app:layout_constraintTop_toBottomOf="@id/textInputPassword"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="32dp"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

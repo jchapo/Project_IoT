@@ -25,18 +25,19 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBarUsers"
+                android:id="@+id/topAppBarNameChat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
                 app:menu="@menu/top_app_bar_information"
                 app:navigationIcon="@drawable/ic_back_outline_black"
-                app:title="Diego Corcuera Llamo" />
+                app:title="Diego Corcuera Llamo"
+                android:contentDescription="toolbar_title" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
+<!--        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listElements"
             android:layout_width="418dp"
             android:layout_height="590dp"
@@ -44,7 +45,7 @@
             app:layout_constraintTop_toBottomOf="@id/appBarLayout"
             app:layout_constraintVertical_bias="0.0"
             tools:layout_editor_absoluteX="-7dp"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints" />  -->
 
         <!-- Campo para ingresar mensajes -->
         <LinearLayout
