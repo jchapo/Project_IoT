@@ -1,7 +1,6 @@
 package com.example.myapplication.Supervisor.objetos;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class ListElementReportes implements Serializable {
 
@@ -14,13 +13,17 @@ public class ListElementReportes implements Serializable {
     private String fecha_final;
 
     private String supervisor_creador;
+    private String equipo_objetivo;
+    private String descripcion;
 
-    public ListElementReportes(String nombre_reporte, String sitio, String fecha_creacion, String fecha_final, String supervisor_creador) {
+    public ListElementReportes(String nombre_reporte, String sitio, String fecha_creacion, String fecha_final, String supervisor_creador, String equipo_objetivo, String descripcion) {
         this.nombre_reporte = nombre_reporte;
         this.sitio = sitio;
         this.fecha_creacion = fecha_creacion;
         this.fecha_final = fecha_final;
         this.supervisor_creador = supervisor_creador;
+        this.equipo_objetivo = equipo_objetivo;
+        this.descripcion = descripcion;
     }
 
 
@@ -64,5 +67,21 @@ public class ListElementReportes implements Serializable {
 
     public void setSitio(String sitio) {
         this.sitio = sitio;
+    }
+
+    public String getEquipo_objetivo() {
+        return equipo_objetivo;
+    }
+
+    public void setEquipo_objetivo(String equipo_objetivo) {
+        this.equipo_objetivo = equipo_objetivo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }
