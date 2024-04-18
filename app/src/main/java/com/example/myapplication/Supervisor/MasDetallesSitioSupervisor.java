@@ -51,6 +51,7 @@ public class MasDetallesSitioSupervisor extends AppCompatActivity {
         //longitud.setText(element.getLongitud());
         ubigeo.setText(element.getUbigeo());
 
+
         MaterialToolbar toolbar = findViewById(R.id.topAppBarSitePerfil);
         setSupportActionBar(toolbar);
 
@@ -58,18 +59,6 @@ public class MasDetallesSitioSupervisor extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MasDetallesSitioSupervisor.this, NavegacionSupervisor.class);
-                startActivity(intent);
-            }
-        });
-
-        FloatingActionButton fabAnadirImagen = findViewById(R.id.anadirimagen);
-
-        // Agrega un OnClickListener al botón
-        fabAnadirImagen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Crea un Intent para abrir la actividad ImagenesSitio
-                Intent intent = new Intent(MasDetallesSitioSupervisor.this, ImagenesSitio.class);
                 startActivity(intent);
             }
         });

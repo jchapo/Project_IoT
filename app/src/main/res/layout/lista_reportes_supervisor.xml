@@ -34,7 +34,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_reportes" />
+                app:srcCompat="@drawable/ic_report_outline_black" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"

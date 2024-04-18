@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
+import com.example.myapplication.Supervisor.ImagenesSitio;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class MainActivity_siteprofile_admin extends AppCompatActivity {
@@ -39,13 +41,27 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
         addressDescriptionTextView.setText(fullDirection);
 
 
-        Toolbar toolbar = findViewById(R.id.topAppBarSitePerfil);
+        Toolbar toolbar = findViewById(R.id.topAppBarSitePerfilAdmin);
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        // Obtener referencia al botón de imágenes
+        ImageButton buttonImagesSiteAdmin = findViewById(R.id.buttonImagesSiteAdmin);
+
+        // Agregar un OnClickListener al botón de imágenes
+        buttonImagesSiteAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Crear Intent para iniciar la actividad ImagenesSitio
+                Intent intent = new Intent(MainActivity_siteprofile_admin.this, ImagenesSitio.class);
+                // Iniciar la actividad ImagenesSitio con el Intent
+                startActivity(intent);
             }
         });
     }

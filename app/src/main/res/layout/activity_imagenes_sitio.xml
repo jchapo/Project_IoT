@@ -22,27 +22,18 @@
             android:id="@+id/topAppBarimagenmas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/top_app_bar_imagen_mas"
-            app:navigationIcon="@drawable/ic_back_outline_white"
+            app:navigationIcon="@drawable/ic_back_outline_black"
             app:title="Imágenes guardadas" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <LinearLayout
         android:id="@+id/contenedorImagenes"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginTop="8dp"
-        android:clipToPadding="false"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        app:layout_constraintVertical_bias="0.0"
-        app:spanCount="2"
-        tools:listitem="@layout/imagenescuadro" />
-
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

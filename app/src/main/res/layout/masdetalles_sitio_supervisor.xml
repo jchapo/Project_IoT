@@ -87,6 +87,15 @@
             </LinearLayout>
 
             <ImageButton
+                android:id="@+id/buttonImagesSiteSuper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:background="@color/white"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_photo_outline" />
+
+            <ImageButton
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -271,20 +280,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_reportes"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/anadirimagen" /> <!-- Cambiamos End_toEndOf por End_toStartOf -->
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/anadirimagen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_mas_photo"
+        android:src="@drawable/ic_addreport_outline_black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
