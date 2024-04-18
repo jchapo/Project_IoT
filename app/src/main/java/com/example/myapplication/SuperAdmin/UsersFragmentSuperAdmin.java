@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Admin.MainActivity_new_user_admin;
+import com.example.myapplication.Admin.MainActivity_userprofile_admin;
 import com.example.myapplication.Admin.items.ListAdapterUser;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
@@ -25,7 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListaUsuario extends Fragment {
+public class UsersFragmentSuperAdmin extends Fragment {
     List<ListElementUser> elements;
 
     @Override
@@ -50,16 +52,16 @@ public class ListaUsuario extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_users_superadmin, container, false);
-        Toolbar toolbar = view.findViewById(R.id.topAppBarUserFragment_sa);
+        Toolbar toolbar = view.findViewById(R.id.topAppBarUserFragmentSuperAdmin);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         init(view);
-        FloatingActionButton agregarUsuarioButton = view.findViewById(R.id.agregarUsuariofloatingActionButton_sa);
+        FloatingActionButton agregarUsuarioButton = view.findViewById(R.id.agregarUsuariofloatingActionButtonSuperAdmin);
         agregarUsuarioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Aquí cambia "NuevaActividad" por la clase de la actividad a la que deseas cambiar
-                Intent intent = new Intent(getActivity(), NewProfileAdmin.class);
+                Intent intent = new Intent(getActivity(), MainActivity_new_user_admin.class);
                 startActivity(intent);
             }
         });
@@ -93,14 +95,14 @@ public class ListaUsuario extends Fragment {
 
 
         ListAdapterUser listAdapter = new ListAdapterUser(elements, getContext(), item -> moveToDescription(item));
-        RecyclerView recyclerView = view.findViewById(R.id.listElements_sa);
+        RecyclerView recyclerView = view.findViewById(R.id.listElementsSuperAdmin);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(listAdapter);
     }
 
     public void moveToDescription(ListElementUser item){
-        Intent intent = new Intent(getContext(),AdminProfile.class);
+        Intent intent = new Intent(getContext(), MainActivity_userprofile_admin.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);
     }

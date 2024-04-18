@@ -39,9 +39,6 @@
             android:name=".Supervisor.MasDetallesSitioSupervisor"
             android:exported="false" />
         <activity
-            android:name=".Supervisor.SitiosFragment"
-            android:exported="false" />
-        <activity
             android:name=".Supervisor.NavegacionSupervisor"
             android:exported="true" />
         <activity
@@ -75,6 +72,9 @@
             android:parentActivityName=".Admin.MainActivity_navigation_admin" />
         <activity
             android:name=".Admin.MainActivity_navigation_admin"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.MainActivity_navigation_SuperAdmin"
             android:exported="false" />
     </application>
 

@@ -12,8 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.Admin.MainActivity_navigation_admin;
-import com.example.myapplication.SuperAdmin.ListaUsuario;
-import com.example.myapplication.SuperAdmin.MainActivitySuperAdmin;
+import com.example.myapplication.SuperAdmin.MainActivity_navigation_SuperAdmin;
 import com.example.myapplication.Supervisor.NavegacionSupervisor;
 
 public class NavegacionInicial extends AppCompatActivity {
@@ -21,7 +20,6 @@ public class NavegacionInicial extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_navegacion_inicial);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -55,7 +53,7 @@ public class NavegacionInicial extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Código para iniciar la actividad Admin
-                Intent intent = new Intent(NavegacionInicial.this, MainActivitySuperAdmin.class);
+                Intent intent = new Intent(NavegacionInicial.this, MainActivity_navigation_SuperAdmin.class);
                 startActivity(intent);
             }
         });
