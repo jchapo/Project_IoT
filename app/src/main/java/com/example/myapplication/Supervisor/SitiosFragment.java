@@ -52,16 +52,16 @@ public class SitiosFragment extends Fragment {
 
     public void init(View view) {
         elements = new ArrayList<>();
-        elements.add(new ListElementSite("Lima","LIM-01","Activo","Lima","Carabayllo","Av. San Felipe","location","31501","Urbano","Fijo","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Lima","LIM-02","Activo","Lima","Carabayllo","Av. San Carlos","location","31502","Urbano","Fijo","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Lima","LIM-03","Activo","Lima","Carabayllo","Av. Los Incas","location","31503","Urbano","Fijo","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Cajamarca","CAJ-01","Activo","Cajamarca","Asunción","Calle Los Mirlos","location","31504","Rural","Móvil","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Cajamarca","CAJ-02","Activo","Cajamarca","Asunción","Calle Los Piris","location","31505","Rural","Móvil","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Cajamarca","CAJ-03","Activo","Cajamarca","Asunción","Calle Los Mirpus","location","31506","Rural","Móvil","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Arequipa","ARQ-01","Activo","Arequipa","Yanahuara","Av. Unión","location","31507","Urbano","Fijo","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Arequipa","ARQ-02","Activo","Caylloma","Caylloma","Av. Bayoneta","location","31508","Urbano","Fijo","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Arequipa","ARQ-03","Activo","Arequipa","Cayma","Av. La Paz","location","31509","Urbano","Móvil","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Tumbes","TUM-01","Activo","Tumbes","Tumbes","Av. Lobitos","location","31510","Rural","Fijo","-34.3213","56.3123"));
+        elements.add(new ListElementSite("Lima","LIM-01","Activo","Lima","Carabayllo","Av. San Felipe","31501","Urbano","Fijo",-34.3213,56.3123,"-34.3213;56.3123"));
+        elements.add(new ListElementSite("Lima","LIM-02","Activo","Lima","Carabayllo","Av. San Carlos","31502","Urbano","Fijo",-34.3213,56.3123,"-34.3213;56.3123"));
+        elements.add(new ListElementSite("Lima","LIM-03","Activo","Lima","Carabayllo","Av. Los Incas","31503","Urbano","Fijo",-34.3213,56.3123,"-34.3213;56.3123"));
+        elements.add(new ListElementSite("Cajamarca","CAJ-01","Activo","Cajamarca","Asunción","Calle Los Mirlos","31504","Rural","Móvil",-34.3213,56.3123,"-34.3213;56.3123"));
+        elements.add(new ListElementSite("Cajamarca","CAJ-02","Activo","Cajamarca","Asunción","Calle Los Piris","31505","Rural","Móvil",-34.3213,56.3123,"-34.3213;56.3123"));
+        elements.add(new ListElementSite("Cajamarca","CAJ-03","Activo","Cajamarca","Asunción","Calle Los Mirpus","31506","Rural","Móvil",-34.3213,56.3123,"-34.3213;56.3123"));
+        elements.add(new ListElementSite("Arequipa","ARQ-01","Activo","Arequipa","Yanahuara","Av. Unión","31507","Urbano","Fijo",-34.3213,56.3123,"-34.3213;56.3123"));
+        elements.add(new ListElementSite("Arequipa","ARQ-02","Activo","Caylloma","Caylloma","Av. Bayoneta","31508","Urbano","Fijo",-34.3213,56.3123,"-34.3213;56.3123"));
+        elements.add(new ListElementSite("Arequipa","ARQ-03","Activo","Arequipa","Cayma","Av. La Paz","31509","Urbano","Móvil",-34.3213,56.3123,"-34.3213;56.3123"));
+        elements.add(new ListElementSite("Tumbes","TUM-01","Activo","Tumbes","Tumbes","Av. Lobitos","31510","Rural","Fijo",-34.3213,56.3123,"-34.3213;56.3123"));
 
         // Añadir más elementos según sea necesario
 

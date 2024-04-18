@@ -7,7 +7,6 @@ public class ListElementSite implements Serializable {
     public String province;
     public String district;
     public String address;
-    public String location;
     public String ubigeo;
     public String zonetype;
     public String sitetype;
@@ -15,14 +14,17 @@ public class ListElementSite implements Serializable {
     public String name;
     public String status;
 
-    private String latitud;
+    private double latitud;
 
-    private String longitud;
+    private double longitud;
+
+    public String coordenadas;
+
 
 
     public ListElementSite(String department, String name, String status, String province,
                            String district, String address, String ubigeo,
-                           String zonetype, String sitetype, String latitud, String longitud) {
+                           String zonetype, String sitetype, double latitud, double longitud, String coordenadas) {
         this.department = department;
         this.province = province;
         this.district = district;
@@ -34,6 +36,7 @@ public class ListElementSite implements Serializable {
         this.latitud = latitud;
         this.longitud = longitud;
         this.status = status;
+        this.coordenadas = coordenadas;
     }
 
 
@@ -109,19 +112,27 @@ public class ListElementSite implements Serializable {
         this.sitetype = sitetype;
     }
 
-    public String getLatitud() {
+    public double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(String latitud) {
+    public void setLatitud(double latitud) {
         this.latitud = latitud;
     }
 
-    public String getLongitud() {
+    public double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(String longitud) {
+    public void setLongitud(double longitud) {
         this.longitud = longitud;
+    }
+
+    public String getCoordenadas() {
+        return coordenadas;
+    }
+
+    public void setCoordenadas(String coordenadas) {
+        this.coordenadas = coordenadas;
     }
 }
