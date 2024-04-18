@@ -53,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
-                    android:text="Formulario completado"
+                    android:text="Usuario Creado"
                     android:textColor="@color/md_theme_scrim"
                     android:textSize="12dp"
                     android:textStyle="bold" />
@@ -62,7 +62,7 @@
                     android:id="@+id/descripcionResumidaTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pedro alfonso ha completado un formulario."
+                    android:text="Pedro alfonso ha creado un nuevo usuario."
                     android:textSize="10dp" />
 
             </LinearLayout>

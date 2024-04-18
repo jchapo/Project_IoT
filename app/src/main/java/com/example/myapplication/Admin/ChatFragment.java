@@ -78,6 +78,7 @@ public class ChatFragment extends Fragment {
 
 
 
+
         ListAdapterChat listAdapter = new ListAdapterChat(elements, getContext(), item -> moveToDescription(item));
         RecyclerView recyclerView = view.findViewById(R.id.listElements);
         recyclerView.setHasFixedSize(true);
