@@ -18,10 +18,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBarUsersPerfil"
+            android:id="@+id/topAppBarUserPerfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_back_outline"
+            app:navigationIcon="@drawable/ic_back_outline_black"
             app:title="Perfil de usuario" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -36,7 +36,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/imageViewProfile"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -44,7 +44,16 @@
             android:layout_marginBottom="16dp"
             android:src="@drawable/default_profile"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/rounded_corner" />
+            android:background="@drawable/rounded_corner" >
+
+            <ImageView
+                android:id="@+id/imageViewNewSite"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_profile" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/fullNameTextView"
@@ -146,7 +155,7 @@
                 <TextView
                     android:id="@+id/textViewDNI1"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="DNI" />
 

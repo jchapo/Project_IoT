@@ -6,7 +6,7 @@
     android:background="@color/rosa"
     tools:context=".Admin.ChatFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

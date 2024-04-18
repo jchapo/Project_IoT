@@ -19,11 +19,11 @@
 
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBarUsers"
+            android:id="@+id/topAppBarNewUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/top_app_bar_admin_crear"
-            app:navigationIcon="@drawable/ic_back_outline"
+            app:menu="@menu/top_app_bar_admin_new_user"
+            app:navigationIcon="@drawable/ic_back_outline_black"
             app:title="Crear usuario" />
 
     </com.google.android.material.appbar.AppBarLayout>

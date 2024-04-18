@@ -19,11 +19,11 @@
 
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBarUsers"
+            android:id="@+id/topAppBarNewSite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/top_app_bar_admin_crear"
-            app:navigationIcon="@drawable/ic_back_outline"
+            app:menu="@menu/top_app_bar_admin_new_site"
+            app:navigationIcon="@drawable/ic_back_outline_black"
             app:title="Crear sitio" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -51,11 +51,11 @@
                 app:cardCornerRadius="75dp">
 
                 <ImageView
-                    android:id="@+id/imageViewProfile"
+                    android:id="@+id/imageViewNewSite"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/location_default" />
+                    android:src="@drawable/add_photo_new_site" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -105,6 +105,8 @@
                     android:visibility="invisible"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/iconProvince"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
@@ -188,12 +190,44 @@
                     android:layout_marginEnd="8dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editUbigeo2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_pindrop_outline_black"
+                    app:endIconContentDescription="Elegir coordenadas">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editUbigeo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:hint="Coordenadas" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
+
+                <ImageView
+                    android:id="@+id/iconLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_near_outline"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editUbigeo"
+                        android:id="@+id/editLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"

@@ -1,5 +1,7 @@
 package com.example.myapplication.Admin;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class MainActivity_siteprofile_admin extends AppCompatActivity {
 
@@ -41,11 +44,28 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Aquí defines la nueva actividad a la que quieres navegar
-                Intent intent = new Intent(MainActivity_siteprofile_admin.this, MainActivity_navigation_admin.class);
-                startActivity(intent);
+                finish();
             }
         });
+    }
+
+    public void showConfirmationDialog(View view) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle("Confirmación");
+        builder.setMessage("¿Está seguro de inhabilitar este sitio?");
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Aquí puedes realizar la acción de inhabilitar el sitio
+            }
+        });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss(); // Cierra el diálogo sin hacer nada
+            }
+        });
+        builder.show();
     }
 
 }

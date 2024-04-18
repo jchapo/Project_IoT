@@ -60,6 +60,7 @@ public class ListAdapterSite extends RecyclerView.Adapter<ListAdapterSite.ViewHo
             name = itemView.findViewById(R.id.nameTextViewSite);
             direction = itemView.findViewById(R.id.directionTextViewSite);
             status = itemView.findViewById(R.id.statusTextViewSite);
+
         }
 
         void bindDataSite(final ListElementSite item){
@@ -67,6 +68,7 @@ public class ListAdapterSite extends RecyclerView.Adapter<ListAdapterSite.ViewHo
             direction.setText(fullDirection);
             name.setText(item.getName());
             status.setText(item.getStatus());
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

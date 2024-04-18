@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sitios_asignados_menu"
+        android:enabled="true"
+        android:icon="@drawable/selector_location"
+        android:title="Sitios"/>
+    <item
+        android:id="@+id/equipos_menu"
+        android:enabled="true"
+        android:icon="@drawable/ic_equipos"
+        android:title="Equipos"/>
+    <item
+        android:id="@+id/chat_menu"
+        android:enabled="true"
+        android:icon="@drawable/selector_chat"
+        android:title="Chats"/>
+    <item
+        android:id="@+id/reportes_menu"
+        android:enabled="true"
+        android:icon="@drawable/ic_reportes"
+        android:title="Reportes"/>
+</menu>

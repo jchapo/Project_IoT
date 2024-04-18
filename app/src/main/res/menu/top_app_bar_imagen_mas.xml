@@ -3,7 +3,8 @@
 
     <item
         android:id="@+id/createUser"
+        android:icon="@drawable/ic_mas_photo"
         app:showAsAction="ifRoom"
-        android:title="CREAR" />
+        android:title="Añadir imágenes" />
 
 </menu>
