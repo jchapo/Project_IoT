@@ -3,6 +3,7 @@ package com.example.myapplication.Supervisor;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -52,16 +53,30 @@ public class MasDetallesSitioSupervisor extends AppCompatActivity {
         ubigeo.setText(element.getUbigeo());
 
 
-        MaterialToolbar toolbar = findViewById(R.id.topAppBarSitePerfil);
+        Toolbar toolbar = findViewById(R.id.topAppBarSitePerfilSuper);
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MasDetallesSitioSupervisor.this, NavegacionSupervisor.class);
+                finish();
+            }
+        });
+
+        // Obtener referencia al botón de imágenes
+        ImageButton buttonImagesSiteAdmin = findViewById(R.id.buttonImagesSiteSuper);
+
+        // Agregar un OnClickListener al botón de imágenes
+        buttonImagesSiteAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Crear Intent para iniciar la actividad ImagenesSitio
+                Intent intent = new Intent(MasDetallesSitioSupervisor.this, ImagenesSitio.class);
+                // Iniciar la actividad ImagenesSitio con el Intent
                 startActivity(intent);
             }
         });
 
     }
+
 }
