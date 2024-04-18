@@ -87,7 +87,7 @@ public class ChatFragment extends Fragment {
     }
 
     public void moveToDescription(ListElementChat item){
-        Intent intent = new Intent(getContext(),MainActivity_chat_user.class);
+        Intent intent = new Intent(getContext(), MainActivity_chat_user.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);
     }
