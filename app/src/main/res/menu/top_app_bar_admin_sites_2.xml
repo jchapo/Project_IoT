@@ -6,6 +6,6 @@
         android:id="@+id/agregarImagen"
         android:icon="@drawable/ic_photo_outline"
         app:showAsAction="ifRoom"
-        android:title="Agregar imágenes" />
+        android:title="Imágenes" />
 
 </menu>
