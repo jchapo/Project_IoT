@@ -24,6 +24,7 @@ import java.util.Locale;
 public class MainActivity_new_site_admin extends AppCompatActivity {
 
     private EditText editDepartment, editProvince, editDistrict, editAddress, editUbigeo, editZoneType, editSiteType, editSiteLatitud, editSiteLongitud, editSiteCoordenadas;
+    private static final int PICK_LOCATION_REQUEST = 1;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
@@ -45,7 +46,7 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         editUbigeo = findViewById(R.id.editUbigeo);
         editZoneType = findViewById(R.id.editZoneType);
         editSiteType = findViewById(R.id.editSiteType);
-        editSiteCoordenadas = findViewById(R.id.editSiteType);
+        editSiteCoordenadas = findViewById(R.id.editCoordenadas);
 
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewSite);
@@ -84,9 +85,11 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Aquí puedes manejar la acción que deseas realizar cuando se presiona el ícono final
-                // Por ejemplo, podrías abrir un mapa para seleccionar coordenadas
-                // o realizar alguna otra acción relacionada con la selección de coordenadas.
+                // Abrir Google Maps para seleccionar la ubicación
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivityForResult(mapIntent, PICK_LOCATION_REQUEST);
             }
         });
     }
@@ -105,6 +108,16 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
             imageView.setImageURI(imageUri);
+        } else if (requestCode == PICK_LOCATION_REQUEST && resultCode == RESULT_OK) {
+            // Obtener las coordenadas del punto seleccionado
+            double latitude = data.getDoubleExtra("latitude", 0.0);
+            double longitude = data.getDoubleExtra("longitude", 0.0);
+
+            // Formatear las coordenadas en el formato "longitud ; latitud"
+            String formattedCoordinates = String.format(Locale.getDefault(), "%.6f ; %.6f", longitude, latitude);
+
+            // Colocar las coordenadas en el campo de texto
+            editSiteCoordenadas.setText(formattedCoordinates);
         }
     }
 
@@ -117,8 +130,5 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
                 editZoneType.getText().toString().isEmpty() ||
                 editSiteType.getText().toString().isEmpty();
     }
-
-
-
 
 }

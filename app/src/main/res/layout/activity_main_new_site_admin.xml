@@ -197,7 +197,7 @@
                     app:endIconContentDescription="Elegir coordenadas">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editLongitud"
+                        android:id="@+id/editCoordenadas"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
