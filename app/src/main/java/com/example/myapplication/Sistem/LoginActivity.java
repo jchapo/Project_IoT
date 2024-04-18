@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.Admin.MainActivity_navigation_admin;
+import com.example.myapplication.NavegacionInicial;
 import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.NavegacionSupervisor;
 
@@ -29,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(LoginActivity.this, NavegacionSupervisor.class);
+                Intent intent = new Intent(LoginActivity.this, NavegacionInicial.class);
                 startActivity(intent);
             }
         });
