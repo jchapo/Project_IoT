@@ -22,9 +22,7 @@
             android:id="@+id/topAppBarNewUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/top_app_bar_admin_new_user"
-            app:navigationIcon="@drawable/ic_back_outline_black"
-            app:title="Crear usuario" />
+            app:navigationIcon="@drawable/ic_back_outline_black" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

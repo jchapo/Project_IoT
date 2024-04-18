@@ -1,7 +1,9 @@
 package com.example.myapplication.Admin;
 
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -52,6 +54,22 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
                 finish();
             }
         });
+
+        // Agregar Listener al botón flotante de editar
+        findViewById(R.id.fabEditUserAdmin).setOnClickListener(new View.OnClickListener() {
+            // Código para abrir MainActivity_new_user_admin desde la actividad del perfil de usuario
+            @Override
+            public void onClick(View v) {
+                // Crear Intent para iniciar MainActivity_new_user_admin
+                Intent intent = new Intent(MainActivity_userprofile_admin.this, MainActivity_new_user_admin.class);
+                // Agregar el indicador para editar un usuario existente
+                intent.putExtra("isEditing", true);
+                // Agregar datos del usuario como extras al Intent
+                intent.putExtra("ListElement", element);
+                // Iniciar MainActivity_new_user_admin con el Intent
+                startActivity(intent);
+            }
+        });
     }
 
     public void showConfirmationDialog(View view) {
@@ -68,6 +86,7 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
                 finish();
             }
         });
+
         builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -75,6 +94,34 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    // Método para abrir la aplicación de correo electrónico al hacer clic en el icono de correo
+    public void icono2Click(View view) {
+        String email = mailDescriptionTextView.getText().toString();
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:" + email));
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Enviar correo electrónico"));
+        } catch (ActivityNotFoundException e) {
+            // Manejar la excepción si no hay aplicaciones de correo electrónico instaladas
+            Toast.makeText(this, "No hay aplicaciones de correo electrónico instaladas", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Método para abrir la aplicación de teléfono al hacer clic en el icono de teléfono
+    public void icono3Click(View view) {
+        String phoneNumber = phoneDescriptionTextView.getText().toString();
+        Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
+        phoneIntent.setData(Uri.parse("tel:" + phoneNumber));
+
+        try {
+            startActivity(phoneIntent);
+        } catch (ActivityNotFoundException e) {
+            // Manejar la excepción si no se puede abrir la aplicación de teléfono
+            Toast.makeText(this, "No se puede realizar la llamada telefónica", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
