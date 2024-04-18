@@ -1,0 +1,9 @@
+<!-- selector_item_background.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Estado cuando el elemento está presionado -->
+    <item android:drawable="@drawable/item_background_pressed" android:state_pressed="true" />
+    <!-- Estado cuando el elemento está seleccionado -->
+    <item android:drawable="@drawable/item_background_selected" android:state_selected="true" />
+    <!-- Estado predeterminado -->
+    <item android:drawable="@drawable/item_background_normal" />
+</selector>

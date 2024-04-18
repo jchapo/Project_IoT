@@ -15,8 +15,13 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
+            android:name=".Admin.items.SimpleListAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.MainActivity_addSupervisor_admin"
+            android:exported="false" />
+        <activity
             android:name=".Sistem.LoginActivity"
-
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +30,6 @@
             </intent-filter>
         </activity>
         <activity
-
             android:name=".Supervisor.MasDetallesReportes"
             android:exported="false" />
         <activity
@@ -42,7 +46,6 @@
             android:exported="true" />
         <activity
             android:name=".NavegacionInicial"
-
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
