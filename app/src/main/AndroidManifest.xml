@@ -74,6 +74,9 @@
             android:name=".Admin.MainActivity_navigation_admin"
             android:exported="false" />
         <activity
+            android:name=".SuperAdmin.MainActivitySuperAdmin"
+            android:exported="false" />
+        <activity
             android:name=".SuperAdmin.ListaUsuario"
             android:exported="false" />
     </application>
