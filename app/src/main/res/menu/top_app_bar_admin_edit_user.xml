@@ -2,9 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/addPhotoSite"
-        android:icon="@drawable/ic_mas_photo"
+        android:id="@+id/saveOldUser"
         app:showAsAction="ifRoom"
-        android:title="Añadir imágenes" />
+        android:title="GUARDAR" />
 
 </menu>

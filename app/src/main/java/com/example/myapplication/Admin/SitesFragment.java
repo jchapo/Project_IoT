@@ -63,6 +63,7 @@ public class SitesFragment extends Fragment {
             public void onClick(View v) {
                 // Aquí cambia "NuevaActividad" por la clase de la actividad a la que deseas cambiar
                 Intent intent = new Intent(getActivity(), MainActivity_new_site_admin.class);
+                intent.putExtra("isEditing", false);
                 startActivity(intent);
             }
         });
