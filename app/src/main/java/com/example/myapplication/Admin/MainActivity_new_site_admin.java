@@ -1,11 +1,22 @@
 package com.example.myapplication.Admin;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;import com.google.android.material.textfield.TextInputLayout;
+
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -19,13 +30,16 @@ import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity_new_site_admin extends AppCompatActivity {
 
-    private EditText editDepartment, editProvince, editDistrict, editAddress, editUbigeo, editZoneType, editSiteType, editSiteLatitud, editSiteLongitud, editSiteCoordenadas;
+    private EditText editDepartment, editProvince, editDistrict, editAddress, editUbigeo, editZoneType, editSiteType, editSiteCoordenadas;
     private static final int PICK_LOCATION_REQUEST = 1;
-
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
+    double latitude, longitude;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
 
@@ -35,6 +49,8 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         setContentView(R.layout.activity_main_new_site_admin);
         TextInputLayout textInputLayout = findViewById(R.id.textInputLayoutLongitud);
 
+        Places.initialize(getApplicationContext(), "AIzaSyAExTORfkCED6S7JMtHAnYKhJVJ5J9inaw");
+        PlacesClient placesClient = Places.createClient(this);
 
         imageView = findViewById(R.id.imageViewNewSite);
         imageView.setOnClickListener(v -> openFileChooser());
@@ -63,12 +79,13 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
                     String zonetype = editZoneType.getText().toString();
                     String sitetype = editSiteType.getText().toString();
                     String name = "NombreGeneradoAutomáticamente";
-                    String latitud = "NombreGeneradoAutomáticamente";
+                    double latitud = latitude;
                     String name2 = "NombreGeneradoAutomáticamente";
-                    String longitud = "Activo";
+                    double longitud = longitude;
                     String status = "Activo";
+                    String coordenadas = String.format(Locale.getDefault(), "%.6f ; %.6f", longitud, latitud);
 
-                    ListElementSite listElement = new ListElementSite(department,name2, status, province, district, address,  ubigeo, zonetype, sitetype, latitud, longitud);
+                    ListElementSite listElement = new ListElementSite(department,name2, status, province, district, address,  ubigeo, zonetype, sitetype, latitud, longitud, coordenadas);
                     
                     Intent intent = new Intent(MainActivity_new_site_admin.this, MainActivity_siteprofile_admin.class);
                     intent.putExtra("ListElement", listElement);
@@ -85,11 +102,11 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Abrir Google Maps para seleccionar la ubicación
-                Uri gmmIntentUri = Uri.parse("geo:0,0?q=");
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                startActivityForResult(mapIntent, PICK_LOCATION_REQUEST);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG))
+                        .setCountry("PE") // Cambia esto al código de país que desees
+                        .build(MainActivity_new_site_admin.this);
+
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
             }
         });
     }
@@ -108,16 +125,26 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
             imageView.setImageURI(imageUri);
-        } else if (requestCode == PICK_LOCATION_REQUEST && resultCode == RESULT_OK) {
-            // Obtener las coordenadas del punto seleccionado
-            double latitude = data.getDoubleExtra("latitude", 0.0);
-            double longitude = data.getDoubleExtra("longitude", 0.0);
+        } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                LatLng latLng = place.getLatLng();
 
-            // Formatear las coordenadas en el formato "longitud ; latitud"
-            String formattedCoordinates = String.format(Locale.getDefault(), "%.6f ; %.6f", longitude, latitude);
+                // Intercambiar los valores de latitud y longitud
+                latitude = latLng.longitude; // Aquí se guarda la longitud
+                longitude = latLng.latitude; // Aquí se guarda la latitud
 
-            // Colocar las coordenadas en el campo de texto
-            editSiteCoordenadas.setText(formattedCoordinates);
+                // Formatear las coordenadas en el formato "longitud ; latitud"
+                String formattedCoordinates = String.format(Locale.getDefault(), "%.6f ; %.6f", longitude, latitude);
+
+                // Colocar las coordenadas en el campo de texto
+                editSiteCoordenadas.setText(formattedCoordinates);
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // El usuario canceló la selección
+            }
         }
     }
 
