@@ -31,7 +31,7 @@
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
                 app:menu="@menu/top_app_bar_admin_users"
-                app:title="Notificaciones" />
+                app:title="Alertas" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
