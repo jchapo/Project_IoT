@@ -62,7 +62,7 @@
                     android:id="@+id/descripcionResumidaTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pedro alfonso ha creado un nuevo usuario."
+                    android:text="Pedro Alfonso ha creado un nuevo usuario."
                     android:textSize="10dp" />
 
             </LinearLayout>
