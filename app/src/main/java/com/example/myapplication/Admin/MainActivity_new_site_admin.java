@@ -37,7 +37,6 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
 
         imageView = findViewById(R.id.imageViewNewSite);
         imageView.setOnClickListener(v -> openFileChooser());
-
         editDepartment = findViewById(R.id.editDepartment);
         editProvince = findViewById(R.id.editProvince);
         editDistrict = findViewById(R.id.editDistrict);
@@ -61,13 +60,14 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
                     String ubigeo = editUbigeo.getText().toString();
                     String zonetype = editZoneType.getText().toString();
                     String sitetype = editSiteType.getText().toString();
-                    String name = "NombreGeneradoAutomáticamente";
+                    String location = "NombreGeneradoAutomáticamente";
                     String latitud = "NombreGeneradoAutomáticamente";
                     String name2 = "NombreGeneradoAutomáticamente";
                     String longitud = "Activo";
                     String status = "Activo";
 
-                    ListElementSite listElement = new ListElementSite(department,name2, status, province, district, address,  ubigeo, zonetype, sitetype, latitud, longitud);
+
+                    ListElementSite listElement = new ListElementSite(department, name2, status, province, district, address, location ,ubigeo, zonetype, sitetype, latitud, longitud);
                     
                     Intent intent = new Intent(MainActivity_new_site_admin.this, MainActivity_siteprofile_admin.class);
                     intent.putExtra("ListElement", listElement);

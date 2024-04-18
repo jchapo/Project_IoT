@@ -21,12 +21,13 @@ public class ListElementSite implements Serializable {
 
 
     public ListElementSite(String department, String name, String status, String province,
-                           String district, String address, String ubigeo,
+                           String district, String address,String location, String ubigeo,
                            String zonetype, String sitetype, String latitud, String longitud) {
         this.department = department;
         this.province = province;
         this.district = district;
         this.address = address;
+        this.location =location;
         this.ubigeo = ubigeo;
         this.zonetype = zonetype;
         this.sitetype = sitetype;
@@ -83,6 +84,14 @@ public class ListElementSite implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getUbigeo() {

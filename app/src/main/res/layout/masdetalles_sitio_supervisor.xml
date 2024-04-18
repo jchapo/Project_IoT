@@ -25,7 +25,7 @@
             android:layout_marginRight="16dp"
             android:elevation="14dp"
             app:menu="@menu/top_app_bar_admin_sites_2"
-            app:navigationIcon="@drawable/ic_back_outline" />
+            app:navigationIcon="@drawable/ic_back_outline_black" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
