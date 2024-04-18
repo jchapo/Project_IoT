@@ -24,6 +24,7 @@ import com.example.myapplication.Admin.items.ListAdapterSite;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
+import com.example.myapplication.Supervisor.objetos.ListAdapterSiteSupervisor;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -68,13 +69,13 @@ public class SitiosFragment extends Fragment {
         recyclerView = view.findViewById(R.id.listElements);
 
         // Crear y configurar el adaptador y el LayoutManager
-        ListAdapterSite listAdapter = new ListAdapterSite(elements, getContext(), item -> moveToDescription(item));
+        ListAdapterSiteSupervisor listAdapter = new ListAdapterSiteSupervisor(elements, getContext(), item -> moveToDescription(item));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(listAdapter);
     }
 
     public void moveToDescription(ListElementSite item){
-        Intent intent = new Intent(getContext(), MainActivity_siteprofile_admin.class);
+        Intent intent = new Intent(getContext(), MasDetallesSitioSupervisor.class);
         intent.putExtra("ListElementSite", item);
         startActivity(intent);
     }
