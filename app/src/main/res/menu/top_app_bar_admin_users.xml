@@ -5,6 +5,7 @@
         android:id="@+id/searchUser"
         android:icon="@drawable/ic_search_outline"
         android:title="Buscar usuario"
-        app:showAsAction="ifRoom"/>
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView"/>
 
 </menu>
