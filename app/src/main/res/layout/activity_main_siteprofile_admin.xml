@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBarSitePerfil"
+            android:id="@+id/topAppBarSitePerfilAdmin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
@@ -84,7 +84,7 @@
             </LinearLayout>
 
             <ImageButton
-                android:id="@+id/buttonImagesSite"
+                android:id="@+id/buttonImagesSiteAdmin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
