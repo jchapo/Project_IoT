@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,11 +16,15 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 public class MainActivity_new_user_admin extends AppCompatActivity {
     private EditText editFirstName, editLastName, editDNI, editMail, editAddress, editPhone;
-
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_new_user_admin);
+
+        imageView = findViewById(R.id.imageViewProfile);
+        imageView.setOnClickListener(v -> openFileChooser());
 
         editFirstName = findViewById(R.id.editFirstName);
         editLastName = findViewById(R.id.editLastttName);
@@ -72,5 +77,12 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
                 editMail.getText().toString().isEmpty() ||
                 editAddress.getText().toString().isEmpty() ||
                 editPhone.getText().toString().isEmpty();
+    }
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 }
