@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_theme_background"
-    tools:context=".Admin.SitesFragment">
+        tools:context=".Admin.ChatFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,39 +14,45 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/md_theme_inverseOnSurface"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBarSite"
+                android:id="@+id/topAppBarUsers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
-                android:visibility="visible"
                 android:minHeight="?attr/actionBarSize"
-                app:title="Lista de sitios" />
+                app:menu="@menu/top_app_bar_admin_users"
+                app:title="Chats" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/topAppBarSite"
+                app:layout_constraintTop_toBottomOf="@id/topAppBarUsers"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <com.google.android.material.tabs.TabItem
-                    android:text="Activos"
+                    android:text="Todos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <com.google.android.material.tabs.TabItem
-                    android:text="Inactivos"
+                    android:text="Administradores"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:text="Supervisores"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -54,28 +60,25 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listElements"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/agregarUsuariofloatingActionButton"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
             app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/appBarLayout"
-            app:layout_constraintEnd_toEndOf="parent" />
+            tools:layout_editor_absoluteX="-16dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/agregarSitiofloatingActionButton"
+            android:id="@+id/agregarUsuariofloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_locationadd_outline"
+            android:src="@drawable/ic_addperson_outline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:contentDescription="Agregar" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -28,7 +28,7 @@ public class MainActivity_edit_user_admin extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Manejar los clics en los elementos del menú
+
         if (item.getItemId() == R.id.saveUser) {
             startActivity(new Intent(this, MainActivity_userprofile_admin.class));
             return true;
