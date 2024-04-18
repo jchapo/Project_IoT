@@ -1,0 +1,5 @@
+<!-- item_background_normal.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@android:color/transparent" /> <!-- Cambia esto al color de fondo normal del elemento -->
+</shape>

@@ -40,7 +40,7 @@ public class SitiosFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.sitios_supervisor_fragment, container, false);
-        Toolbar toolbar = view.findViewById(R.id.topAppBarSite);
+        Toolbar toolbar = view.findViewById(R.id.topAppBarSiteSuper);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
 
