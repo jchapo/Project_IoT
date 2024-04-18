@@ -183,8 +183,8 @@
                             android:layout_height="48dp"
                             android:padding="8dp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/ic_remove_outline" />
-
+                            android:src="@drawable/ic_remove_outline"
+                            android:onClick="showRemoveSupervisorConfirmationDialog" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -195,7 +195,15 @@
                     app:cardBackgroundColor="@color/md_theme_inversePrimary"
                     app:cardCornerRadius="8dp">
 
-                    <LinearLayout
+                    <FrameLayout
+                        android:id="@+id/btnAddSupervisor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+
+                        <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -207,7 +215,7 @@
                             android:padding="8dp"
                             android:layout_gravity="center"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/ic_add_outline" />
+                            android:src="@drawable/ic_addperson_outline_black" />
 
                         <!-- Texto en el centro -->
                         <TextView
@@ -226,9 +234,11 @@
                             android:layout_height="48dp"
                             android:padding="8dp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/ic_remove_outline" />
+                            android:src="@drawable/ic_mas_anadir" />
 
                     </LinearLayout>
+
+                    </FrameLayout>
                 </androidx.cardview.widget.CardView>
 
                 <!-- Resto de CardViews similares -->

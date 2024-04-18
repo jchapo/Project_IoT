@@ -1,86 +1,57 @@
 package com.example.myapplication.Admin;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Admin.items.ListAdapterUser;
 import com.example.myapplication.Admin.items.ListElementUser;
+import com.example.myapplication.Admin.items.SimpleListAdapter;
 import com.example.myapplication.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsersFragment extends Fragment {
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
+public class MainActivity_addSupervisor_admin extends AppCompatActivity {
 
     List<ListElementUser> elements;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.top_app_bar_admin_users, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_users, container, false);
-        Toolbar toolbar = view.findViewById(R.id.topAppBarUserFragment);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
-
-        /**drawerLayout = view.findViewById(R.id.navView);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();**/
-
-        setHasOptionsMenu(true);
+        setContentView(R.layout.activity_main_add_supervisor_admin);
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBarAddSuperSite);
+        topAppBar.inflateMenu(R.menu.top_app_bar_admin_select_super);
+        View view = getWindow().getDecorView().getRootView();
         init(view);
-        
-        
-        FloatingActionButton agregarUsuarioButton = view.findViewById(R.id.agregarUsuariofloatingActionButton);
-        agregarUsuarioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Aquí cambia "NuevaActividad" por la clase de la actividad a la que deseas cambiar
-                Intent intent = new Intent(getActivity(), MainActivity_new_user_admin.class);
-                startActivity(intent);
+
+        topAppBar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.chooseSuper) {
+                Toast.makeText(MainActivity_addSupervisor_admin.this, "Supervisor asignado", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                return false;
             }
+            return false;
         });
-
-
-        return view;
+        topAppBar.setNavigationOnClickListener(v -> {
+            finish();
+        });
     }
+
 
     public void init(View view) {
         elements = new ArrayList<>();
@@ -106,16 +77,17 @@ public class UsersFragment extends Fragment {
         elements.add(new ListElementUser("70987654", "Roberto", "Suares","Supervisor", "Activo", "roberto_correo@gmail.com","976543218", "Calle de la Arena"));
 
 
-        ListAdapterUser listAdapter = new ListAdapterUser(elements, getContext(), item -> moveToDescription(item));
+        SimpleListAdapter simpleListAdapter = new SimpleListAdapter( this, elements);
         RecyclerView recyclerView = view.findViewById(R.id.listElementsUsers);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(listAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(simpleListAdapter);
     }
 
     public void moveToDescription(ListElementUser item){
-        Intent intent = new Intent(getContext(),MainActivity_userprofile_admin.class);
+        Intent intent = new Intent(this,MainActivity_userprofile_admin.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);
     }
+
 }
