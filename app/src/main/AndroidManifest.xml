@@ -93,6 +93,9 @@
         <activity
             android:name=".Admin.MainActivity_chat_user"
             android:exported="false" />
+        <activity
+            android:name=".Sistem.MainActivity_notificacion_user"
+            android:exported="false" />
     </application>
 
 </manifest>

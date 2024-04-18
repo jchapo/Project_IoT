@@ -1,4 +1,4 @@
-package com.example.myapplication.Admin;
+package com.example.myapplication.Sistem;
 
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
@@ -16,7 +16,7 @@ import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class MainActivity_chat_user extends AppCompatActivity {
+public class MainActivity_notificacion_user extends AppCompatActivity {
 
     TextView nameTextView;
 
@@ -24,7 +24,7 @@ public class MainActivity_chat_user extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_chat_users);
+        setContentView(R.layout.activity_main_notificacion_user);
 
         //ListElementUser element = (ListElementUser) getIntent().getSerializableExtra("ListElement");
         //nameTextView = findViewById(R.id.topAppBarNameChat);
@@ -33,7 +33,7 @@ public class MainActivity_chat_user extends AppCompatActivity {
         //nameTextView.setText(element.getName());
 
 
-        Toolbar toolbar = findViewById(R.id.topAppBarNameChat);
+        Toolbar toolbar = findViewById(R.id.topAppBarNameNotification);
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -42,10 +42,7 @@ public class MainActivity_chat_user extends AppCompatActivity {
                 finish();
             }
         });
+
+
     }
-
-
-
-
-
 }
