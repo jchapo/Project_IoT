@@ -1,11 +1,22 @@
 package com.example.myapplication.Admin;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;import com.google.android.material.textfield.TextInputLayout;
+
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -19,14 +30,16 @@ import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity_new_site_admin extends AppCompatActivity {
 
-    private EditText editDepartment, editProvince, editDistrict, editAddress, editUbigeo, editZoneType, editSiteType, editSiteLatitud, editSiteLongitud;
-    TextInputEditText textField = findViewById(R.id.editUbigeo);
-
-
+    private EditText editDepartment, editProvince, editDistrict, editAddress, editUbigeo, editZoneType, editSiteType, editSiteCoordenadas;
+    private static final int PICK_LOCATION_REQUEST = 1;
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
+    double latitude, longitude;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
 
@@ -34,6 +47,10 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_new_site_admin);
+        TextInputLayout textInputLayout = findViewById(R.id.textInputLayoutLongitud);
+
+        Places.initialize(getApplicationContext(), "AIzaSyAExTORfkCED6S7JMtHAnYKhJVJ5J9inaw");
+        PlacesClient placesClient = Places.createClient(this);
 
         imageView = findViewById(R.id.imageViewNewSite);
         imageView.setOnClickListener(v -> openFileChooser());
@@ -44,8 +61,8 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         editUbigeo = findViewById(R.id.editUbigeo);
         editZoneType = findViewById(R.id.editZoneType);
         editSiteType = findViewById(R.id.editSiteType);
-        editSiteLatitud = findViewById(R.id.editSiteType);
-        editSiteLongitud = findViewById(R.id.editSiteType);
+        editSiteCoordenadas = findViewById(R.id.editCoordenadas);
+
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewSite);
         topAppBar.setOnMenuItemClickListener(item -> {
@@ -60,14 +77,20 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
                     String ubigeo = editUbigeo.getText().toString();
                     String zonetype = editZoneType.getText().toString();
                     String sitetype = editSiteType.getText().toString();
+
                     String location = "NombreGeneradoAutomáticamente";
                     String latitud = "NombreGeneradoAutomáticamente";
-                    String name2 = "NombreGeneradoAutomáticamente";
-                    String longitud = "Activo";
-                    String status = "Activo";
+                    String longitud = "NombreGeneradoAutomáticamente";
+                    String name = "NombreGeneradoAutomáticamente";
+                    //double latitud = latitude;
 
+                    String name2 = "NombreGeneradoAutomáticamente";
+                    //double longitud = longitude;
+                    String status = "Activo";
+                    //String coordenadas = String.format(Locale.getDefault(), "%.6f ; %.6f", longitud, latitud);
 
                     ListElementSite listElement = new ListElementSite(department, name2, status, province, district, address, location ,ubigeo, zonetype, sitetype, latitud, longitud);
+
                     
                     Intent intent = new Intent(MainActivity_new_site_admin.this, MainActivity_siteprofile_admin.class);
                     intent.putExtra("ListElement", listElement);
@@ -80,6 +103,16 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         });
         topAppBar.setNavigationOnClickListener(v -> {
             finish();
+        });
+        textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG))
+                        .setCountry("PE") // Cambia esto al código de país que desees
+                        .build(MainActivity_new_site_admin.this);
+
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+            }
         });
     }
 
@@ -97,6 +130,26 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
             imageView.setImageURI(imageUri);
+        } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                LatLng latLng = place.getLatLng();
+
+                // Intercambiar los valores de latitud y longitud
+                latitude = latLng.longitude; // Aquí se guarda la longitud
+                longitude = latLng.latitude; // Aquí se guarda la latitud
+
+                // Formatear las coordenadas en el formato "longitud ; latitud"
+                String formattedCoordinates = String.format(Locale.getDefault(), "%.6f ; %.6f", longitude, latitude);
+
+                // Colocar las coordenadas en el campo de texto
+                editSiteCoordenadas.setText(formattedCoordinates);
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // El usuario canceló la selección
+            }
         }
     }
 
@@ -109,8 +162,5 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
                 editZoneType.getText().toString().isEmpty() ||
                 editSiteType.getText().toString().isEmpty();
     }
-
-
-
 
 }
