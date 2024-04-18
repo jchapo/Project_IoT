@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/usuarios_menu_superadmin"
+        android:enabled="true"
+        android:icon="@drawable/ic_groups_outline"
+        android:title="Usuarios"/>
+    <item
+        android:id="@+id/log_menu_superadmin"
+        android:enabled="true"
+        android:icon="@drawable/ic_codeblock_outline_black"
+        android:title="Log"/>
+    <item
+        android:id="@+id/chat_menu_superadmin"
+        android:enabled="true"
+        android:icon="@drawable/ic_chat_outline"
+        android:title="Chats"/>
+</menu>
+
+
