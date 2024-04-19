@@ -55,16 +55,6 @@ public class ChatFragment extends Fragment {
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         init(view);
-        FloatingActionButton agregarUsuarioButton = view.findViewById(R.id.agregarUsuariofloatingActionButton);
-        agregarUsuarioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Aquí cambia "NuevaActividad" por la clase de la actividad a la que deseas cambiar
-                Intent intent = new Intent(getActivity(), MainActivity_new_user_admin.class);
-                startActivity(intent);
-            }
-        });
-
 
         return view;
     }

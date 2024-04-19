@@ -58,11 +58,11 @@ public class UsersFragment extends Fragment {
         Toolbar toolbar = view.findViewById(R.id.topAppBarUserFragment);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
 
-        /**drawerLayout = view.findViewById(R.id.navView);
+        drawerLayout = view.findViewById(R.id.drawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();**/
+        toggle.syncState();
 
         setHasOptionsMenu(true);
         init(view);
