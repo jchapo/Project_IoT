@@ -51,15 +51,15 @@ public class ReportesFragment extends Fragment {
 
     public void init(View view) {
         elementsReportes = new ArrayList<>();
-        elementsReportes.add(new ListElementReportes("RPT-101","ARP-101","13/04/24","17/04/24","Pablo"));
-        elementsReportes.add(new ListElementReportes("RPT-102","ARP-102","12/04/24","17/04/24","Pablo"));
-        elementsReportes.add(new ListElementReportes("RPT-103","ARP-103","11/04/24","13/04/24","Sergio"));
-        elementsReportes.add(new ListElementReportes("RPT-104","CAJ-101","10/04/24","11/04/24","Juan"));
-        elementsReportes.add(new ListElementReportes("RPT-105","CAJ-102","09/04/24","12/04/24","Juan"));
-        elementsReportes.add(new ListElementReportes("RPT-106","CAJ-103","06/04/24","11/04/24","Juan"));
-        elementsReportes.add(new ListElementReportes("RPT-107","LIM-101","03/04/24","10/04/24","Diego"));
-        elementsReportes.add(new ListElementReportes("RPT-108","LIM-102","12/04/24","14/04/24","Diego"));
-        elementsReportes.add(new ListElementReportes("RPT-109","LIM-103","16/04/24","17/04/24","Sergio"));
+        elementsReportes.add(new ListElementReportes("RPT-101","ARP-101","13/04/24","17/04/24","Pablo","Router SW1","Malfuncionamiento del equipo"));
+        elementsReportes.add(new ListElementReportes("RPT-102","ARP-102","12/04/24","17/04/24","Pablo","Router SW2","Malfuncionamiento del equipo"));
+        elementsReportes.add(new ListElementReportes("RPT-103","ARP-103","11/04/24","13/04/24","Sergio","Router SW3","Malfuncionamiento del equipo"));
+        elementsReportes.add(new ListElementReportes("RPT-104","CAJ-101","10/04/24","11/04/24","Juan","Switch DW3","Malfuncionamiento del equipo"));
+        elementsReportes.add(new ListElementReportes("RPT-105","CAJ-102","09/04/24","12/04/24","Juan","Switch DW4","Malfuncionamiento del equipo"));
+        elementsReportes.add(new ListElementReportes("RPT-106","CAJ-103","06/04/24","11/04/24","Juan","Switch DW5","Malfuncionamiento del equipo"));
+        elementsReportes.add(new ListElementReportes("RPT-107","LIM-101","03/04/24","10/04/24","Diego","Repetidor RE1","Malfuncionamiento del equipo"));
+        elementsReportes.add(new ListElementReportes("RPT-108","LIM-102","12/04/24","14/04/24","Diego","Repetidor RE2","Malfuncionamiento del equipo"));
+        elementsReportes.add(new ListElementReportes("RPT-109","LIM-103","16/04/24","17/04/24","Sergio","Repetidor RE3","Malfuncionamiento del equipo"));
 
         // Añadir más elementos según sea necesario
 
