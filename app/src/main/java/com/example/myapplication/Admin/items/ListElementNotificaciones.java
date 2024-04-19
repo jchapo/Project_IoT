@@ -6,12 +6,15 @@ public class ListElementNotificaciones implements Serializable {
     public String accion;
     public String descripcionResumida;
     public String fecha;
+    //public String descripcionTotal;
 
 
     public ListElementNotificaciones(String accion, String descripcionResumida, String fecha) {
         this.accion = accion;
         this.descripcionResumida = descripcionResumida;
         this.fecha = fecha;
+
+
     }
 
 
@@ -39,5 +42,7 @@ public class ListElementNotificaciones implements Serializable {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
+
+
 
 }

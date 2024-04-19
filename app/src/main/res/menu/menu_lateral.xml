@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <!-- Primera sección: Perfil -->
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_perfil_outline"
+            android:title="Diego Corcuera Lamo" />
+        <!-- Segunda sección: Correo -->
+        <item
+            android:id="@+id/nav_email"
+            android:icon="@drawable/ic_email_outline"
+            android:title="djcll_2015@hotmail.com" />
+        <!-- Tercera sección: Teléfono -->
+        <item
+            android:id="@+id/nav_phone"
+            android:icon="@drawable/ic_phone_outline"
+            android:title="986492338" />
+
+        <item
+            android:id="@+id/nav_change_password"
+            android:icon="@drawable/ic_password_outline"
+            android:title="Cambiar Contraseña" />
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Cerrar Sesión" />
+    </group>
+</menu>

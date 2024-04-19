@@ -17,15 +17,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Admin.items.ListAdapterChat;
 import com.example.myapplication.Admin.items.ListAdapterNotificaciones;
-import com.example.myapplication.Admin.items.ListElementChat;
 import com.example.myapplication.Admin.items.ListElementNotificaciones;
-import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.myapplication.Sistem.MainActivity_notificacion_user;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,14 +68,14 @@ public class NotificationsFragment extends Fragment {
 
 
         ListAdapterNotificaciones listAdapter = new ListAdapterNotificaciones(elements, getContext(), item -> moveToDescription(item));
-        RecyclerView recyclerView = view.findViewById(R.id.listElements);
+        RecyclerView recyclerView = view.findViewById(R.id.listElementsAlerts);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(listAdapter);
     }
 
     public void moveToDescription(ListElementNotificaciones item){
-        Intent intent = new Intent(getContext(),MainActivity_chat_user.class);
+        Intent intent = new Intent(getContext(), MainActivity_notificacion_user.class);
         intent.putExtra("ListElement",item);
         startActivity(intent);
     }

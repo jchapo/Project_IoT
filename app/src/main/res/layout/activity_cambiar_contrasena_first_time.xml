@@ -18,19 +18,16 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <!-- Texto de bienvenida -->
-        <TextView
-            android:id="@+id/textWelcome"
-            android:layout_width="wrap_content"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBarNewSite"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bienvenido a Telesolver!"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:paddingStart="16dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp"/>
-
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            app:menu="@menu/top_app_bar"
+            app:navigationIcon="@drawable/ic_back_outline_white"
+            app:title="Bienvenido a TeleSolver!"
+            app:titleTextColor="@color/gris" />
     </LinearLayout>
 
     <!-- Texto de seguridad -->
@@ -173,16 +170,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginTop="32dp"/>
 
-    <!-- Flecha de retroceso -->
-    <ImageButton
-        android:id="@+id/buttonBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_back_outline_white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

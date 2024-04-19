@@ -1,9 +1,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
     <item
         android:id="@+id/search_item"
         android:title="Buscar"
         android:icon="@drawable/ic_search_outline"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always|collapseActionView"/>
+
+
+    <item
+        android:id="@+id/perfil"
+        android:title="Buscar"
+        android:icon="@drawable/ic_perfil_outline"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView"/>
+
 </menu>
