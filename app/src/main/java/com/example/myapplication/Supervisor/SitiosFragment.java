@@ -3,8 +3,6 @@ package com.example.myapplication.Supervisor;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -12,20 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.myapplication.Admin.MainActivity_new_site_admin;
-import com.example.myapplication.Admin.MainActivity_siteprofile_admin;
-import com.example.myapplication.Admin.items.ListAdapterSite;
-import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.objetos.ListAdapterSiteSupervisor;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +29,7 @@ public class SitiosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.sitios_supervisor_fragment, container, false);
+        View view = inflater.inflate(R.layout.supervisor_fragment_sitios, container, false);
         Toolbar toolbar = view.findViewById(R.id.topAppBarSiteSuper);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);

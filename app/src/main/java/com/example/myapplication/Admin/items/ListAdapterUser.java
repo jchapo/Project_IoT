@@ -38,7 +38,7 @@ public class ListAdapterUser extends RecyclerView.Adapter<ListAdapterUser.ViewHo
 
     @Override
     public ListAdapterUser.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
-        View view = nInflater.inflate(R.layout.lista_usuasios_admin, null);
+        View view = nInflater.inflate(R.layout.admin_list_usuarios, null);
         return new ListAdapterUser.ViewHolder(view);
     }
 

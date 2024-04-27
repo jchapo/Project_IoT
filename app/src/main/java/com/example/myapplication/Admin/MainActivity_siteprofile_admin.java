@@ -1,6 +1,5 @@
 package com.example.myapplication.Admin;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +9,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
@@ -31,7 +26,7 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_siteprofile_admin);
+        setContentView(R.layout.admin_activity_main_siteprofile);
 
         ListElementSite element = (ListElementSite) getIntent().getSerializableExtra("ListElementSite");
         nameTextViewSite = findViewById(R.id.nameTextViewSite);

@@ -37,7 +37,7 @@ public class ListAdapterSite extends RecyclerView.Adapter<ListAdapterSite.ViewHo
 
     @Override
     public ListAdapterSite.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
-        View view = nInflater.inflate(R.layout.lista_sitios_admin, null);
+        View view = nInflater.inflate(R.layout.admin_lista_sitios, null);
         return new ListAdapterSite.ViewHolder(view);
     }
 

@@ -9,9 +9,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.example.myapplication.Admin.items.ListElementSite;
-import com.example.myapplication.Supervisor.objetos.ListAdapterReportesSupervisor;
-import com.example.myapplication.Supervisor.objetos.ListElementReportes;
 import com.example.myapplication.R;
 
 import java.util.List;
@@ -40,7 +37,7 @@ public class ListAdapterReportesSupervisor extends RecyclerView.Adapter<ListAdap
 
     @Override
     public ListAdapterReportesSupervisor.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_reportes_supervisor, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.supervisor_list_reportes, parent, false);
         return new ListAdapterReportesSupervisor.ViewHolder(view);
     }
 

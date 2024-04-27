@@ -28,7 +28,7 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_userprofile_admin);
+        setContentView(R.layout.admin_activity_main_userprofile);
 
         ListElementUser element = (ListElementUser) getIntent().getSerializableExtra("ListElement");
         nameDescriptionTextView = findViewById(R.id.fullNameTextView);
