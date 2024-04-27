@@ -3,7 +3,6 @@ package com.example.myapplication.Admin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -23,7 +22,7 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_new_user_admin);
+        setContentView(R.layout.admin_activity_main_new_user);
 
         // Obtener el indicador de si se está editando desde el Intent
         isEditing = getIntent().getBooleanExtra("isEditing", false);

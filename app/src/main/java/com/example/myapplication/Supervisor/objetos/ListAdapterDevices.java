@@ -38,7 +38,7 @@ public class ListAdapterDevices extends RecyclerView.Adapter<ListAdapterDevices.
 
     @Override
     public ListAdapterDevices.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
-        View view = nInflater.inflate(R.layout.lista_devices_supervisor, null);
+        View view = nInflater.inflate(R.layout.supervisor_list_devices, null);
         return new ListAdapterDevices.ViewHolder(view);
     }
 
