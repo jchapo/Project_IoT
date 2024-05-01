@@ -43,7 +43,9 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent = new Intent(MainActivity_siteprofile_admin.this, MainActivity_navigation_admin.class);
+                intent.putExtra("comeFrom", "siteProfile");
+                startActivity(intent);
             }
         });
 

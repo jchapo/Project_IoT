@@ -9,16 +9,15 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label=""
+        android:label="TeleManage"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
-        <activity
-            android:name=".Supervisor.CrearReporte"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan"
-            />
+
+
+
+        <!-- Actividades Sistema -->
         <activity
             android:name=".Sistem.LoginActivityFirstTime"
             android:exported="true">
@@ -29,8 +28,30 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Sistem.LoginActivity"
+            android:exported="true" />
+        <activity
             android:name=".Sistem.MainActivityCambiarPrimeraContra"
             android:exported="false" />
+        <activity
+            android:name=".NavegacionInicial"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".Sistem.MainActivity_notificacion_user"
+            android:exported="false" />
+
+
+
+
+        <!-- Actividades Super Admin -->
+        <activity
+            android:name=".SuperAdmin.MainActivity_navigation_SuperAdmin"
+            android:exported="false" />
+
+
+
+        <!-- Actividades Admin -->
         <activity
             android:name=".Admin.items.SimpleListAdapter"
             android:exported="false" />
@@ -38,14 +59,35 @@
             android:name=".Admin.MainActivity_addSupervisor_admin"
             android:exported="false" />
         <activity
-            android:name=".Sistem.LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:name=".Admin.MainActivity_new_site_admin"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.MainActivity_siteprofile_admin"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.MainActivity_search_admin"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.MainActivity_userprofile_admin"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.MainActivity_edit_user_admin"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.MainActivity_new_user_admin"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.MainActivity_navigation_admin"
+            android:exported="false" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+
+
+
+        <!-- Actividades Supervisor -->
+        <activity
+            android:name=".Supervisor.CrearReporte"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Supervisor.MasDetallesReportes"
             android:exported="false" />
@@ -58,44 +100,10 @@
         <activity
             android:name=".Supervisor.NavegacionSupervisor"
             android:exported="true" />
-        <activity
-            android:name=".NavegacionInicial"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".Admin.MainActivity_new_site_admin"
-            android:exported="false" />
-        <activity
-            android:name=".Admin.MainActivity_siteprofile_admin"
-            android:exported="false" />
-        <activity
-            android:name=".Admin.MainActivity_search_admin"
-            android:exported="false" />
-        <activity
-            android:name=".Admin.MainActivity_userprofile_admin"
-            android:exported="false"
-            android:parentActivityName=".Admin.MainActivity_navigation_admin" />
-        <activity
-            android:name=".Admin.MainActivity_edit_user_admin"
-            android:exported="false" />
-        <activity
-            android:name=".Admin.MainActivity_new_user_admin"
-            android:exported="false"
-            android:parentActivityName=".Admin.MainActivity_navigation_admin" />
-        <activity
-            android:name=".Admin.MainActivity_navigation_admin"
-            android:exported="false" />
-        <activity
-            android:name=".SuperAdmin.MainActivity_navigation_SuperAdmin"
-            android:exported="false" />
-        <activity
-            android:name=".Sistem.MainActivity_notificacion_user"
-            android:exported="false" />
+
+
+
     </application>
 
 </manifest>

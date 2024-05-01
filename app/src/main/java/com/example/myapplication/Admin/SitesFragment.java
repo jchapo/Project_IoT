@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.Admin.items.ListAdapterSite;
 import com.example.myapplication.Admin.items.ListElementSite;
-import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -52,7 +51,7 @@ public class SitesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_sites, container, false);
+        View view = inflater.inflate(R.layout.admin_fragment_sites, container, false);
         Toolbar toolbar = view.findViewById(R.id.topAppBarSite);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
