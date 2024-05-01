@@ -27,6 +27,9 @@
         <activity
             android:name=".Sistem.MainActivityCambiarPrimeraContra"
             android:exported="false" />
+        <activity
+            android:name=".Admin.MainActivity_chat_user"
+            android:exported="false" />
 
         <activity
             android:name=".Admin.items.SimpleListAdapter"

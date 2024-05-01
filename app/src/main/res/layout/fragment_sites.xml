@@ -30,6 +30,7 @@
                 android:background="?attr/colorPrimary"
                 android:visibility="visible"
                 android:minHeight="?attr/actionBarSize"
+                app:navigationIcon="@drawable/ic_perfil_outline"
                 app:title="Lista de sitios" />
 
             <com.google.android.material.tabs.TabLayout
