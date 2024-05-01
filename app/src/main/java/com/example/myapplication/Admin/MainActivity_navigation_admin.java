@@ -14,16 +14,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.myapplication.R;
-import com.example.myapplication.databinding.ActivityMainNavigationAdminBinding;
+import com.example.myapplication.databinding.AdminActivityMainNavigationBinding;
 
 public class MainActivity_navigation_admin extends AppCompatActivity {
 
-    ActivityMainNavigationAdminBinding binding;
+    AdminActivityMainNavigationBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainNavigationAdminBinding.inflate(getLayoutInflater());
+        binding = AdminActivityMainNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new UsersFragment());
 
