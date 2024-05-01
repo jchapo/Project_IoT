@@ -13,12 +13,12 @@ import com.example.myapplication.R;
 
 public class MainActivity_navigation_SuperAdmin extends AppCompatActivity {
 
-    com.example.myapplication.databinding.ActivityMainNavigationSuperadminBinding binding;
+    com.example.myapplication.databinding.SuperadminActivityMainNavigationBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = com.example.myapplication.databinding.ActivityMainNavigationSuperadminBinding.inflate(getLayoutInflater());
+        binding = com.example.myapplication.databinding.SuperadminActivityMainNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragmentSuperAdmin(new UsersFragmentSuperAdmin());
 

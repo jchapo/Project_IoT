@@ -12,16 +12,16 @@ import com.example.myapplication.Admin.NotificationsFragment;
 import com.example.myapplication.Admin.SitesFragment;
 import com.example.myapplication.Admin.UsersFragment;
 import com.example.myapplication.R;
-import com.example.myapplication.databinding.ActivityNavegacionSupervisorBinding;
+import com.example.myapplication.databinding.SupervisorActivityNavegacionBinding;
 
 public class NavegacionSupervisor extends AppCompatActivity {
 
-    ActivityNavegacionSupervisorBinding binding;
+    SupervisorActivityNavegacionBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityNavegacionSupervisorBinding.inflate(getLayoutInflater());
+        binding = SupervisorActivityNavegacionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         // Reemplazar el fragmento con SitiosFragment al iniciar la actividad
         replaceFragment(new SitiosFragment());
