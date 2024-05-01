@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.lista_usuasios_admin_select, parent, false);
+        View view = mInflater.inflate(R.layout.admin_list_usuarios_select, parent, false);
         return new ViewHolder(view);
     }
 

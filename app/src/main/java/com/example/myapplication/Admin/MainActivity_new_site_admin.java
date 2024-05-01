@@ -14,11 +14,10 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textfield.TextInputLayout;
 
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -31,7 +30,6 @@ import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 public class MainActivity_new_site_admin extends AppCompatActivity {
@@ -46,7 +44,7 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_new_site_admin);
+        setContentView(R.layout.admin_activity_main_new_site);
         TextInputLayout textInputLayout = findViewById(R.id.textInputLayoutLongitud);
 
         Places.initialize(getApplicationContext(), "AIzaSyAExTORfkCED6S7JMtHAnYKhJVJ5J9inaw");

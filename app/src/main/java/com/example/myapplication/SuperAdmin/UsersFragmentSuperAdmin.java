@@ -51,7 +51,7 @@ public class UsersFragmentSuperAdmin extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_users_superadmin, container, false);
+        View view = inflater.inflate(R.layout.superadmin_fragment_users, container, false);
         Toolbar toolbar = view.findViewById(R.id.topAppBarUserFragmentSuperAdmin);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);

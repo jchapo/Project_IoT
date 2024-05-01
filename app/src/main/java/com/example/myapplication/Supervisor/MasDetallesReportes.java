@@ -6,20 +6,11 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.myapplication.Supervisor.NavegacionSupervisor;
-import com.example.myapplication.Admin.MainActivity_siteprofile_admin;
-import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Supervisor.objetos.ListElementReportes;
 import com.example.myapplication.R;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MasDetallesReportes extends AppCompatActivity {
 
@@ -30,7 +21,7 @@ public class MasDetallesReportes extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mas_detalles_reportes_supervisor);
+        setContentView(R.layout.supervisor_activity_mas_detalles_reportes);
 
         ListElementReportes element = (ListElementReportes) getIntent().getSerializableExtra("ListElementReporte");
         textViewdescripcion = findViewById(R.id.textViewdescripcion);

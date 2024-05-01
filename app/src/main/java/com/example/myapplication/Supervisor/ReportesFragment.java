@@ -3,22 +3,15 @@ package com.example.myapplication.Supervisor;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.myapplication.Admin.items.ListElementSite;
-import com.example.myapplication.Supervisor.objetos.ListAdapterSiteSupervisor;
 import com.example.myapplication.Supervisor.objetos.ListElementReportes;
 import com.example.myapplication.Supervisor.objetos.ListAdapterReportesSupervisor;
 import com.example.myapplication.R;
@@ -38,13 +31,26 @@ public class ReportesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_reportes, container, false);
+        View view = inflater.inflate(R.layout.supervisor_fragment_reportes, container, false);
         Toolbar toolbar = view.findViewById(R.id.topAppBarSupervisorReportes);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
 
         // Inicializar RecyclerView y cargar datos
         init(view);
+
+        FloatingActionButton fab = view.findViewById(R.id.agregarReportefloatingActionButton);
+
+        // Agregar OnClickListener al botón flotante
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Iniciar la actividad Crear Reporte
+                Intent intent = new Intent(getContext(), CrearReporte.class);
+                startActivity(intent);
+            }
+        });
+
 
         return view;
     }
@@ -77,4 +83,8 @@ public class ReportesFragment extends Fragment {
         intent.putExtra("ListElementReporte", item);
         startActivity(intent);
     }
+
+
+
+
 }

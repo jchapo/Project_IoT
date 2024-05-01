@@ -28,7 +28,7 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_userprofile_admin);
+        setContentView(R.layout.admin_activity_main_userprofile);
 
         ListElementUser element = (ListElementUser) getIntent().getSerializableExtra("ListElement");
         nameDescriptionTextView = findViewById(R.id.fullNameTextView);
@@ -51,7 +51,9 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent = new Intent(MainActivity_userprofile_admin.this, MainActivity_navigation_admin.class);
+                intent.putExtra("comeFrom", "userProfile");
+                startActivity(intent);
             }
         });
 
@@ -60,13 +62,9 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
             // Código para abrir MainActivity_new_user_admin desde la actividad del perfil de usuario
             @Override
             public void onClick(View v) {
-                // Crear Intent para iniciar MainActivity_new_user_admin
                 Intent intent = new Intent(MainActivity_userprofile_admin.this, MainActivity_new_user_admin.class);
-                // Agregar el indicador para editar un usuario existente
                 intent.putExtra("isEditing", true);
-                // Agregar datos del usuario como extras al Intent
                 intent.putExtra("ListElement", element);
-                // Iniciar MainActivity_new_user_admin con el Intent
                 startActivity(intent);
             }
         });

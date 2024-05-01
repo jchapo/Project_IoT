@@ -1,7 +1,37 @@
 <resources>
     <string name="app_name">My Application</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="navigation_drawer_open">Abrir menú lateral</string>
     <string name="navigation_drawer_close">Cerrar menú lateral</string>
+    <string name="crear_reporte_de_sitio">Crear reporte de sitio</string>
+    <string name="crear_reporte_de_equipo">Crear reporte de equipo</string>
+    <string name="selecciona_sitio">Selecciona el sitio:</string>
+    <string name="selecciona_equipo">Selecciona el equipo:</string>
+    <string name="anote_sus_observaciones">Anote sus observaciones</string>
+    <string name="crear_reporte">Crear reporte</string>
+
+    <string-array name="Sitios">
+        <item>ARP-101</item>
+        <item>ARP-102</item>
+        <item>ARP-103</item>
+        <item>CAJ-101</item>
+        <item>CAJ-102</item>
+        <item>CAJ-103</item>
+        <item>LIM-101</item>
+        <item>LIM-102</item>
+        <item>LIM-103</item>
+    </string-array>
+    <string-array name="Equipos">
+        <item>Switch_101</item>
+        <item>Switch-102</item>
+        <item>Router-101</item>
+        <item>Router-102</item>
+        <item>Router-103</item>
+        <item>Patch-101</item>
+        <item>Patch-102</item>
+        <item>Repetidor-101</item>
+        <item>Repetidor-102</item>
+    </string-array>
+
+
 </resources>

@@ -37,7 +37,7 @@ public class ListAdapterChat extends RecyclerView.Adapter<ListAdapterChat.ViewHo
 
     @Override
     public ListAdapterChat.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
-        View view = nInflater.inflate(R.layout.lista_chats, null);
+        View view = nInflater.inflate(R.layout.admin_lista_chats, null);
         return new ListAdapterChat.ViewHolder(view);
     }
 

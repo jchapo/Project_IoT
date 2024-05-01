@@ -12,17 +12,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.Admin.MainActivity_navigation_admin;
 import com.example.myapplication.NavegacionInicial;
 import com.example.myapplication.R;
-import com.example.myapplication.Supervisor.NavegacionSupervisor;
 
 public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_login_users);
+        setContentView(R.layout.sistema_activity_main_login_users);
 
         Button buttonLogin = findViewById(R.id.buttonLogin); // Reemplaza "buttonLogin" con el ID correcto de tu botón
 

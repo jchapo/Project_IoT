@@ -21,9 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Admin.items.ListAdapterChat;
 import com.example.myapplication.Admin.items.ListElementChat;
-import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +50,7 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragments_chats, container, false);
+        View view = inflater.inflate(R.layout.admin_fragments_chats, container, false);
         Toolbar toolbar = view.findViewById(R.id.topAppBarUsers);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
 
