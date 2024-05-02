@@ -47,7 +47,9 @@
             android:entries="@array/Equipos"
             android:prompt="@string/selecciona_sitio"
             android:spinnerMode="dropdown"
-            android:tooltipText="Selecciona el equipo" />
+            android:tooltipText="Selecciona el equipo"
+            android:dropDownHeight="50dp"
+            />
     </LinearLayout>
 
     <EditText

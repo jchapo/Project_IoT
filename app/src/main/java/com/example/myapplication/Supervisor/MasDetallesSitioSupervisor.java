@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MasDetallesSitioSupervisor extends AppCompatActivity {
     TextView nameTextViewSite;
@@ -67,6 +68,11 @@ public class MasDetallesSitioSupervisor extends AppCompatActivity {
                 // Iniciar la actividad ImagenesSitio con el Intent
                 startActivity(intent);
             }
+        });
+        FloatingActionButton fabEdit = findViewById(R.id.fabEdit);
+        fabEdit.setOnClickListener(v -> {
+            Intent intent = new Intent(MasDetallesSitioSupervisor.this, CrearReporte.class);
+            startActivity(intent);
         });
 
     }

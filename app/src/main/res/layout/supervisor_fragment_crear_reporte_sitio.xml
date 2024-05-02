@@ -47,6 +47,7 @@
             android:entries="@array/Sitios"
             android:prompt="@string/selecciona_sitio"
             android:spinnerMode="dropdown"
+            android:dropDownHeight="50dp"
             android:tooltipText="Selecciona el sitio" />
     </LinearLayout>
 
