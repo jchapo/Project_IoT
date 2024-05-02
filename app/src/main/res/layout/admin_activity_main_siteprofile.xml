@@ -71,19 +71,48 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/nameTextViewSite"
+                        android:id="@+id/nameTextViewSiteSiteProfile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:textSize="16dp"
                         android:text="Nombre del sitio" />
 
-                    <TextView
-                        android:id="@+id/addressTextViewSite"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:text="Departamento / Provincia / Distrito" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/departmentTextViewSite"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12dp"
+                            android:text="Departamento" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12dp"
+                            android:text=" / " />
+                        <TextView
+                            android:id="@+id/provinceTextViewSite"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12dp"
+                            android:text="Provincia" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12dp"
+                            android:text=" / " />
+                        <TextView
+                            android:id="@+id/districtTextViewSite"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12dp"
+                            android:text="Distrito" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <ImageButton
@@ -285,7 +314,7 @@
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabEdit"
+        android:id="@+id/fabEditSiteAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_chat_outline"
                     android:clickable="true"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="16dp"
                     android:onClick="icono1Click"/>
 
                 <ImageView
@@ -99,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_mail_outline"
                     android:clickable="true"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="16dp"
                     android:onClick="icono2Click"/>
 
                 <ImageView
@@ -235,6 +235,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:cardElevation="0dp"
                     android:layout_marginBottom="8dp"
                     app:cardBackgroundColor="@color/md_theme_inverseOnSurface_mediumContrast"
                     app:cardCornerRadius="8dp">
@@ -277,6 +278,8 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:cardElevation="0dp"
+
                     android:layout_marginBottom="8dp"
                     app:cardCornerRadius="8dp">
 
