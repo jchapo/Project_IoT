@@ -61,7 +61,7 @@
             android:id="@+id/listElementsUsers"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/agregarUsuariofloatingActionButton"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
