@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Admin.items.ListElementUser;
-import com.example.myapplication.Admin.items.SimpleListAdapter;
+import com.example.myapplication.Admin.items.ListAdapterAddSuper;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -26,7 +26,7 @@ public class MainActivity_addSupervisor_admin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_add_supervisor);
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarAddSuperSite);
-        topAppBar.inflateMenu(R.menu.top_app_bar_admin_select_super);
+        topAppBar.inflateMenu(R.menu.top_app_bar_admin_select);
         View view = getWindow().getDecorView().getRootView();
         init(view);
 
@@ -69,8 +69,8 @@ public class MainActivity_addSupervisor_admin extends AppCompatActivity {
         elements.add(new ListElementUser("70987654", "Roberto", "Suares","Supervisor", "Activo", "roberto_correo@gmail.com","976543218", "Calle de la Arena"));
 
 
-        SimpleListAdapter simpleListAdapter = new SimpleListAdapter( this, elements);
-        RecyclerView recyclerView = view.findViewById(R.id.listElementsUsers);
+        ListAdapterAddSuper simpleListAdapter = new ListAdapterAddSuper( this, elements);
+        RecyclerView recyclerView = view.findViewById(R.id.listElementsUsersAdd);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(simpleListAdapter);

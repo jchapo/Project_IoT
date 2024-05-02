@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +69,19 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        // Obtener referencia al FrameLayout que actuará como botón
+        FrameLayout btnAddSiteUserProfile = findViewById(R.id.btnAddSiteUserProfile);
+
+        // Agregar un OnClickListener al FrameLayout
+        btnAddSiteUserProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Crear Intent para iniciar la actividad MainActivity_addSupervisor_admin
+                Intent intent = new Intent(MainActivity_userprofile_admin.this, MainActivity_addSite_admin.class);
+                // Iniciar la actividad MainActivity_addSupervisor_admin con el Intent
+                startActivity(intent);
+            }
+        });
     }
 
     public void showConfirmationDialog(View view) {
@@ -91,6 +105,25 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
                 dialogInterface.dismiss(); // Cierra el diálogo sin hacer nada
             }
         });
+        builder.show();
+    }
+
+    public void showRemoveSiteConfirmationDialog(View view) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setMessage("¿Está seguro de que desea remover este sitio?")
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Eliminar el supervisor y mostrar el toast
+                        Toast.makeText(MainActivity_userprofile_admin.this, "Sitio removido", Toast.LENGTH_SHORT).show();
+                        // Aquí debes agregar el código para eliminar el supervisor
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // No hacer nada, simplemente cerrar el diálogo
+                        dialog.dismiss();
+                    }
+                });
         builder.show();
     }
 
