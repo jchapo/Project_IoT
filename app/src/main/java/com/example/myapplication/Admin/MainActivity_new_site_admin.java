@@ -8,14 +8,10 @@ import android.net.Uri;
 
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementUser;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
-import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -27,6 +23,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,6 +37,7 @@ import java.util.Locale;
 
 public class MainActivity_new_site_admin extends AppCompatActivity {
 
+    ListElementSite element;
     private EditText editAddress, editUbigeo, editSiteCoordenadas;
     private static final int PICK_LOCATION_REQUEST = 1;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -64,57 +63,10 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
 
     // Declarar los arrays de opciones para los campos de autocompletado
     String[] departmentOptions = {
-            "Amazonas",
-            "Áncash",
-            "Apurímac",
-            "Arequipa",
-            "Ayacucho",
-            "Cajamarca",
-            "Callao",
-            "Cusco",
-            "Huancavelica",
-            "Huánuco",
-            "Ica",
-            "Junín",
-            "La Libertad",
-            "Lambayeque",
-            "Lima",
-            "Loreto",
-            "Madre de Dios",
-            "Moquegua",
-            "Pasco",
-            "Piura",
-            "Puno",
-            "San Martín",
-            "Tacna",
-            "Tumbes",
-            "Ucayali",
-            "Amazonas",
-            "Áncash",
-            "Apurímac",
-            "Arequipa",
-            "Ayacucho",
-            "Cajamarca",
-            "Callao",
-            "Cusco",
-            "Huancavelica",
-            "Huánuco",
-            "Ica",
-            "Junín",
-            "La Libertad",
-            "Lambayeque",
-            "Lima",
-            "Loreto",
-            "Madre de Dios",
-            "Moquegua",
-            "Pasco",
-            "Piura",
-            "Puno",
-            "San Martín",
-            "Tacna",
-            "Tumbes",
-            "Ucayali"
-    };
+            "Amazonas", "Áncash","Apurímac","Arequipa","Ayacucho","Cajamarca","Callao","Cusco","Huancavelica","Huánuco","Ica","Junín","La Libertad","Lambayeque","Lima","Loreto","Madre de Dios","Moquegua","Pasco","Piura",
+            "Puno","San Martín","Tacna","Tumbes","Ucayali","Amazonas","Áncash","Apurímac","Arequipa","Ayacucho","Cajamarca","Callao",
+            "Cusco","Huancavelica","Huánuco","Ica","Junín","La Libertad","Lambayeque","Lima","Loreto","Madre de Dios","Moquegua",
+            "Pasco","Piura","Puno","San Martín","Tacna","Tumbes","Ucayali"};
     // Cambia a tus opciones reales
     String[] provinceOptions = {"Province A", "Province B", "Province C"}; // Cambia a tus opciones reales
     String[] districtOptions = {"District X", "District Y", "District Z"}; // Cambia a tus opciones reales
@@ -151,9 +103,6 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
 
         TextInputLayout textInputLayout = findViewById(R.id.textInputLayoutLongitud);
 
-        Places.initialize(getApplicationContext(), "AIzaSyAExTORfkCED6S7JMtHAnYKhJVJ5J9inaw");
-        PlacesClient placesClient = Places.createClient(this);
-
         // Obtener el indicador de si se está editando desde el Intent
         isEditing = getIntent().getBooleanExtra("isEditing", false);
 
@@ -178,7 +127,7 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         // Verificar si se está editando un sitio existente o creando uno nuevo
         Intent intent = getIntent();
         if (intent.hasExtra("ListElementSite")) {
-            ListElementSite element = (ListElementSite) intent.getSerializableExtra("ListElementSite");
+            element = (ListElementSite) intent.getSerializableExtra("ListElementSite");
             isEditing = true; // Indicar que se está editando un sitio existente
             fillFields(element); // Llenar campos con los datos del sitio existente
             topAppBar.setTitle("Editar Sitio"); // Cambiar título de la actividad
@@ -203,10 +152,10 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
                 }
 
                 // Si todos los datos están completos, crear el elemento de sitio
-                String location = "NombreGeneradoAutomáticamente";
-                String latitud = "NombreGeneradoAutomáticamente";
-                String longitud = "NombreGeneradoAutomáticamente";
-                String name = "NombreGeneradoAutomáticamente";
+                String location = editSiteCoordenadas.getText().toString();
+                String latitud = String.valueOf(latitude);
+                String longitud = String.valueOf(longitude);;
+                String name = (item.getItemId() == R.id.createNewTopAppBar) ? "NombreGeneradoAutomáticamente" : element.getName();
                 String status = "Activo";
 
                 // Crear el objeto ListElementSite con los valores seleccionados
@@ -226,16 +175,35 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         topAppBar.setNavigationOnClickListener(v -> {
             finish();
         });
+        // Primero, registra un ActivityResultLauncher en tu actividad
+        ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        // Aquí maneja el resultado de la actividad MapActivity si es necesario
+                        if (result.getData() != null) {
+                            // Aquí obtén los datos de ubicación seleccionados si los hay
+                            latitude = result.getData().getDoubleExtra("latitude", 0.0);
+                            longitude = result.getData().getDoubleExtra("longitude", 0.0);
+                            // Luego puedes hacer algo con la ubicación seleccionada
+                            // Por ejemplo, mostrarla en un TextView o almacenarla en una base de datos
+                            editSiteCoordenadas.setText(String.format(Locale.getDefault(), "%.6f ; %.6f", latitude, longitude));
+
+                        }
+                    }
+                });
+
+// Luego, en tu onClickListener, usa el ActivityResultLauncher para iniciar la actividad
         textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG))
-                        .setCountry("PE") // Cambia esto al código de país que desees
-                        .build(MainActivity_new_site_admin.this);
-
-                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+                // Aquí iniciamos la actividad MapActivity para que el usuario pueda seleccionar la ubicación
+                Intent intent = new Intent(MainActivity_new_site_admin.this, MainActivity_mapchooser_admin.class);
+                launcher.launch(intent);
             }
         });
+
+
     }
 
     private void openFileChooser() {
@@ -245,35 +213,6 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri imageUri = data.getData();
-            imageView.setImageURI(imageUri);
-        } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Place place = Autocomplete.getPlaceFromIntent(data);
-                LatLng latLng = place.getLatLng();
-
-                // Intercambiar los valores de latitud y longitud
-                latitude = latLng.longitude; // Aquí se guarda la longitud
-                longitude = latLng.latitude; // Aquí se guarda la latitud
-
-                // Formatear las coordenadas en el formato "longitud ; latitud"
-                String formattedCoordinates = String.format(Locale.getDefault(), "%.6f ; %.6f", longitude, latitude);
-
-                // Colocar las coordenadas en el campo de texto
-                editSiteCoordenadas.setText(formattedCoordinates);
-            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i(TAG, status.getStatusMessage());
-            } else if (resultCode == RESULT_CANCELED) {
-                // El sitio canceló la selección
-            }
-        }
-    }
 
     private boolean areFieldsEmpty() {
         return selectDepartment.getText().toString().isEmpty() ||
