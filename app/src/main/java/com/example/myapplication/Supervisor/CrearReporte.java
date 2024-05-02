@@ -1,8 +1,13 @@
 package com.example.myapplication.Supervisor;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.myapplication.R;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -42,6 +47,18 @@ public class CrearReporte extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 // No necesitamos hacer nada cuando se vuelve a seleccionar una pestaña
+            }
+
+
+
+        });
+        Toolbar toolbar = findViewById(R.id.topAppBarCrearReporte);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
