@@ -37,7 +37,7 @@ public class ListAdapterNotificaciones extends RecyclerView.Adapter<ListAdapterN
 
     @Override
     public ListAdapterNotificaciones.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
-        View view = nInflater.inflate(R.layout.lista_noti_form, null);
+        View view = nInflater.inflate(R.layout.admin_lista_noti_form, null);
         return new ListAdapterNotificaciones.ViewHolder(view);
     }
 

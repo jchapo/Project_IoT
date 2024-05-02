@@ -71,14 +71,34 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
                     String user = "Supervisor";
                     String status = "Activo";
 
-                    ListElementUser listElement = new ListElementUser(dni, firstName, lastName, user,status, mail, phone, address);
+                    ListElementUser listElement = new ListElementUser(dni, firstName, lastName, user, status, mail, phone, address);
 
                     Intent intent2 = new Intent(MainActivity_new_user_admin.this, MainActivity_userprofile_admin.class);
                     intent2.putExtra("ListElement", listElement);
-                    startActivity(intent);
+                    startActivity(intent2);
                 }
                 return true;
-            } else {
+            } else if (item.getItemId() == R.id.saveOldUser) {
+                if (areFieldsEmpty()) {
+                    Toast.makeText(MainActivity_new_user_admin.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
+                } else {
+                    String firstName = editFirstName.getText().toString();
+                    String lastName = editLastName.getText().toString();
+                    String dni = editDNI.getText().toString();
+                    String mail = editMail.getText().toString();
+                    String address = editAddress.getText().toString();
+                    String phone = editPhone.getText().toString();
+                    String user = "Supervisor";
+                    String status = "Activo";
+
+                    ListElementUser listElement = new ListElementUser(dni, firstName, lastName, user,status, mail, phone, address);
+
+                    Intent intent3 = new Intent(MainActivity_new_user_admin.this, MainActivity_userprofile_admin.class);
+                    intent3.putExtra("ListElement", listElement);
+                    startActivity(intent3);
+                }
+                return true;
+            } else{
                 return false;
             }
         });

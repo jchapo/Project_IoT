@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.objetos.ListAdapterDevices;
 import com.example.myapplication.Supervisor.objetos.ListElementDevices;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +31,7 @@ public class EquiposFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.supervisor_fragment_equipos, container, false);
+
         Toolbar toolbar = view.findViewById(R.id.topAppBarDevices);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
