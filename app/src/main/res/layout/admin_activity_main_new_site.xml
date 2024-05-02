@@ -176,8 +176,9 @@
                         android:id="@+id/editAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:inputType="text"
                         android:hint="Dirección" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -208,7 +209,7 @@
                         android:id="@+id/editCoordenadas"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
+                        android:inputType="numberDecimal"
                         android:hint="Coordenadas" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -238,7 +239,7 @@
                         android:id="@+id/editUbigeo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
+                        android:inputType="number"
                         android:hint="Ubigeo" />
                 </com.google.android.material.textfield.TextInputLayout>
 
