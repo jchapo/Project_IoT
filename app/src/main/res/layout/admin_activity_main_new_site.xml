@@ -22,9 +22,7 @@
             android:id="@+id/topAppBarNewSite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/top_app_bar_admin_new_site"
-            app:navigationIcon="@drawable/ic_back_outline_black"
-            app:title="Crear sitio" />
+            app:navigationIcon="@drawable/ic_back_outline_black" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -77,15 +75,18 @@
                     android:layout_marginEnd="8dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editDepartment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_weight="1"
+                    android:hint="Departamento">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editDepartment"
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/selectDepartment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Departamento" />
+                        android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -105,17 +106,19 @@
                     android:visibility="invisible"/>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/iconProvince2"
-
+                    android:id="@+id/editProvince"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_weight="1"
+                    android:hint="Provincia">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editProvince"
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/selectProvince"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Provincia" />
+                        android:inputType="none" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -135,15 +138,18 @@
                     android:visibility="invisible"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editDistrict"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_weight="1"
+                    android:hint="Distrito">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editDistrict"
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/selectDistrict"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Distrito" />
+                        android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -251,18 +257,20 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="8dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/editZoneType"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:hint="Tipo de zona" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_weight="1"
+                        android:hint="Tipo de zona">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/selectZoneType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
             <LinearLayout
@@ -280,16 +288,18 @@
                     android:layout_marginEnd="8dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editSiteType"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_weight="1"
+                    android:hint="Tipo de sitio">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editSiteType"
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/selectSiteType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:hint="Tipo de sitio" />
+                        android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

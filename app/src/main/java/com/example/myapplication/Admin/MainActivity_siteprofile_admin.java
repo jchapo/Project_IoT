@@ -21,7 +21,7 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
 
 
     TextView nameTextViewSite;
-    TextView addressDescriptionTextView;
+    TextView departmentDescriptionTextView,provinceDescriptionTextView,districtDescriptionTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +29,15 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
         setContentView(R.layout.admin_activity_main_siteprofile);
 
         ListElementSite element = (ListElementSite) getIntent().getSerializableExtra("ListElementSite");
-        nameTextViewSite = findViewById(R.id.nameTextViewSite);
-        addressDescriptionTextView = findViewById(R.id.addressTextViewSite);
+        nameTextViewSite = findViewById(R.id.nameTextViewSiteSiteProfile);
+        departmentDescriptionTextView = findViewById(R.id.departmentTextViewSite);
+        provinceDescriptionTextView = findViewById(R.id.provinceTextViewSite);
+        districtDescriptionTextView = findViewById(R.id.districtTextViewSite);
 
         nameTextViewSite.setText(element.getName());
-        String fullDirection = element.getDepartment() + " " + element.getProvince() + " " + element.getDistrict();
-        addressDescriptionTextView.setText(fullDirection);
+        departmentDescriptionTextView.setText(element.getDepartment());
+        provinceDescriptionTextView.setText(element.getProvince());
+        districtDescriptionTextView.setText(element.getDistrict());
 
 
         Toolbar toolbar = findViewById(R.id.topAppBarSitePerfilAdmin);
@@ -45,6 +48,18 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity_siteprofile_admin.this, MainActivity_navigation_admin.class);
                 intent.putExtra("comeFrom", "siteProfile");
+                startActivity(intent);
+            }
+        });
+
+        // Agregar Listener al botón flotante de editar
+        findViewById(R.id.fabEditSiteAdmin).setOnClickListener(new View.OnClickListener() {
+            // Código para abrir MainActivity_new_user_admin desde la actividad del perfil de usuario
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity_siteprofile_admin.this, MainActivity_new_site_admin.class);
+                intent.putExtra("isEditing", true);
+                intent.putExtra("ListElementSite", element);
                 startActivity(intent);
             }
         });
