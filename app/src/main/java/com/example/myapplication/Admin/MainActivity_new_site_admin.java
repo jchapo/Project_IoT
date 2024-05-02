@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.example.myapplication.Admin.items.ListElementSite;
+import com.example.myapplication.Admin.items.ListElementUser;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
@@ -14,10 +16,13 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -34,71 +39,190 @@ import java.util.Locale;
 
 public class MainActivity_new_site_admin extends AppCompatActivity {
 
-    private EditText editDepartment, editProvince, editDistrict, editAddress, editUbigeo, editZoneType, editSiteType, editSiteCoordenadas;
+    private EditText editAddress, editUbigeo, editSiteCoordenadas;
     private static final int PICK_LOCATION_REQUEST = 1;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
     double latitude, longitude;
+    String nombredesitio;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
+    private boolean isEditing = false; // Indicador para editar o crear nuevo sitio
+
+    // Declarar los elementos MaterialAutoCompleteTextView para los campos de autocompletado
+    private MaterialAutoCompleteTextView selectDepartment;
+    private MaterialAutoCompleteTextView selectProvince;
+    private MaterialAutoCompleteTextView selectDistrict;
+    private MaterialAutoCompleteTextView selectZoneType;
+    private MaterialAutoCompleteTextView selectSiteType;
+
+    // Declarar los adaptadores para los campos de autocompletado
+    ArrayAdapter<String> departmentAdapter;
+    ArrayAdapter<String> provinceAdapter;
+    ArrayAdapter<String> districtAdapter;
+    ArrayAdapter<String> zoneTypeAdapter;
+    ArrayAdapter<String> siteTypeAdapter;
+
+    // Declarar los arrays de opciones para los campos de autocompletado
+    String[] departmentOptions = {
+            "Amazonas",
+            "Áncash",
+            "Apurímac",
+            "Arequipa",
+            "Ayacucho",
+            "Cajamarca",
+            "Callao",
+            "Cusco",
+            "Huancavelica",
+            "Huánuco",
+            "Ica",
+            "Junín",
+            "La Libertad",
+            "Lambayeque",
+            "Lima",
+            "Loreto",
+            "Madre de Dios",
+            "Moquegua",
+            "Pasco",
+            "Piura",
+            "Puno",
+            "San Martín",
+            "Tacna",
+            "Tumbes",
+            "Ucayali",
+            "Amazonas",
+            "Áncash",
+            "Apurímac",
+            "Arequipa",
+            "Ayacucho",
+            "Cajamarca",
+            "Callao",
+            "Cusco",
+            "Huancavelica",
+            "Huánuco",
+            "Ica",
+            "Junín",
+            "La Libertad",
+            "Lambayeque",
+            "Lima",
+            "Loreto",
+            "Madre de Dios",
+            "Moquegua",
+            "Pasco",
+            "Piura",
+            "Puno",
+            "San Martín",
+            "Tacna",
+            "Tumbes",
+            "Ucayali"
+    };
+    // Cambia a tus opciones reales
+    String[] provinceOptions = {"Province A", "Province B", "Province C"}; // Cambia a tus opciones reales
+    String[] districtOptions = {"District X", "District Y", "District Z"}; // Cambia a tus opciones reales
+    String[] zoneTypeOptions = {"Zone Type 1", "Zone Type 2", "Zone Type 3"}; // Cambia a tus opciones reales
+    String[] siteTypeOptions = {"Site Type 1", "Site Type 2", "Site Type 3"}; // Cambia a tus opciones reales
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_new_site);
+
+        // Encuentra las referencias a los campos de autocompletado
+        selectDepartment = findViewById(R.id.selectDepartment);
+        selectProvince = findViewById(R.id.selectProvince);
+        selectDistrict = findViewById(R.id.selectDistrict);
+        selectZoneType = findViewById(R.id.selectZoneType);
+        selectSiteType = findViewById(R.id.selectSiteType);
+
+        // Establece el adaptador con las opciones en el AutoCompleteTextView
+        // Inicializa los adaptadores con las opciones
+        departmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, departmentOptions);
+        provinceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, provinceOptions);
+        districtAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, districtOptions);
+        zoneTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, zoneTypeOptions);
+        siteTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, siteTypeOptions);
+
+        // Asigna los adaptadores a los campos de autocompletado
+        selectDepartment.setAdapter(departmentAdapter);
+        selectProvince.setAdapter(provinceAdapter);
+        selectDistrict.setAdapter(districtAdapter);
+        selectZoneType.setAdapter(zoneTypeAdapter);
+        selectSiteType.setAdapter(siteTypeAdapter);
+
         TextInputLayout textInputLayout = findViewById(R.id.textInputLayoutLongitud);
 
         Places.initialize(getApplicationContext(), "AIzaSyAExTORfkCED6S7JMtHAnYKhJVJ5J9inaw");
         PlacesClient placesClient = Places.createClient(this);
 
+        // Obtener el indicador de si se está editando desde el Intent
+        isEditing = getIntent().getBooleanExtra("isEditing", false);
+
+
         imageView = findViewById(R.id.imageViewNewSite);
         imageView.setOnClickListener(v -> openFileChooser());
-        editDepartment = findViewById(R.id.editDepartment);
-        editProvince = findViewById(R.id.editProvince);
-        editDistrict = findViewById(R.id.editDistrict);
         editAddress = findViewById(R.id.editAddress);
         editUbigeo = findViewById(R.id.editUbigeo);
-        editZoneType = findViewById(R.id.editZoneType);
-        editSiteType = findViewById(R.id.editSiteType);
         editSiteCoordenadas = findViewById(R.id.editCoordenadas);
 
 
+
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewSite);
+        if (isEditing) {
+            // Si se está editando, inflar el menú de editar sitio
+            topAppBar.inflateMenu(R.menu.top_app_bar_admin_edit);
+        } else {
+            // Si se está creando, inflar el menú de crear sitio
+            topAppBar.inflateMenu(R.menu.top_app_bar_admin_new);
+        }
+
+        // Verificar si se está editando un sitio existente o creando uno nuevo
+        Intent intent = getIntent();
+        if (intent.hasExtra("ListElementSite")) {
+            ListElementSite element = (ListElementSite) intent.getSerializableExtra("ListElementSite");
+            isEditing = true; // Indicar que se está editando un sitio existente
+            fillFields(element); // Llenar campos con los datos del sitio existente
+            topAppBar.setTitle("Editar Sitio"); // Cambiar título de la actividad
+        } else {
+            topAppBar.setTitle("Nuevo Sitio"); // Cambiar título de la actividad
+        }
+
         topAppBar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.createNewSite) {
-                if (areFieldsEmpty()) {
+            if (item.getItemId() == R.id.createNewTopAppBar || item.getItemId() == R.id.saveOldTopAppBar) {
+                // Obtener los valores seleccionados de los menús desplegables
+                String department = selectDepartment.getText().toString();
+                String province = selectProvince.getText().toString();
+                String district = selectDistrict.getText().toString();
+                String zonetype = selectZoneType.getText().toString();
+                String sitetype = selectSiteType.getText().toString();
+
+                // Verificar si los campos están vacíos
+                if (TextUtils.isEmpty(department) || TextUtils.isEmpty(province) || TextUtils.isEmpty(district) ||
+                        TextUtils.isEmpty(zonetype) || TextUtils.isEmpty(sitetype)) {
                     Toast.makeText(MainActivity_new_site_admin.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
-                } else {
-                    String department = editDepartment.getText().toString();
-                    String province = editProvince.getText().toString();
-                    String district = editDistrict.getText().toString();
-                    String address = editAddress.getText().toString();
-                    String ubigeo = editUbigeo.getText().toString();
-                    String zonetype = editZoneType.getText().toString();
-                    String sitetype = editSiteType.getText().toString();
-
-                    String location = "NombreGeneradoAutomáticamente";
-                    String latitud = "NombreGeneradoAutomáticamente";
-                    String longitud = "NombreGeneradoAutomáticamente";
-                    String name = "NombreGeneradoAutomáticamente";
-                    //double latitud = latitude;
-
-                    String name2 = "NombreGeneradoAutomáticamente";
-                    //double longitud = longitude;
-                    String status = "Activo";
-                    //String coordenadas = String.format(Locale.getDefault(), "%.6f ; %.6f", longitud, latitud);
-
-                    ListElementSite listElement = new ListElementSite(department, name2, status, province, district, address, location ,ubigeo, zonetype, sitetype, latitud, longitud);
-
-                    
-                    Intent intent = new Intent(MainActivity_new_site_admin.this, MainActivity_siteprofile_admin.class);
-                    intent.putExtra("ListElement", listElement);
-                    startActivity(intent);
+                    return false; // No continuar si falta algún dato
                 }
+
+                // Si todos los datos están completos, crear el elemento de sitio
+                String location = "NombreGeneradoAutomáticamente";
+                String latitud = "NombreGeneradoAutomáticamente";
+                String longitud = "NombreGeneradoAutomáticamente";
+                String name = "NombreGeneradoAutomáticamente";
+                String status = "Activo";
+
+                // Crear el objeto ListElementSite con los valores seleccionados
+                ListElementSite listElement = new ListElementSite(department, name, status, province, district, "", location, "", zonetype, sitetype, latitud, longitud);
+
+                // Iniciar la actividad de perfil de sitio y pasar los datos
+                Intent intent2 = new Intent(MainActivity_new_site_admin.this, MainActivity_siteprofile_admin.class);
+                intent2.putExtra("ListElementSite", listElement);
+                startActivity(intent2);
+
                 return true;
             } else {
                 return false;
             }
         });
+
         topAppBar.setNavigationOnClickListener(v -> {
             finish();
         });
@@ -146,19 +270,33 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Log.i(TAG, status.getStatusMessage());
             } else if (resultCode == RESULT_CANCELED) {
-                // El usuario canceló la selección
+                // El sitio canceló la selección
             }
         }
     }
 
     private boolean areFieldsEmpty() {
-        return editDepartment.getText().toString().isEmpty() ||
-                editProvince.getText().toString().isEmpty() ||
-                editDistrict.getText().toString().isEmpty() ||
+        return selectDepartment.getText().toString().isEmpty() ||
+                selectProvince.getText().toString().isEmpty() ||
+                selectDistrict.getText().toString().isEmpty() ||
+                selectZoneType.getText().toString().isEmpty() ||
+                selectSiteType.getText().toString().isEmpty() ||
                 editAddress.getText().toString().isEmpty() ||
-                editUbigeo.getText().toString().isEmpty() ||
-                editZoneType.getText().toString().isEmpty() ||
-                editSiteType.getText().toString().isEmpty();
+                editUbigeo.getText().toString().isEmpty();
+    }
+
+    private void fillFields(ListElementSite element) {
+        selectDepartment.setText(element.getDepartment());
+        selectProvince.setText(element.getProvince());
+        selectDistrict.setText(element.getDistrict());
+        selectZoneType.setText(element.getZonetype());
+        selectSiteType.setText(element.getSitetype());
+        editSiteCoordenadas.setText(element.getCoordenadas());
+        nombredesitio = element.getName();
+        editAddress.setText(element.getAddress());
+        editUbigeo.setText(element.getUbigeo());
+        editSiteCoordenadas.setText(element.getCoordenadas());
+        nombredesitio = element.getName();
     }
 
 }

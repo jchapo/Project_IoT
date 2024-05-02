@@ -15,12 +15,12 @@ import com.example.myapplication.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.ViewHolder> {
-    private List<ListElementUser> mData;
+public class ListAdapterAddSite extends RecyclerView.Adapter<ListAdapterAddSite.ViewHolder> {
+    private List<ListElementSite> mData;
     private LayoutInflater mInflater;
-    private List<ListElementUser> mSelectedItems = new ArrayList<>();
+    private List<ListElementSite> mSelectedItems = new ArrayList<>();
 
-    public SimpleListAdapter(Context context, List<ListElementUser> data) {
+    public ListAdapterAddSite(Context context, List<ListElementSite> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -32,15 +32,15 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.admin_list_usuarios_select, parent, false);
+        View view = mInflater.inflate(R.layout.admin_list_sitios_select, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ListElementUser item = mData.get(position);
-        holder.name.setText(item.getName() + " " + item.getLastname());
-        holder.user.setText(item.getUser());
+        ListElementSite item = mData.get(position);
+        holder.name.setText(item.getName());
+        holder.location.setText(item.getAddress());
         holder.status.setText(item.getStatus());
 
         // Asigna un listener al CheckBox para manejar la selección
@@ -57,16 +57,16 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iconImage;
-        TextView name, user, status;
+        TextView name, location, status;
         CheckBox checkBox;
 
         ViewHolder(View itemView) {
             super(itemView);
             iconImage = itemView.findViewById(R.id.iconImageView);
             name = itemView.findViewById(R.id.nameTextView);
-            user = itemView.findViewById(R.id.userTextView);
+            location = itemView.findViewById(R.id.locationTextView);
             status = itemView.findViewById(R.id.statusTextView);
-            checkBox = itemView.findViewById(R.id.checkBox); // Inicializa CheckBox
+            checkBox = itemView.findViewById(R.id.checkBoxSiteSelect); // Inicializa CheckBox
 
         }
     }

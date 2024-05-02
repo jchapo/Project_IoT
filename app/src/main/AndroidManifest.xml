@@ -4,8 +4,8 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" />
 
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:allowBackup="true"
@@ -17,9 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
-
+        <activity
+            android:name=".Admin.MainActivity_addSite_admin"
+            android:exported="false" />
         <!-- Actividades Sistema -->
-
         <activity
             android:name=".Sistem.LoginActivityFirstTime"
             android:exported="true">
@@ -36,9 +37,12 @@
             android:name=".Sistem.MainActivityCambiarPrimeraContra"
             android:exported="false" />
         <activity
+
+            android:name=".Admin.MainActivity_chat_user"
+            android:exported="false" />
+        <activity
             android:name=".NavegacionInicial"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".Sistem.MainActivity_notificacion_user"
             android:exported="false" />
@@ -47,15 +51,12 @@
 
 
         <!-- Actividades Super Admin -->
+      
         <activity
             android:name=".SuperAdmin.MainActivity_navigation_SuperAdmin"
-            android:exported="false" />
-
-
-
-        <!-- Actividades Admin -->
+            android:exported="false" /> <!-- Actividades Admin -->
         <activity
-            android:name=".Admin.items.SimpleListAdapter"
+            android:name=".Admin.items.ListAdapterAddSuper"
             android:exported="false" />
         <activity
             android:name=".Admin.MainActivity_addSupervisor_admin"
@@ -80,12 +81,7 @@
             android:exported="false" />
         <activity
             android:name=".Admin.MainActivity_navigation_admin"
-            android:exported="false" />
-
-
-
-
-        <!-- Actividades Supervisor -->
+            android:exported="false" /> <!-- Actividades Supervisor -->
         <activity
             android:name=".Supervisor.CrearReporte"
             android:exported="false"
@@ -102,7 +98,6 @@
         <activity
             android:name=".Supervisor.NavegacionSupervisor"
             android:exported="true" />
-
     </application>
 
 </manifest>

@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.objetos.ListAdapterDevices;
 import com.example.myapplication.Supervisor.objetos.ListElementDevices;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 
 import java.util.ArrayList;
 import java.util.List;

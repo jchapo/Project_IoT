@@ -35,7 +35,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_person_outline" />
+                app:srcCompat="@drawable/ic_location_outline" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -60,7 +60,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/userTextView"
+                    android:id="@+id/locationTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Supervisor"
@@ -79,10 +79,10 @@
                 android:layout_marginRight="6dp"
                 android:text="Activo"
                 android:textSize="10dp"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <CheckBox
-                android:id="@+id/checkBox"
+                android:id="@+id/checkBoxSiteSelect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
