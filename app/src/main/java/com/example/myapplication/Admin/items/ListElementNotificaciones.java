@@ -6,6 +6,8 @@ public class ListElementNotificaciones implements Serializable {
     public String accion;
     public String descripcionResumida;
     public String fecha;
+
+    private String tipo;
     //public String descripcionTotal;
 
 
@@ -41,6 +43,14 @@ public class ListElementNotificaciones implements Serializable {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    public ListElementNotificaciones(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getTipo() {
+        return tipo;
     }
 
 

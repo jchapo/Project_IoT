@@ -36,11 +36,16 @@
             android:name=".Sistem.MainActivityCambiarPrimeraContra"
             android:exported="false" />
         <activity
+
+            android:name=".Admin.MainActivity_chat_user"
+            android:exported="false" />
+        <activity
             android:name=".NavegacionInicial"
             android:exported="true">
         </activity>
         <activity
             android:name=".Sistem.MainActivity_notificacion_user"
+
             android:exported="false" />
 
 

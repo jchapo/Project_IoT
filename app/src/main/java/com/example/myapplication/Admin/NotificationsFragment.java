@@ -26,7 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationsFragment extends Fragment {
-    List<ListElementNotificaciones> elements;
+    List<ListElementNotificaciones> elementsForms;
+    List<ListElementNotificaciones> elementsUsers;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,17 +62,28 @@ public class NotificationsFragment extends Fragment {
     }
 
     public void init(View view) {
-        elements = new ArrayList<>();
-        elements.add(new ListElementNotificaciones("Formulario Completado", "Pablo Flores ha llenado un formulario", "10:20 a.m."));
-        elements.add(new ListElementNotificaciones("Formulario Completado", "Sergio Maldonado ha completado un formulario", "9:10 a.m."));
+        elementsUsers = new ArrayList<>();
+        elementsUsers.add(new ListElementNotificaciones("Supervisor asignado", "Has asignado a Pablo flores a un nuevo trabajo", "11:11 a.m."));
+        elementsUsers.add(new ListElementNotificaciones("Supervisro asignado", "Has asignado a Sergio Maldonado a un nuevo proyecto", "12:59 p.m."));
+
+        elementsForms = new ArrayList<>();
+        elementsForms.add(new ListElementNotificaciones("Formulario Completado", "Pablo Flores ha llenado un formulario", "10:20 a.m."));
+        elementsForms.add(new ListElementNotificaciones("Formulario Completado", "Sergio Maldonado ha completado un formulario", "9:10 a.m."));
 
 
 
-        ListAdapterNotificaciones listAdapter = new ListAdapterNotificaciones(elements, getContext(), item -> moveToDescription(item));
-        RecyclerView recyclerView = view.findViewById(R.id.listElementsAlerts);
+        List<ListElementNotificaciones> combinedElements = new ArrayList<>();
+        combinedElements.addAll(elementsForms);
+        combinedElements.addAll(elementsUsers);
+
+        ListAdapterNotificaciones listAdapter = new ListAdapterNotificaciones(combinedElements, getContext(), item -> moveToDescription(item));
+        RecyclerView recyclerView = view.findViewById(R.id.listElementsNotiForms);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(listAdapter);
+
+
+
     }
 
     public void moveToDescription(ListElementNotificaciones item){

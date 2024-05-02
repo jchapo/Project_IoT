@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +28,7 @@ import java.util.List;
 
 public class ChatFragment extends Fragment {
     List<ListElementChat> elements;
-
+    private DrawerLayout drawerLayout;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,13 @@ public class ChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.admin_fragments_chats, container, false);
         Toolbar toolbar = view.findViewById(R.id.topAppBarUsers);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+
+        /**drawerLayout = view.findViewById(R.id.drawerLayout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();**/
+
         setHasOptionsMenu(true);
         init(view);
 
