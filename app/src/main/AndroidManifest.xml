@@ -37,11 +37,21 @@
             android:name=".Sistem.MainActivityCambiarPrimeraContra"
             android:exported="false" />
         <activity
+
+            android:name=".Admin.MainActivity_chat_user"
+            android:exported="false" />
+        <activity
             android:name=".NavegacionInicial"
             android:exported="true"></activity>
         <activity
             android:name=".Sistem.MainActivity_notificacion_user"
-            android:exported="false" /> <!-- Actividades Super Admin -->
+            android:exported="false" />
+
+
+
+
+        <!-- Actividades Super Admin -->
+      
         <activity
             android:name=".SuperAdmin.MainActivity_navigation_SuperAdmin"
             android:exported="false" /> <!-- Actividades Admin -->
