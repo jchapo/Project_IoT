@@ -82,7 +82,16 @@ public class MasDetallesEquipos extends AppCompatActivity {
             Intent intent = new Intent(MasDetallesEquipos.this, CrearReporte.class);
             startActivity(intent);
         });
-
+        TextView textViewEditarEquipo = findViewById(R.id.textViewEditarEquipo);
+        textViewEditarEquipo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Crear Intent para iniciar la actividad EditarEquipo
+                Intent intent = new Intent(MasDetallesEquipos.this, EditarEquipo.class);
+                // Iniciar la actividad EditarEquipo con el Intent
+                startActivity(intent);
+            }
+        });
 
     }
 }

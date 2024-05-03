@@ -32,6 +32,13 @@
         <item>Repetidor-101</item>
         <item>Repetidor-102</item>
     </string-array>
+    <string-array name="TipodeEquipo">
+        <item>Router</item>
+        <item>Switch</item>
+        <item>Repetidor</item>
+        <item>Splitter</item>
+        <item>Patch Pannel</item>
+    </string-array>
 
 
 </resources>

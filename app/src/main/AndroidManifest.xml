@@ -26,10 +26,9 @@
             android:name=".Admin.MainActivity_mapchooser_admin"
             android:exported="false" />
         <activity
-            android:name=".Admin.MainActivity_addSite_admin"
+            android:name=".Supervisor.EditarEquipo"
             android:exported="false" />
 
-        <!-- Actividades Sistema -->
         <activity
             android:name=".Sistem.LoginActivityFirstTime"
             android:exported="true">
@@ -53,9 +52,11 @@
             android:exported="true" />
         <activity
             android:name=".Sistem.MainActivity_notificacion_user"
+
             android:exported="false" />
 
         <!-- Actividades Super Admin -->
+
         <activity
             android:name=".SuperAdmin.MainActivity_navigation_SuperAdmin"
             android:exported="false" />
@@ -88,7 +89,9 @@
         <activity
             android:name=".Admin.MainActivity_navigation_admin"
             android:exported="false" />
-
+      <activity
+            android:name=".Admin.MainActivity_addSite_admin"
+            android:exported="false" /> 
 
         <!-- Actividades Supervisor -->
         <activity
@@ -109,6 +112,9 @@
             android:exported="true" />
         <activity
             android:name=".Supervisor.CrearEquipo"
+            android:exported="false" />
+        <activity
+            android:name=".Supervisor.MasDetallesEquipos"
             android:exported="false" />
     </application>
 
