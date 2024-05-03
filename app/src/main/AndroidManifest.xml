@@ -17,12 +17,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAExTORfkCED6S7JMtHAnYKhJVJ5J9inaw" />
+
+        <activity
+            android:name=".Admin.MainActivity_mapchooser_admin"
+            android:exported="false" />
         <activity
             android:name=".Supervisor.EditarEquipo"
             android:exported="false" />
-        <activity
-            android:name=".Admin.MainActivity_addSite_admin"
-            android:exported="false" /> <!-- Actividades Sistema -->
+
         <activity
             android:name=".Sistem.LoginActivityFirstTime"
             android:exported="true">
@@ -46,10 +52,16 @@
             android:exported="true" />
         <activity
             android:name=".Sistem.MainActivity_notificacion_user"
-            android:exported="false" /> <!-- Actividades Super Admin -->
+
+            android:exported="false" />
+
+        <!-- Actividades Super Admin -->
+
         <activity
             android:name=".SuperAdmin.MainActivity_navigation_SuperAdmin"
-            android:exported="false" /> <!-- Actividades Admin -->
+            android:exported="false" />
+
+        <!-- Actividades Admin -->
         <activity
             android:name=".Admin.items.ListAdapterAddSuper"
             android:exported="false" />
@@ -76,7 +88,12 @@
             android:exported="false" />
         <activity
             android:name=".Admin.MainActivity_navigation_admin"
-            android:exported="false" /> <!-- Actividades Supervisor -->
+            android:exported="false" />
+      <activity
+            android:name=".Admin.MainActivity_addSite_admin"
+            android:exported="false" /> 
+
+        <!-- Actividades Supervisor -->
         <activity
             android:name=".Supervisor.CrearReporte"
             android:exported="false"
