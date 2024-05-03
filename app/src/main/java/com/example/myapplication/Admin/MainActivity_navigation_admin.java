@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.myapplication.R;
+import com.example.myapplication.SuperAdmin.LogFragment;
 import com.example.myapplication.databinding.AdminActivityMainNavigationBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -54,7 +55,7 @@ public class MainActivity_navigation_admin extends AppCompatActivity {
                 replaceFragment(new UsersFragment());
                 return true;
             } else if (item.getItemId() == R.id.sitios_menu) {
-                replaceFragment(new SitesFragment());
+                replaceFragment(new LogFragment());
                 return true;
             } else if (item.getItemId() == R.id.chat_menu) {
                 replaceFragment(new ChatFragment());

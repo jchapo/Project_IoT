@@ -54,7 +54,13 @@
       
         <activity
             android:name=".SuperAdmin.MainActivity_navigation_SuperAdmin"
-            android:exported="false" /> <!-- Actividades Admin -->
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.LogFragment"
+            android:exported="false" />
+
+
+        <!-- Actividades Admin -->
         <activity
             android:name=".Admin.items.ListAdapterAddSuper"
             android:exported="false" />
