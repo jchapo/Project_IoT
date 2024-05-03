@@ -53,7 +53,7 @@ public class LogFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.superadmin_fragment_log, container, false);
-        Toolbar toolbar = view.findViewById(R.id.topAppBarSite);
+        Toolbar toolbar = view.findViewById(R.id.topAppBarLog);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         init(view);

@@ -55,7 +55,7 @@ public class MainActivity_navigation_admin extends AppCompatActivity {
                 replaceFragment(new UsersFragment());
                 return true;
             } else if (item.getItemId() == R.id.sitios_menu) {
-                replaceFragment(new LogFragment());
+                replaceFragment(new SitesFragment());
                 return true;
             } else if (item.getItemId() == R.id.chat_menu) {
                 replaceFragment(new ChatFragment());
