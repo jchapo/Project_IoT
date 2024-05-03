@@ -51,14 +51,14 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.admin_fragments_chats, container, false);
-        Toolbar toolbar = view.findViewById(R.id.topAppBarUsers);
+        Toolbar toolbar = view.findViewById(R.id.topAppBarChats);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
 
-        /**drawerLayout = view.findViewById(R.id.drawerLayout);
+        drawerLayout = view.findViewById(R.id.drawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();**/
+        toggle.syncState();
 
         setHasOptionsMenu(true);
         init(view);

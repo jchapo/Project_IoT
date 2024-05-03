@@ -26,12 +26,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBarUsers"
+                android:id="@+id/topAppBarChats"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
                 app:menu="@menu/top_app_bar_admin_users"
+                app:navigationIcon="@drawable/ic_perfil_outline"
                 app:title="Chats" />
 
             <com.google.android.material.tabs.TabLayout
