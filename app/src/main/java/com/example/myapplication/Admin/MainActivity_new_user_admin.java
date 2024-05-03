@@ -40,10 +40,10 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewUser);
         if (isEditing) {
             // Si se está editando, inflar el menú de editar usuario
-            topAppBar.inflateMenu(R.menu.top_app_bar_admin_edit_user);
+            topAppBar.inflateMenu(R.menu.top_app_bar_admin_edit);
         } else {
             // Si se está creando, inflar el menú de crear usuario
-            topAppBar.inflateMenu(R.menu.top_app_bar_admin_new_user);
+            topAppBar.inflateMenu(R.menu.top_app_bar_admin_new);
         }
 
         // Verificar si se está editando un usuario existente o creando uno nuevo
@@ -58,7 +58,7 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
         }
 
         topAppBar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.createNewUser) {
+            if (item.getItemId() == R.id.createNewTopAppBar) {
                 if (areFieldsEmpty()) {
                     Toast.makeText(MainActivity_new_user_admin.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
                 } else {
@@ -78,7 +78,7 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
                     startActivity(intent2);
                 }
                 return true;
-            } else if (item.getItemId() == R.id.saveOldUser) {
+            } else if (item.getItemId() == R.id.saveOldTopAppBar) {
                 if (areFieldsEmpty()) {
                     Toast.makeText(MainActivity_new_user_admin.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
                 } else {
@@ -109,7 +109,7 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_app_bar_admin_new_user, menu);
+        getMenuInflater().inflate(R.menu.top_app_bar_admin_new, menu);
         return true;
     }
 
