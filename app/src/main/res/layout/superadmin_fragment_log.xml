@@ -6,74 +6,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_theme_background"
-    tools:context=".SuperAdmin.UsersFragmentSuperAdmin">
+    tools:context=".Admin.LogsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayoutSuperAdmin"
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/md_theme_inverseOnSurface"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBarUserFragmentSuperAdmin"
+                android:id="@+id/topAppBarLog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
+                android:visibility="visible"
                 android:minHeight="?attr/actionBarSize"
-                app:menu="@menu/top_app_bar_admin_users"
-                app:title="Lista de usuarios" />
+                app:navigationIcon="@drawable/ic_perfil_outline"
+                app:title="Registro de incidencias" />
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayoutSuperAdmin"
+                android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/topAppBarUserFragmentSuperAdmin"
+                app:layout_constraintTop_toBottomOf="@id/topAppBarLog"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <com.google.android.material.tabs.TabItem
-                    android:text="Administradores"
+                    android:text="Activos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <com.google.android.material.tabs.TabItem
-                    android:text="Supervisores"
+                    android:text="Inactivos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-
-
 
             </com.google.android.material.tabs.TabLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 
+
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listElementsSuperAdmin"
+            android:id="@+id/listElements"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/agregarUsuariofloatingActionButtonSuperAdmin"
-            app:layout_constraintTop_toBottomOf="@id/appBarLayoutSuperAdmin" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/agregarUsuariofloatingActionButtonSuperAdmin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_addperson_outline_black"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:contentDescription="Agregar" />
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/appBarLayout"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

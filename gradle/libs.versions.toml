@@ -32,5 +32,5 @@ play-services-maps = { group = "com.google.android.gms", name = "play-services-m
 zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxingAndroidEmbedded" }
 
 [plugins]
-androidApplication = { id = "com.android.application", version = "8.3.2" }
+androidApplication = { id = "com.android.application", version = "7.4.2" }
 

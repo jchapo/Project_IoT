@@ -28,7 +28,7 @@ public class MainActivity_navigation_SuperAdmin extends AppCompatActivity {
                 replaceFragmentSuperAdmin(new UsersFragmentSuperAdmin());
                 return true;
             } else if (item.getItemId() == R.id.log_menu_superadmin) {
-                replaceFragmentSuperAdmin(new SitesFragment());
+                replaceFragmentSuperAdmin(new LogFragment());
                 return true;
             } else if (item.getItemId() == R.id.chat_menu_superadmin) {
                 replaceFragmentSuperAdmin(new ChatFragment());
