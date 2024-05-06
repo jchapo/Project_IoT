@@ -40,10 +40,10 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewUser);
         if (isEditing) {
             // Si se está editando, inflar el menú de editar usuario
-            topAppBar.inflateMenu(R.menu.top_app_bar_admin_edit);
+            topAppBar.inflateMenu(R.menu.top_app_bar_edit);
         } else {
             // Si se está creando, inflar el menú de crear usuario
-            topAppBar.inflateMenu(R.menu.top_app_bar_admin_new);
+            topAppBar.inflateMenu(R.menu.top_app_bar_new);
         }
 
         // Verificar si se está editando un usuario existente o creando uno nuevo
@@ -109,7 +109,7 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_app_bar_admin_new, menu);
+        getMenuInflater().inflate(R.menu.top_app_bar_new, menu);
         return true;
     }
 

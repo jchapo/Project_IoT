@@ -21,7 +21,7 @@ tools:context=".Admin.MainActivity_edit_user_admin">
         android:id="@+id/topAppBarEditUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:menu="@menu/top_app_bar_admin_edit"
+        app:menu="@menu/top_app_bar_edit"
         app:navigationIcon="@drawable/ic_back_outline_black"
         app:title="Editar usuario" />
 

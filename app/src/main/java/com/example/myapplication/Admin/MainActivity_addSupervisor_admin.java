@@ -26,7 +26,7 @@ public class MainActivity_addSupervisor_admin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_add_supervisor);
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarAddSuperSite);
-        topAppBar.inflateMenu(R.menu.top_app_bar_admin_select);
+        topAppBar.inflateMenu(R.menu.top_app_bar_select);
         View view = getWindow().getDecorView().getRootView();
         init(view);
 

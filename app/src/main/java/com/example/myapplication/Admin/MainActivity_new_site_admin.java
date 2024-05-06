@@ -1,22 +1,13 @@
 package com.example.myapplication.Admin;
 
-import static android.content.ContentValues.TAG;
-
 import android.os.Bundle;
 import android.content.Intent;
-import android.net.Uri;
 
 import com.example.myapplication.Admin.items.ListElementSite;
-import com.example.myapplication.Admin.items.ListElementUser;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -25,14 +16,11 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
-import java.util.Arrays;
 import java.util.Locale;
 
 public class MainActivity_new_site_admin extends AppCompatActivity {
@@ -118,10 +106,10 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewSite);
         if (isEditing) {
             // Si se está editando, inflar el menú de editar sitio
-            topAppBar.inflateMenu(R.menu.top_app_bar_admin_edit);
+            topAppBar.inflateMenu(R.menu.top_app_bar_edit);
         } else {
             // Si se está creando, inflar el menú de crear sitio
-            topAppBar.inflateMenu(R.menu.top_app_bar_admin_new);
+            topAppBar.inflateMenu(R.menu.top_app_bar_new);
         }
 
         // Verificar si se está editando un sitio existente o creando uno nuevo

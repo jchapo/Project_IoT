@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.myapplication.R;
 
@@ -25,6 +26,10 @@ public class MainActivityCambiarPrimeraContra extends AppCompatActivity {
                 Intent intent = new Intent(MainActivityCambiarPrimeraContra.this, LoginActivity.class);
                 startActivity(intent);
             }
+        });
+        Toolbar toolbar = findViewById(R.id.topAppBarNewSite);
+        toolbar.setNavigationOnClickListener(v -> {
+            finish();
         });
 
     }

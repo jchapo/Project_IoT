@@ -1,7 +1,5 @@
 package com.example.myapplication.Admin;
 
-import static java.security.AccessController.getContext;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Admin.items.ListAdapterAddSite;
-import com.example.myapplication.Admin.items.ListAdapterSite;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -28,7 +25,7 @@ public class MainActivity_addSite_admin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_add_site_admin);
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarAddSiteUser);
-        topAppBar.inflateMenu(R.menu.top_app_bar_admin_select);
+        topAppBar.inflateMenu(R.menu.top_app_bar_select);
         View view = getWindow().getDecorView().getRootView();
         init(view);
 
