@@ -2,19 +2,26 @@ package com.example.myapplication.Admin;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.AdminActivityMainNavigationBinding;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
@@ -31,6 +38,13 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         replaceFragment(new Fragment_1_Users());
 
         Toolbar toolbar = binding.topAppBarUserFragment;
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBarUserFragment);
+
+        topAppBar.inflateMenu(R.menu.top_app_bar_admin_users);
+        topAppBar.setOnMenuItemClickListener(item -> {
+            binding.bottomNavigation.setVisibility(View.GONE);
+            return false;
+        });
 
         drawerLayout = binding.drawerLayout;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -58,39 +72,31 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
             }
             return true;
         });
+
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.top_app_bar_admin_users, menu);
-        MenuItem searchItem = menu.findItem(R.id.searchUser);
-        SearchView searchView = (SearchView) searchItem.getActionView();
+    /*@Override
+    public void onBackPressed() {
+        // Obtener el MenuItem de búsqueda
+        MenuItem searchMenuItem = menu.findItem(R.id.searchUser);
 
-        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                // Ocultar el BottomNavigationView
-                BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-                bottomNavigationView.setVisibility(View.GONE);
-                // Aquí puedes manejar el clic en el ítem del menú
-                // Por ejemplo, puedes abrir una nueva actividad o fragmento para la búsqueda
-                return true; // True indica que el evento fue manejado
+        // Verificar si el SearchView está expandido
+        if (searchMenuItem != null) {
+            SearchView searchView = (SearchView) searchMenuItem.getActionView();
+            if (!searchView.isIconified()) {
+                // Mostrar Toast
+                Toast.makeText(this, "Presionaste atrás con el cuadro de búsqueda abierto", Toast.LENGTH_SHORT).show();
+                // Colapsar el SearchView
+                searchMenuItem.collapseActionView();
+                return;
             }
-        });
+        }
 
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                // Restaurar la visibilidad del BottomNavigationView
-                BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-                bottomNavigationView.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
+        // Si el SearchView no está expandido, realizar el comportamiento predeterminado
+        super.onBackPressed();
+    }*/
 
-        return true;
-    }
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -98,4 +104,6 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout_Admin, fragment);
         fragmentTransaction.commit();
     }
+
+
 }
