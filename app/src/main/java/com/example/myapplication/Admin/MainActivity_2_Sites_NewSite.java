@@ -23,7 +23,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.Locale;
 
-public class MainActivity_new_site_admin extends AppCompatActivity {
+public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
 
     ListElementSite element;
     private EditText editAddress, editUbigeo, editSiteCoordenadas;
@@ -135,7 +135,7 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
                 // Verificar si los campos están vacíos
                 if (TextUtils.isEmpty(department) || TextUtils.isEmpty(province) || TextUtils.isEmpty(district) ||
                         TextUtils.isEmpty(zonetype) || TextUtils.isEmpty(sitetype)) {
-                    Toast.makeText(MainActivity_new_site_admin.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity_2_Sites_NewSite.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
                     return false; // No continuar si falta algún dato
                 }
 
@@ -150,7 +150,7 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
                 ListElementSite listElement = new ListElementSite(department, name, status, province, district, "", location, "", zonetype, sitetype, latitud, longitud);
 
                 // Iniciar la actividad de perfil de sitio y pasar los datos
-                Intent intent2 = new Intent(MainActivity_new_site_admin.this, MainActivity_siteprofile_admin.class);
+                Intent intent2 = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_SiteDetails.class);
                 intent2.putExtra("ListElementSite", listElement);
                 startActivity(intent2);
 
@@ -186,7 +186,7 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Aquí iniciamos la actividad MapActivity para que el usuario pueda seleccionar la ubicación
-                Intent intent = new Intent(MainActivity_new_site_admin.this, MainActivity_mapchooser_admin.class);
+                Intent intent = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_MappChooser.class);
                 launcher.launch(intent);
             }
         });

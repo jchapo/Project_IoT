@@ -17,7 +17,7 @@ import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class MainActivity_userprofile_admin extends AppCompatActivity {
+public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
 
     TextView nameDescriptionTextView;
     TextView userDescriptionTextView;
@@ -52,8 +52,7 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity_userprofile_admin.this, MainActivity_navigation_admin.class);
-                intent.putExtra("comeFrom", "userProfile");
+                Intent intent = new Intent(MainActivity_1_Users_UserDetais.this, MainActivity_0_NavigationAdmin.class);
                 startActivity(intent);
             }
         });
@@ -63,7 +62,7 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
             // Código para abrir MainActivity_new_user_admin desde la actividad del perfil de usuario
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity_userprofile_admin.this, MainActivity_new_user_admin.class);
+                Intent intent = new Intent(MainActivity_1_Users_UserDetais.this, MainActivity_1_Users_NewUser.class);
                 intent.putExtra("isEditing", true);
                 intent.putExtra("ListElement", element);
                 startActivity(intent);
@@ -77,7 +76,7 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Crear Intent para iniciar la actividad MainActivity_addSupervisor_admin
-                Intent intent = new Intent(MainActivity_userprofile_admin.this, MainActivity_addSite_admin.class);
+                Intent intent = new Intent(MainActivity_1_Users_UserDetais.this, MainActivity_2_Sites_AddSite.class);
                 // Iniciar la actividad MainActivity_addSupervisor_admin con el Intent
                 startActivity(intent);
             }
@@ -93,7 +92,7 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Aquí puedes realizar la acción de inhabilitar el usuario
                 // Muestra el Toast indicando que el usuario ha sido inhabilitado
-                Toast.makeText(MainActivity_userprofile_admin.this, "El usuario ha sido inhabilitado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity_1_Users_UserDetais.this, "El usuario ha sido inhabilitado", Toast.LENGTH_SHORT).show();
                 // Termina la actividad actual y regresa a la actividad anterior
                 finish();
             }
@@ -114,7 +113,7 @@ public class MainActivity_userprofile_admin extends AppCompatActivity {
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Eliminar el supervisor y mostrar el toast
-                        Toast.makeText(MainActivity_userprofile_admin.this, "Sitio removido", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity_1_Users_UserDetais.this, "Sitio removido", Toast.LENGTH_SHORT).show();
                         // Aquí debes agregar el código para eliminar el supervisor
                     }
                 })

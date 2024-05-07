@@ -9,7 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.myapplication.R;
 
-public class MainActivity_chat_user extends AppCompatActivity {
+public class MainActivity_3_Chat_ChatAdmin extends AppCompatActivity {
 
     TextView nameTextView;
 

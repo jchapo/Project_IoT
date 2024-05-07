@@ -17,7 +17,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.ImagenesSitio;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class MainActivity_siteprofile_admin extends AppCompatActivity {
+public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
 
 
     TextView nameTextViewSite;
@@ -46,7 +46,7 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity_siteprofile_admin.this, MainActivity_navigation_admin.class);
+                Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_0_NavigationAdmin.class);
                 intent.putExtra("comeFrom", "siteProfile");
                 startActivity(intent);
             }
@@ -57,7 +57,7 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
             // Código para abrir MainActivity_new_user_admin desde la actividad del perfil de usuario
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity_siteprofile_admin.this, MainActivity_new_site_admin.class);
+                Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_2_Sites_NewSite.class);
                 intent.putExtra("isEditing", true);
                 intent.putExtra("ListElementSite", element);
                 startActivity(intent);
@@ -72,7 +72,7 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Crear Intent para iniciar la actividad ImagenesSitio
-                Intent intent = new Intent(MainActivity_siteprofile_admin.this, ImagenesSitio.class);
+                Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, ImagenesSitio.class);
                 // Iniciar la actividad ImagenesSitio con el Intent
                 startActivity(intent);
             }
@@ -86,7 +86,7 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Crear Intent para iniciar la actividad MainActivity_addSupervisor_admin
-                Intent intent = new Intent(MainActivity_siteprofile_admin.this, MainActivity_addSupervisor_admin.class);
+                Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_2_Sites_AddSupervisor.class);
                 // Iniciar la actividad MainActivity_addSupervisor_admin con el Intent
                 startActivity(intent);
             }
@@ -102,7 +102,7 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Aquí puedes realizar la acción de inhabilitar el sitio
                 // Muestra un toast después de inhabilitar el sitio
-                Toast.makeText(MainActivity_siteprofile_admin.this, "El sitio ha sido inhabilitado", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity_2_Sites_SiteDetails.this, "El sitio ha sido inhabilitado", Toast.LENGTH_LONG).show();
                 // Termina la actividad actual y regresa a la actividad anterior
                 finish();
             }
@@ -122,7 +122,7 @@ public class MainActivity_siteprofile_admin extends AppCompatActivity {
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Eliminar el supervisor y mostrar el toast
-                        Toast.makeText(MainActivity_siteprofile_admin.this, "Supervisor removido", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity_2_Sites_SiteDetails.this, "Supervisor removido", Toast.LENGTH_SHORT).show();
                         // Aquí debes agregar el código para eliminar el supervisor
                     }
                 })

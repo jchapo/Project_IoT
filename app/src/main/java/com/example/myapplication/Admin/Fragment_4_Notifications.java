@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,7 +23,7 @@ import com.example.myapplication.Sistem.MainActivity_notificacion_user;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentNotifications extends Fragment {
+public class Fragment_4_Notifications extends Fragment {
     List<ListElementNotificaciones> elementsForms;
     List<ListElementNotificaciones> elementsUsers;
 

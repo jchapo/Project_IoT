@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,7 +23,7 @@ import com.example.myapplication.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentChat extends Fragment {
+public class Fragment_3_Chat extends Fragment {
     List<ListElementChat> elements;
     private DrawerLayout drawerLayout;
     @Override
@@ -75,7 +73,7 @@ public class FragmentChat extends Fragment {
     }
 
     public void moveToDescription(ListElementChat item){
-        Intent intent = new Intent(getContext(), MainActivity_chat_user.class);
+        Intent intent = new Intent(getContext(), MainActivity_3_Chat_ChatAdmin.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);
     }

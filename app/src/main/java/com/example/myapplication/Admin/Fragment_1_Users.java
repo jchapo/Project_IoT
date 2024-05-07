@@ -25,7 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentUsers extends Fragment {
+public class Fragment_1_Users extends Fragment {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -63,7 +63,7 @@ public class FragmentUsers extends Fragment {
             @Override
             public void onClick(View v) {
                 // Aquí cambia "NuevaActividad" por la clase de la actividad a la que deseas cambiar
-                Intent intent = new Intent(getActivity(), MainActivity_new_user_admin.class);
+                Intent intent = new Intent(getActivity(), MainActivity_1_Users_NewUser.class);
                 startActivity(intent);
             }
         });
@@ -104,7 +104,7 @@ public class FragmentUsers extends Fragment {
     }
 
     public void moveToDescription(ListElementUser item){
-        Intent intent = new Intent(getContext(),MainActivity_userprofile_admin.class);
+        Intent intent = new Intent(getContext(), MainActivity_1_Users_UserDetais.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);
     }

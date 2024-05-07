@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.R;
 
-public class MainActivity_edit_user_admin extends AppCompatActivity {
+public class MainActivity_1_Users_EditUser extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class MainActivity_edit_user_admin extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.saveOldTopAppBar) {
-            startActivity(new Intent(this, MainActivity_userprofile_admin.class));
+            startActivity(new Intent(this, MainActivity_1_Users_UserDetais.class));
             return true;
         } else {
             return super.onOptionsItemSelected(item);

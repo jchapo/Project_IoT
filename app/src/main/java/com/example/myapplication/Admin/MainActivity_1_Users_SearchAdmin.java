@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.R;
 
-public class MainActivity_search_admin extends AppCompatActivity {
+public class MainActivity_1_Users_SearchAdmin extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

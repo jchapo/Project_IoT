@@ -13,7 +13,7 @@ import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
-public class MainActivity_new_user_admin extends AppCompatActivity {
+public class MainActivity_1_Users_NewUser extends AppCompatActivity {
     private EditText editFirstName, editLastName, editDNI, editMail, editAddress, editPhone;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
@@ -60,7 +60,7 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
         topAppBar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.createNewTopAppBar) {
                 if (areFieldsEmpty()) {
-                    Toast.makeText(MainActivity_new_user_admin.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity_1_Users_NewUser.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
                 } else {
                     String firstName = editFirstName.getText().toString();
                     String lastName = editLastName.getText().toString();
@@ -73,14 +73,14 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
 
                     ListElementUser listElement = new ListElementUser(dni, firstName, lastName, user, status, mail, phone, address);
 
-                    Intent intent2 = new Intent(MainActivity_new_user_admin.this, MainActivity_userprofile_admin.class);
+                    Intent intent2 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetais.class);
                     intent2.putExtra("ListElement", listElement);
                     startActivity(intent2);
                 }
                 return true;
             } else if (item.getItemId() == R.id.saveOldTopAppBar) {
                 if (areFieldsEmpty()) {
-                    Toast.makeText(MainActivity_new_user_admin.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity_1_Users_NewUser.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
                 } else {
                     String firstName = editFirstName.getText().toString();
                     String lastName = editLastName.getText().toString();
@@ -93,7 +93,7 @@ public class MainActivity_new_user_admin extends AppCompatActivity {
 
                     ListElementUser listElement = new ListElementUser(dni, firstName, lastName, user,status, mail, phone, address);
 
-                    Intent intent3 = new Intent(MainActivity_new_user_admin.this, MainActivity_userprofile_admin.class);
+                    Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetais.class);
                     intent3.putExtra("ListElement", listElement);
                     startActivity(intent3);
                 }

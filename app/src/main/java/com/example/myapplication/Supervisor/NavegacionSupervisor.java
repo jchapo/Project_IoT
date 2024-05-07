@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.myapplication.Admin.FragmentChat;
+import com.example.myapplication.Admin.Fragment_3_Chat;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.SupervisorActivityNavegacionBinding;
 
@@ -31,7 +31,7 @@ public class NavegacionSupervisor extends AppCompatActivity {
                 replaceFragment(new EquiposFragment());
                 return true;
             } else if (item.getItemId() == R.id.chat_menu) {
-                replaceFragment(new FragmentChat());
+                replaceFragment(new Fragment_3_Chat());
                 return true;
             } else if (item.getItemId() == R.id.reportes_menu) {
                 replaceFragment(new ReportesFragment());

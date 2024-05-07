@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_theme_background"
-    tools:context=".Admin.MainActivity_navigation_admin">
+    tools:context=".Admin.MainActivity_0_NavigationAdmin">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -53,7 +53,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/bottom_navigation_menu_admin"
             app:labelVisibilityMode="labeled"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

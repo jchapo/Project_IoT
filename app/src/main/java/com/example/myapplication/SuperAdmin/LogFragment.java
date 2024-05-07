@@ -17,12 +17,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Admin.MainActivity_new_site_admin;
-import com.example.myapplication.Admin.MainActivity_siteprofile_admin;
+import com.example.myapplication.Admin.MainActivity_2_Sites_SiteDetails;
 import com.example.myapplication.Admin.items.ListAdapterSite;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +94,7 @@ public class LogFragment extends Fragment {
     }
 
     public void moveToDescription(ListElementSite item){
-        Intent intent = new Intent(getContext(), MainActivity_siteprofile_admin.class);
+        Intent intent = new Intent(getContext(), MainActivity_2_Sites_SiteDetails.class);
         intent.putExtra("ListElementSite", item);
         startActivity(intent);
     }

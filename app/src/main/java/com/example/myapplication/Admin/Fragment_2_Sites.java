@@ -2,46 +2,71 @@ package com.example.myapplication.Admin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Admin.items.ListAdapterAddSite;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.example.myapplication.Admin.items.ListAdapterSite;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
-import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity_addSite_admin extends AppCompatActivity {
+public class Fragment_2_Sites extends Fragment {
+
     List<ListElementSite> elements;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.admin_activity_main_add_site_admin);
-        MaterialToolbar topAppBar = findViewById(R.id.topAppBarAddSiteUser);
-        topAppBar.inflateMenu(R.menu.top_app_bar_select);
-        View view = getWindow().getDecorView().getRootView();
-        init(view);
-
-        topAppBar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.chooseSuper) {
-                Toast.makeText(this, "Sitio asignado", Toast.LENGTH_SHORT).show();
-                finish();
-            } else {
-                return false;
-            }
-            return false;
-        });
-        topAppBar.setNavigationOnClickListener(v -> {
-            finish();
-        });
+        setHasOptionsMenu(true);
     }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.top_app_bar_admin_sites, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.admin_fragment_sites, container, false);
+        setHasOptionsMenu(true);
+        init(view);
+        FloatingActionButton agregarSitioButton = view.findViewById(R.id.agregarSitiofloatingActionButton);
+        agregarSitioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Aquí cambia "NuevaActividad" por la clase de la actividad a la que deseas cambiar
+                Intent intent = new Intent(getActivity(), MainActivity_2_Sites_NewSite.class);
+                intent.putExtra("isEditing", false);
+                startActivity(intent);
+            }
+        });
+
+
+        return view;
+    }
+
     public void init(View view) {
         elements = new ArrayList<>();
 
@@ -69,15 +94,15 @@ public class MainActivity_addSite_admin extends AppCompatActivity {
 
 
 
-        ListAdapterAddSite listAdapter = new ListAdapterAddSite(this,elements);
-        RecyclerView recyclerView = view.findViewById(R.id.listElementsSites);
+        ListAdapterSite listAdapter = new ListAdapterSite(elements, getContext(), item -> moveToDescription(item));
+        RecyclerView recyclerView = view.findViewById(R.id.listElements);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(listAdapter);
     }
 
     public void moveToDescription(ListElementSite item){
-        Intent intent = new Intent(this,MainActivity_siteprofile_admin.class);
+        Intent intent = new Intent(getContext(), MainActivity_2_Sites_SiteDetails.class);
         intent.putExtra("ListElementSite", item);
         startActivity(intent);
     }

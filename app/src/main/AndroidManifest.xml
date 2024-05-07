@@ -23,7 +23,7 @@
             android:value="AIzaSyAExTORfkCED6S7JMtHAnYKhJVJ5J9inaw" />
 
         <activity
-            android:name=".Admin.MainActivity_mapchooser_admin"
+            android:name=".Admin.MainActivity_2_Sites_MappChooser"
             android:exported="false" />
         <activity
             android:name=".Supervisor.EditarEquipo"
@@ -45,7 +45,7 @@
             android:name=".Sistem.MainActivityCambiarPrimeraContra"
             android:exported="false" />
         <activity
-            android:name=".Admin.MainActivity_chat_user"
+            android:name=".Admin.MainActivity_3_Chat_ChatAdmin"
             android:exported="false" />
         <activity
             android:name=".NavegacionInicial"
@@ -66,31 +66,31 @@
             android:name=".Admin.items.ListAdapterAddSuper"
             android:exported="false" />
         <activity
-            android:name=".Admin.MainActivity_addSupervisor_admin"
+            android:name=".Admin.MainActivity_2_Sites_AddSupervisor"
             android:exported="false" />
         <activity
-            android:name=".Admin.MainActivity_new_site_admin"
+            android:name=".Admin.MainActivity_2_Sites_NewSite"
             android:exported="false" />
         <activity
-            android:name=".Admin.MainActivity_siteprofile_admin"
+            android:name=".Admin.MainActivity_2_Sites_SiteDetails"
             android:exported="false" />
         <activity
-            android:name=".Admin.MainActivity_search_admin"
+            android:name=".Admin.MainActivity_1_Users_SearchAdmin"
             android:exported="false" />
         <activity
-            android:name=".Admin.MainActivity_userprofile_admin"
+            android:name=".Admin.MainActivity_1_Users_UserDetais"
             android:exported="false" />
         <activity
-            android:name=".Admin.MainActivity_edit_user_admin"
+            android:name=".Admin.MainActivity_1_Users_EditUser"
             android:exported="false" />
         <activity
-            android:name=".Admin.MainActivity_new_user_admin"
+            android:name=".Admin.MainActivity_1_Users_NewUser"
             android:exported="false" />
         <activity
-            android:name=".Admin.MainActivity_navigation_admin"
+            android:name=".Admin.MainActivity_0_NavigationAdmin"
             android:exported="false" />
       <activity
-            android:name=".Admin.MainActivity_addSite_admin"
+            android:name=".Admin.MainActivity_2_Sites_AddSite"
             android:exported="false" /> 
 
         <!-- Actividades Supervisor -->

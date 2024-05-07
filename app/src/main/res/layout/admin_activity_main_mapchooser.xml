@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin.MainActivity_mapchooser_admin">
+    tools:context=".Admin.MainActivity_2_Sites_MappChooser">
 
     <fragment
         android:id="@+id/map"
