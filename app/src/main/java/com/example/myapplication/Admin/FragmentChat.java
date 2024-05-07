@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -26,7 +25,7 @@ import com.example.myapplication.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatFragment extends Fragment {
+public class FragmentChat extends Fragment {
     List<ListElementChat> elements;
     private DrawerLayout drawerLayout;
     @Override
@@ -51,14 +50,6 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.admin_fragments_chats, container, false);
-        Toolbar toolbar = view.findViewById(R.id.topAppBarUsers);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
-
-        /**drawerLayout = view.findViewById(R.id.drawerLayout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();**/
 
         setHasOptionsMenu(true);
         init(view);

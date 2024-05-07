@@ -26,7 +26,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SitesFragment extends Fragment {
+public class FragmentSites extends Fragment {
 
     List<ListElementSite> elements;
 
@@ -52,8 +52,6 @@ public class SitesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.admin_fragment_sites, container, false);
-        Toolbar toolbar = view.findViewById(R.id.topAppBarSite);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         init(view);
         FloatingActionButton agregarSitioButton = view.findViewById(R.id.agregarSitiofloatingActionButton);

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_theme_background"
-    tools:context=".Admin.UsersFragment">
+    tools:context=".Admin.FragmentUsers">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,16 +24,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBarUserFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:minHeight="?attr/actionBarSize"
-                app:menu="@menu/top_app_bar_admin_users"
-                app:navigationIcon="@drawable/ic_perfil_outline"
-                app:title="Lista de usuarios" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"

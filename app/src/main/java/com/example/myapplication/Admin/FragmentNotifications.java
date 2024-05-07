@@ -25,7 +25,7 @@ import com.example.myapplication.Sistem.MainActivity_notificacion_user;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotificationsFragment extends Fragment {
+public class FragmentNotifications extends Fragment {
     List<ListElementNotificaciones> elementsForms;
     List<ListElementNotificaciones> elementsUsers;
 
@@ -51,8 +51,6 @@ public class NotificationsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.admin_fragment_notifications, container, false);
-        Toolbar toolbar = view.findViewById(R.id.topAppBarUsers);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         init(view);
         

@@ -7,8 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.myapplication.Admin.ChatFragment;
-import com.example.myapplication.Admin.SitesFragment;
+import com.example.myapplication.Admin.FragmentChat;
 import com.example.myapplication.R;
 
 public class MainActivity_navigation_SuperAdmin extends AppCompatActivity {
@@ -31,7 +30,7 @@ public class MainActivity_navigation_SuperAdmin extends AppCompatActivity {
                 replaceFragmentSuperAdmin(new LogFragment());
                 return true;
             } else if (item.getItemId() == R.id.chat_menu_superadmin) {
-                replaceFragmentSuperAdmin(new ChatFragment());
+                replaceFragmentSuperAdmin(new FragmentChat());
                 return true;
             }
             return true;
