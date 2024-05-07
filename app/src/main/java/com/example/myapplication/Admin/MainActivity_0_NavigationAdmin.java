@@ -28,22 +28,64 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
 
     AdminActivityMainNavigationBinding binding;
     private DrawerLayout drawerLayout;
+    private boolean isSearchViewActive = false;
+    private BottomNavigationView bottomNavigationView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = AdminActivityMainNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        bottomNavigationView = binding.bottomNavigation;
         binding.topAppBarUserFragment.setTitle("Lista de usuarios");
         replaceFragment(new Fragment_1_Users());
 
         Toolbar toolbar = binding.topAppBarUserFragment;
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarUserFragment);
 
-        topAppBar.inflateMenu(R.menu.top_app_bar_admin_users);
-        topAppBar.setOnMenuItemClickListener(item -> {
+        // Obtener el ítem del menú del ícono de búsqueda
+        MenuItem searchItem = topAppBar.getMenu().findItem(R.id.searchUser);
+
+        // Obtener la vista del SearchView
+        /*topAppBar.inflateMenu(R.menu.top_app_bar_admin_users);*/
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        /*topAppBar.setOnMenuItemClickListener(item -> {
             binding.bottomNavigation.setVisibility(View.GONE);
             return false;
+        });*/
+
+        // Establecer un listener para el ícono de búsqueda
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                binding.bottomNavigation.setVisibility(View.GONE);
+                return true; // True para permitir la expansión del ícono de búsqueda
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // El ícono de búsqueda se ha colapsado
+                binding.bottomNavigation.setVisibility(View.VISIBLE);
+                return true; // True para permitir el colapso del ícono de búsqueda
+            }
+        });
+
+        // Establecer un listener para el SearchView
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Aquí puedes manejar la búsqueda cuando se envía la consulta
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Aquí puedes manejar la búsqueda mientras el texto cambia
+                return false;
+            }
         });
 
         drawerLayout = binding.drawerLayout;
@@ -75,27 +117,6 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
 
 
     }
-
-    /*@Override
-    public void onBackPressed() {
-        // Obtener el MenuItem de búsqueda
-        MenuItem searchMenuItem = menu.findItem(R.id.searchUser);
-
-        // Verificar si el SearchView está expandido
-        if (searchMenuItem != null) {
-            SearchView searchView = (SearchView) searchMenuItem.getActionView();
-            if (!searchView.isIconified()) {
-                // Mostrar Toast
-                Toast.makeText(this, "Presionaste atrás con el cuadro de búsqueda abierto", Toast.LENGTH_SHORT).show();
-                // Colapsar el SearchView
-                searchMenuItem.collapseActionView();
-                return;
-            }
-        }
-
-        // Si el SearchView no está expandido, realizar el comportamiento predeterminado
-        super.onBackPressed();
-    }*/
 
 
     private void replaceFragment(Fragment fragment) {
