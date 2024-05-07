@@ -69,9 +69,6 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
             return true;
         });
 
-        topAppBar.setOnMenuItemClickListener(items -> {
-            Toast.makeText(MainActivity_0_NavigationAdmin.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
-        });
 
     }
 
