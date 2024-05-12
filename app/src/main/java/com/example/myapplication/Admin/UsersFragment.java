@@ -64,10 +64,10 @@ public class UsersFragment extends Fragment {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+
+
         setHasOptionsMenu(true);
         init(view);
-        
-        
         FloatingActionButton agregarUsuarioButton = view.findViewById(R.id.agregarUsuariofloatingActionButton);
         agregarUsuarioButton.setOnClickListener(new View.OnClickListener() {
             @Override

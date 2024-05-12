@@ -5,8 +5,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,7 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SitesFragment extends Fragment {
-
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
     List<ListElementSite> elements;
 
     @Override
@@ -54,6 +57,14 @@ public class SitesFragment extends Fragment {
         View view = inflater.inflate(R.layout.admin_fragment_sites, container, false);
         Toolbar toolbar = view.findViewById(R.id.topAppBarSite);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+
+        drawerLayout = view.findViewById(R.id.drawerLayout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+
         setHasOptionsMenu(true);
         init(view);
         FloatingActionButton agregarSitioButton = view.findViewById(R.id.agregarSitiofloatingActionButton);
