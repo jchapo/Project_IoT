@@ -3,6 +3,7 @@ package com.example.myapplication.Supervisor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.myapplication.Admin.MainActivity_new_site_admin;
 import com.example.myapplication.R;
 
 public class CrearEquipo extends AppCompatActivity {
@@ -45,4 +47,5 @@ public class CrearEquipo extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.top_app_bar_supervisor_new_equipo, menu);
         return true;
     }
+
 }
