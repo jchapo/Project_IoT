@@ -2,6 +2,8 @@ package com.example.myapplication.Supervisor;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +13,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.tabs.TabLayout;
 
 public class CrearReporte extends AppCompatActivity {
@@ -52,6 +56,7 @@ public class CrearReporte extends AppCompatActivity {
 
 
         });
+
         Toolbar toolbar = findViewById(R.id.topAppBarCrearReporte);
         setSupportActionBar(toolbar);
 
@@ -63,6 +68,23 @@ public class CrearReporte extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.createNewReporte) {
+            // Aquí manejamos el clic en el botón "CREAR"
+            Intent intent = new Intent(this, NavegacionSupervisor.class); // Suponiendo que ReportesFragment es una actividad
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_app_bar_supervisor_crear_reporte, menu);
+        return true;
+    }
+
+
     private void loadFragment(Fragment fragment) {
         // Carga el fragmento en el FragmentContainerView
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -71,4 +93,5 @@ public class CrearReporte extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
 }
