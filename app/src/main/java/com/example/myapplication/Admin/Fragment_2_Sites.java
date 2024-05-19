@@ -20,13 +20,17 @@ import com.example.myapplication.Admin.items.ListAdapterSite;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Fragment_2_Sites extends Fragment {
 
-    List<ListElementSite> elements;
+    private List<ListElementSite> activeSites;
+    private List<ListElementSite> inactiveSites;
+    private ListAdapterSite listAdapterSites;
+    private RecyclerView recyclerViewSites;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,42 +67,53 @@ public class Fragment_2_Sites extends Fragment {
             }
         });
 
+        TabLayout tabLayout = view.findViewById(R.id.tabLayoutSites);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        listAdapterSites.setItems(activeSites);
+                        listAdapterSites.notifyDataSetChanged();
+                        break;
+                    case 1:
+                        listAdapterSites.setItems(inactiveSites);
+                        listAdapterSites.notifyDataSetChanged();
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
 
         return view;
     }
 
     public void init(View view) {
-        elements = new ArrayList<>();
+        activeSites = new ArrayList<>();
+        inactiveSites = new ArrayList<>();
 
-        elements.add(new ListElementSite("Lima","LIM-01","Activo","Lima","Carabayllo","Av. San Felipe","location","31501","Urbano","Fijo","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Lima","LIM-02","Activo","Lima","Carabayllo","Av. San Carlos","location","31502","Urbano","Fijo","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Lima","LIM-03","Activo","Lima","Carabayllo","Av. Los Incas","location","31503","Urbano","Fijo","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Cajamarca","CAJ-01","Activo","Cajamarca","Asunción","Calle Los Mirlos","location","31504","Rural","Móvil","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Cajamarca","CAJ-02","Activo","Cajamarca","Asunción","Calle Los Piris","location","31505","Rural","Móvil","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Cajamarca","CAJ-03","Activo","Cajamarca","Asunción","Calle Los Mirpus","location","31506","Rural","Móvil","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Arequipa","ARQ-01","Activo","Arequipa","Yanahuara","Av. Unión","location","31507","Urbano","Fijo","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Arequipa","ARQ-02","Activo","Caylloma","Caylloma","Av. Bayoneta","location","31508","Urbano","Fijo","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Arequipa","ARQ-03","Activo","Arequipa","Cayma","Av. La Paz","location","31509","Urbano","Móvil","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Tumbes","TUM-01","Activo","Tumbes","Tumbes","Av. Lobitos","location","31510","Rural","Fijo","-34.3213","56.3123"));
-        elements.add(new ListElementSite("Lima","LIM-04","Activo","Lima","Miraflores","Av. Larco","location","31509","Urbano","Fijo","-12.1212","-76.1234"));
-        elements.add(new ListElementSite("Lima","LIM-05","Activo","Lima","San Borja","Av. Aviación","location","31510","Urbano","Fijo","-12.1212","-76.1234"));
-        elements.add(new ListElementSite("Lima","LIM-06","Activo","Lima","Surco","Av. Primavera","location","31511","Urbano","Fijo","-12.1212","-76.1234"));
-        elements.add(new ListElementSite("Cusco","CUS-01","Activo","Cusco","Wanchaq","Av. de la Cultura","location","31512","Urbano","Fijo","-13.5252","-71.9723"));
-        elements.add(new ListElementSite("Cusco","CUS-02","Activo","Cusco","San Sebastián","Av. Tomasa Tito Condemayta","location","31513","Urbano","Fijo","-13.5252","-71.9723"));
-        elements.add(new ListElementSite("Cusco","CUS-03","Activo","Cusco","San Jerónimo","Av. Los Incas","location","31514","Urbano","Fijo","-13.5252","-71.9723"));
-        elements.add(new ListElementSite("Trujillo","TRJ-01","Activo","La Libertad","Trujillo","Av. España","location","31515","Urbano","Fijo","-8.1152","-79.0299"));
-        elements.add(new ListElementSite("Trujillo","TRJ-02","Activo","La Libertad","Huanchaco","Av. La Ribera","location","31516","Urbano","Fijo","-8.1152","-79.0299"));
-        elements.add(new ListElementSite("Trujillo","TRJ-03","Activo","La Libertad","Moche","Av. Huaca del Sol","location","31517","Urbano","Fijo","-8.1152","-79.0299"));
-        elements.add(new ListElementSite("Piura","PIU-01","Activo","Piura","Piura","Av. Grau","location","31518","Urbano","Fijo","-5.1945","-80.6328"));
+        activeSites.add(new ListElementSite("Lima","LIM-01","Activo","Lima","Carabayllo","Av. San Felipe","location","31501","Urbano","Fijo","-34.3213","56.3123"));
+        activeSites.add(new ListElementSite("Lima","LIM-02","Activo","Lima","Carabayllo","Av. San Carlos","location","31502","Urbano","Fijo","-34.3213","56.3123"));
+        activeSites.add(new ListElementSite("Lima","LIM-03","Activo","Lima","Carabayllo","Av. Los Incas","location","31503","Urbano","Fijo","-34.3213","56.3123"));
+        activeSites.add(new ListElementSite("Cajamarca","CAJ-01","Activo","Cajamarca","Asunción","Calle Los Mirlos","location","31504","Rural","Móvil","-34.3213","56.3123"));
+        activeSites.add(new ListElementSite("Cajamarca","CAJ-02","Activo","Cajamarca","Asunción","Calle Los Piris","location","31505","Rural","Móvil","-34.3213","56.3123"));
 
 
+        inactiveSites.add(new ListElementSite("Cajamarca","CAJ-03","Activo","Cajamarca","Asunción","Calle Los Mirpus","location","31506","Rural","Móvil","-34.3213","56.3123"));
+        inactiveSites.add(new ListElementSite("Arequipa","ARQ-01","Activo","Arequipa","Yanahuara","Av. Unión","location","31507","Urbano","Fijo","-34.3213","56.3123"));
+        inactiveSites.add(new ListElementSite("Arequipa","ARQ-02","Activo","Caylloma","Caylloma","Av. Bayoneta","location","31508","Urbano","Fijo","-34.3213","56.3123"));
 
-
-        ListAdapterSite listAdapter = new ListAdapterSite(elements, getContext(), item -> moveToDescription(item));
-        RecyclerView recyclerView = view.findViewById(R.id.listElements);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(listAdapter);
+        // Initialize the adapter and RecyclerView
+        listAdapterSites = new ListAdapterSite(activeSites, getContext(), item -> moveToDescription(item));
+        recyclerViewSites = view.findViewById(R.id.listElementsSites);
+        recyclerViewSites.setHasFixedSize(true);
+        recyclerViewSites.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewSites.setAdapter(listAdapterSites);
     }
 
     public void moveToDescription(ListElementSite item){

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.SearchView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,15 +22,18 @@ import com.example.myapplication.Admin.items.ListAdapterUser;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Fragment_1_Users extends Fragment {
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
 
-    List<ListElementUser> elements;
+    private List<ListElementUser> allUsers;
+    private List<ListElementUser> activeUsers;
+    private List<ListElementUser> inactiveUsers;
+    private ListAdapterUser listAdapterUsers;
+    private RecyclerView recyclerViewUsers;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +44,22 @@ public class Fragment_1_Users extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.top_app_bar_admin_users, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.searchUser);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                listAdapterUsers.filter(newText);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -68,42 +88,59 @@ public class Fragment_1_Users extends Fragment {
             }
         });
 
+        TabLayout tabLayout = view.findViewById(R.id.tabLayoutUsers);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        listAdapterUsers.setItems(activeUsers);
+                        listAdapterUsers.notifyDataSetChanged();
+                        break;
+                    case 1:
+                        listAdapterUsers.setItems(inactiveUsers);
+                        listAdapterUsers.notifyDataSetChanged();
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
 
         return view;
     }
 
     public void init(View view) {
-        elements = new ArrayList<>();
-        elements.add(new ListElementUser("74567890", "Pedro", "Suares","Administrador", "Activo", "pedro_correo@gmail.com","978675678", "Calle Manzana"));
-        elements.add(new ListElementUser("72903456", "Ana", "Suares","Supervisor", "Activo", "ana_correo@gmail.com","934567890", "Avenida Central"));
-        elements.add(new ListElementUser("70234567", "Juan","Suares", "Administrador", "Activo", "juan_correo@gmail.com","956783421", "Calle Primavera"));
-        elements.add(new ListElementUser("71234567", "María","Suares", "Supervisor", "Activo", "maria_correo@gmail.com","911234567", "Calle San José"));
-        elements.add(new ListElementUser("79908765", "Carlos", "Suares","Administrador", "Activo", "carlos_correo@gmail.com","978564321", "Avenida Libertad"));
-        elements.add(new ListElementUser("74895673", "Laura", "Suares","Supervisor", "Activo", "laura_correo@gmail.com","923456789", "Calle del Sol"));
-        elements.add(new ListElementUser("71234567", "Roberto","Suares", "Administrador", "Activo", "roberto_correo@gmail.com","989765432", "Avenida del Parque"));
-        elements.add(new ListElementUser("75789234", "Sofía", "Suares","Supervisor", "Activo", "sofia_correo@gmail.com","957684321", "Calle de la Luna"));
-        elements.add(new ListElementUser("72543019", "Fernando","Suares", "Administrador", "Activo", "fernando_correo@gmail.com","978932156", "Avenida Central"));
-        elements.add(new ListElementUser("70987654", "Ana","Suares", "Supervisor", "Activo", "ana_correo@gmail.com","976543218", "Calle de las Flores"));
-        elements.add(new ListElementUser("74891230", "Elena","Suares", "Administrador", "Activo", "elena_correo@gmail.com","923456789", "Avenida de la Paz"));
-        elements.add(new ListElementUser("71234567", "David","Suares", "Supervisor", "Activo", "david_correo@gmail.com","934567890", "Avenida del Bosque"));
-        elements.add(new ListElementUser("75678901", "Lucía", "Suares","Administrador", "Activo", "lucia_correo@gmail.com","956783421", "Calle del Río"));
-        elements.add(new ListElementUser("70234567", "Andrés", "Suares","Supervisor", "Activo", "andres_correo@gmail.com","911234567", "Calle de la Montaña"));
-        elements.add(new ListElementUser("79908765", "Marta", "Suares","Administrador", "Activo", "marta_correo@gmail.com","978564321", "Avenida de la Costa"));
-        elements.add(new ListElementUser("74895673", "Raquel", "Suares","Supervisor", "Activo", "raquel_correo@gmail.com","923456789", "Calle del Mar"));
-        elements.add(new ListElementUser("71234567", "José","Suares", "Administrador", "Activo", "jose_correo@gmail.com","989765432", "Avenida del Lago"));
-        elements.add(new ListElementUser("75789234", "Laura", "Suares","Supervisor", "Activo", "laura_correo@gmail.com","957684321", "Calle de la Playa"));
-        elements.add(new ListElementUser("72543019", "Isabel", "Suares","Administrador", "Activo", "isabel_correo@gmail.com","978932156", "Avenida del Sol"));
-        elements.add(new ListElementUser("70987654", "Roberto", "Suares","Supervisor", "Activo", "roberto_correo@gmail.com","976543218", "Calle de la Arena"));
+        allUsers = new ArrayList<>();
+        activeUsers = new ArrayList<>();
+        inactiveUsers = new ArrayList<>();
+
+        activeUsers.add(new ListElementUser("74567890", "Pedro", "Suares","Administrador", "Activo", "pedro_correo@gmail.com","978675678", "Calle Manzana"));
+        activeUsers.add(new ListElementUser("72903456", "Ana", "Suares","Supervisor", "Activo", "ana_correo@gmail.com","934567890", "Avenida Central"));
+        activeUsers.add(new ListElementUser("70234567", "Juan","Suares", "Administrador", "Activo", "juan_correo@gmail.com","956783421", "Calle Primavera"));
+        activeUsers.add(new ListElementUser("71234567", "María","Suares", "Supervisor", "Activo", "maria_correo@gmail.com","911234567", "Calle San José"));
+        activeUsers.add(new ListElementUser("79908765", "Carlos", "Suares","Administrador", "Activo", "carlos_correo@gmail.com","978564321", "Avenida Libertad"));
 
 
-        ListAdapterUser listAdapter = new ListAdapterUser(elements, getContext(), item -> moveToDescription(item));
-        RecyclerView recyclerView = view.findViewById(R.id.listElementsUsers);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(listAdapter);
+        inactiveUsers.add(new ListElementUser("79908765", "Marta", "Suares","Administrador", "Activo", "marta_correo@gmail.com","978564321", "Avenida de la Costa"));
+        inactiveUsers.add(new ListElementUser("74895673", "Raquel", "Suares","Supervisor", "Activo", "raquel_correo@gmail.com","923456789", "Calle del Mar"));
+
+        allUsers.addAll(activeUsers);
+        allUsers.addAll(inactiveUsers);
+
+
+        listAdapterUsers = new ListAdapterUser(activeUsers, getContext(), item -> moveToDescription(item));
+        recyclerViewUsers = view.findViewById(R.id.listElementsUsers);
+        recyclerViewUsers.setHasFixedSize(true);
+        recyclerViewUsers.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewUsers.setAdapter(listAdapterUsers);
     }
 
-    public void moveToDescription(ListElementUser item){
+    public void moveToDescription(ListElementUser item) {
         Intent intent = new Intent(getContext(), MainActivity_1_Users_UserDetais.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);

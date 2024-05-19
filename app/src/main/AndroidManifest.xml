@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -75,7 +75,7 @@
             android:name=".Admin.MainActivity_2_Sites_SiteDetails"
             android:exported="false" />
         <activity
-            android:name=".Admin.MainActivity_1_Users_SearchAdmin"
+            android:name=".Admin.MainActivity_0_NavigationSearch"
             android:exported="false" />
         <activity
             android:name=".Admin.MainActivity_1_Users_UserDetais"

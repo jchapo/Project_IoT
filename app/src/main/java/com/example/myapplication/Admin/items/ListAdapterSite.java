@@ -46,8 +46,7 @@ public class ListAdapterSite extends RecyclerView.Adapter<ListAdapterSite.ViewHo
         holder.bindDataSite(nData.get(position));
     }
 
-    public void setItems(List<ListElementSite> items) {
-        nData = items;
+    public void setItems(List<ListElementSite> items) {nData = items;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
