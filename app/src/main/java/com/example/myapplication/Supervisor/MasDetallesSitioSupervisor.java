@@ -89,6 +89,7 @@ public class MasDetallesSitioSupervisor extends AppCompatActivity {
         FloatingActionButton fabEdit = findViewById(R.id.fabEdit);
         fabEdit.setOnClickListener(v -> {
             Intent intent = new Intent(MasDetallesSitioSupervisor.this, CrearReporte.class);
+            intent.putExtra("tipo_reporte", "Sitio");
             startActivity(intent);
         });
 

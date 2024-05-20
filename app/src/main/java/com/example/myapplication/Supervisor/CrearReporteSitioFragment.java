@@ -2,6 +2,8 @@ package com.example.myapplication.Supervisor;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -10,23 +12,36 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.example.myapplication.R;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
 
 public class CrearReporteSitioFragment extends Fragment {
+
+
+    private MaterialAutoCompleteTextView selectSitio;
+    private ArrayAdapter<String> sitioAdapter;
+
+    private String[] sitioOptions = {"LIM-01","CAJ-02","ARQ-03","TRJ-01","PIU-01"};
+
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.supervisor_fragment_crear_reporte_sitio, container, false);
+
+
+        View view = inflater.inflate(R.layout.supervisor_fragment_crear_reporte_sitio, container, false);
+
+        selectSitio = view.findViewById(R.id.selectSitio);
+        sitioAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, sitioOptions);
+
+        selectSitio.setAdapter(sitioAdapter);
+
+
+        return view;
     }
 
-
-
-
-
-
-
-
-
+    private boolean areFieldsEmpty() {
+        return selectSitio.getText().toString().isEmpty();
+    }
 
 }

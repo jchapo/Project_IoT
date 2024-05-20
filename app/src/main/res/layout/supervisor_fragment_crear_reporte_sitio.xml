@@ -39,16 +39,20 @@
             android:src="@drawable/ic_location_outline"
             android:contentDescription="@null" />
 
-        <Spinner
-            android:id="@+id/spinner2"
-            android:layout_width="345dp"
-            android:layout_height="49dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editSitio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_weight="1"
-            android:entries="@array/Sitios"
-            android:prompt="@string/selecciona_sitio"
-            android:spinnerMode="dropdown"
-            android:dropDownHeight="50dp"
-            android:tooltipText="Selecciona el sitio" />
+            android:hint="Selecciona el sitio">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/selectSitio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <EditText
