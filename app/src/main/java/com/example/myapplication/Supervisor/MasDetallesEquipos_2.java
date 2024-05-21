@@ -68,8 +68,7 @@ public class MasDetallesEquipos_2 extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MasDetallesEquipos_2.this, MainActivity_0_NavigationAdmin.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -91,7 +90,7 @@ public class MasDetallesEquipos_2 extends AppCompatActivity {
         });
     }
 
-    public void showConfirmationDialog(View view) {
+    public void showConfirmationDialogDevice(View view) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Confirmación");
         builder.setMessage("¿Está seguro de inhabilitar este dispositivo?");

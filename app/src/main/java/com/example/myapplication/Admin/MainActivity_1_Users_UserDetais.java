@@ -75,10 +75,7 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
         btnAddSiteUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Crear Intent para iniciar la actividad MainActivity_addSupervisor_admin
-                Intent intent = new Intent(MainActivity_1_Users_UserDetais.this, MainActivity_2_Sites_AddSite.class);
-                // Iniciar la actividad MainActivity_addSupervisor_admin con el Intent
-                startActivity(intent);
+                finish();
             }
         });
     }

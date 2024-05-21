@@ -221,8 +221,8 @@
                         android:id="@+id/editRegistrationDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
-                        android:hint="Fecha de registro" />
+                        android:hint="Fecha de registro"
+                        android:focusable="false" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

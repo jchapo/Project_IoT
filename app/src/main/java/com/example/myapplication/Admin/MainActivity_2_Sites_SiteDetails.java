@@ -71,10 +71,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         buttonImagesSiteAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Crear Intent para iniciar la actividad ImagenesSitio
-                Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, ImagenesSitio.class);
-                // Iniciar la actividad ImagenesSitio con el Intent
-                startActivity(intent);
+                finish();
             }
         });
 

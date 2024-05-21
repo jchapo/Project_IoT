@@ -1,9 +1,11 @@
 package com.example.myapplication.Supervisor;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -15,8 +17,10 @@ import com.example.myapplication.R.id;
 import com.example.myapplication.Supervisor.objetos.ListElementDevices;
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.util.Calendar;
+
 public class CrearEquipo_2 extends AppCompatActivity {
-    private EditText editTypeDevice, editBrand, editSerialNumber, editDescription, editSKU, editRegistrationDate, editPhone;
+    private EditText editTypeDevice, editBrand, editSerialNumber, editDescription, editSKU, editRegistrationDate;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
     private boolean isEditing = false; // Indicador para editar o crear nuevo usuario
@@ -39,6 +43,13 @@ public class CrearEquipo_2 extends AppCompatActivity {
         editSKU = findViewById(R.id.editSKU);
         editRegistrationDate = findViewById(R.id.editRegistrationDate);
 
+        editRegistrationDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
+
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewDevice);
         if (isEditing) {
             // Si se está editando, inflar el menú de editar usuario
@@ -47,6 +58,8 @@ public class CrearEquipo_2 extends AppCompatActivity {
             // Si se está creando, inflar el menú de crear usuario
             topAppBar.inflateMenu(R.menu.top_app_bar_new);
         }
+
+
 
         // Verificar si se está editando un usuario existente o creando uno nuevo
         Intent intent = getIntent();
@@ -146,5 +159,24 @@ public class CrearEquipo_2 extends AppCompatActivity {
 
     private void createNewUser() {
         // Implementa la lógica para crear un nuevo usuario
+    }
+
+    private void showDatePickerDialog() {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        // Se establece la fecha seleccionada en el EditText
+                        String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                        editRegistrationDate.setText(selectedDate);
+                    }
+                }, year, month, day);
+
+        datePickerDialog.show();
     }
 }

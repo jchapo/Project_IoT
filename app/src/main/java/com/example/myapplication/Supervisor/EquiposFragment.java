@@ -48,7 +48,7 @@ public class EquiposFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // Iniciar la actividad Crear Reporte
-                Intent intent = new Intent(getContext(), CrearEquipo.class);
+                Intent intent = new Intent(getContext(), CrearEquipo_2.class);
                 startActivity(intent);
             }
         });
@@ -88,7 +88,7 @@ public class EquiposFragment extends Fragment {
     }
 
     public void moveToDescriptionDevice(ListElementDevices item){
-        Intent intent = new Intent(getContext(), MasDetallesEquipos.class);
+        Intent intent = new Intent(getContext(), MasDetallesEquipos_2.class);
         intent.putExtra("ListElementDevices", item);
         startActivity(intent);
     }

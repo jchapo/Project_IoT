@@ -114,7 +114,13 @@
             android:name=".Supervisor.CrearEquipo"
             android:exported="false" />
         <activity
+            android:name=".Supervisor.CrearEquipo_2"
+            android:exported="false" />
+        <activity
             android:name=".Supervisor.MasDetallesEquipos"
+            android:exported="false" />
+        <activity
+            android:name=".Supervisor.MasDetallesEquipos_2"
             android:exported="false" />
     </application>
 
