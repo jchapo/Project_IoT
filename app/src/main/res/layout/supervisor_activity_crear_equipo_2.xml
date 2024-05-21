@@ -74,15 +74,17 @@
                     android:layout_marginEnd="8dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editTypeDevice"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTypeDevice"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_weight="1"
+                    android:hint="Tipo de equipo">
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/selectTypeDevice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Tipo de equipo" />
+                        android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,10 +17,15 @@ import com.example.myapplication.R;
 import com.example.myapplication.R.id;
 import com.example.myapplication.Supervisor.objetos.ListElementDevices;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
 import java.util.Calendar;
 
 public class CrearEquipo_2 extends AppCompatActivity {
+    private MaterialAutoCompleteTextView selectTypeDevice;
+    ArrayAdapter<String> typeDeviceAdapter;
+    String[] typeOptions = {"Type A", "Type B", "Type C"};
+
     private EditText editTypeDevice, editBrand, editSerialNumber, editDescription, editSKU, editRegistrationDate;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
@@ -29,6 +35,10 @@ public class CrearEquipo_2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.supervisor_activity_crear_equipo_2);
+        selectTypeDevice = findViewById(R.id.selectTypeDevice);
+        typeDeviceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, typeOptions);
+        selectTypeDevice.setAdapter(typeDeviceAdapter);
+
 
         // Obtener el indicador de si se está editando desde el Intent
         isEditing = getIntent().getBooleanExtra("isEditing", false);
@@ -36,7 +46,6 @@ public class CrearEquipo_2 extends AppCompatActivity {
         imageView = findViewById(R.id.imageViewDevice);
         imageView.setOnClickListener(v -> openFileChooser());
 
-        editTypeDevice = findViewById(R.id.editTypeDevice);
         editBrand= findViewById(R.id.editBrand);
         editSerialNumber= findViewById(R.id.editSerialNumber);
         editDescription = findViewById(id.editDescription);
@@ -129,7 +138,7 @@ public class CrearEquipo_2 extends AppCompatActivity {
     }
 
     private boolean areFieldsEmpty() {
-        return editTypeDevice.getText().toString().isEmpty() ||
+        return selectTypeDevice.getText().toString().isEmpty() ||
                 editBrand.getText().toString().isEmpty() ||
                 editSerialNumber.getText().toString().isEmpty() ||
                 editDescription.getText().toString().isEmpty() ||
