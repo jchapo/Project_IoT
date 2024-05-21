@@ -25,17 +25,28 @@ public class CrearReporte extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.supervisor_activity_crear_reporte);
 
-        // Verificar si se pasó el tipo de reporte en el Intent
+        // Verificar si se pasó el tipo de reporte y el equipo seleccionado en el Intent
         String tipoReporte = getIntent().getStringExtra("tipo_reporte");
-
+        String equipoSeleccionado = getIntent().getStringExtra("equipo_seleccionado");
+        String sitioSeleccionado = getIntent().getStringExtra("sitio_seleccionado");
 
         Fragment fragment;
         if (tipoReporte != null && tipoReporte.equals("Equipo")) {
             fragment = new CrearReporteEquipoFragment();
+            Bundle args = new Bundle();
+            args.putString("equipo_seleccionado", equipoSeleccionado);
+            fragment.setArguments(args);
         } else {
-            fragment = new CrearReporteSitioFragment();
+            if(tipoReporte != null && tipoReporte.equals("Sitio")){
+                fragment = new CrearReporteSitioFragment();
+                Bundle args = new Bundle();
+                args.putString("sitio_seleccionado", sitioSeleccionado);
+                fragment.setArguments(args);
+            }
+            else{
+                fragment = new CrearReporteSitioFragment();
+            }
         }
-
 
         loadFragment(fragment);
 
@@ -48,9 +59,15 @@ public class CrearReporte extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         fragment = new CrearReporteSitioFragment();
+                        Bundle args1 = new Bundle();
+                        args1.putString("sitio_seleccionado", sitioSeleccionado);
+                        fragment.setArguments(args1);
                         break;
                     case 1:
                         fragment = new CrearReporteEquipoFragment();
+                        Bundle args2 = new Bundle();
+                        args2.putString("equipo_seleccionado", equipoSeleccionado);
+                        fragment.setArguments(args2);
                         break;
                     default:
                         fragment = new CrearReporteSitioFragment(); // Fragment por defecto
@@ -114,4 +131,5 @@ public class CrearReporte extends AppCompatActivity {
         transaction.commit();
     }
 }
+
 

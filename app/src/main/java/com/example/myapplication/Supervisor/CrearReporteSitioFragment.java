@@ -33,9 +33,16 @@ public class CrearReporteSitioFragment extends Fragment {
 
         selectSitio = view.findViewById(R.id.selectSitio);
         sitioAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, sitioOptions);
-
         selectSitio.setAdapter(sitioAdapter);
 
+        Bundle args = getArguments();
+        if (args != null) {
+            String sitioSeleccionado = args.getString("sitio_seleccionado");
+            if (sitioSeleccionado != null) {
+                selectSitio.setText(sitioSeleccionado, false);
+                selectSitio.setEnabled(false); // Deshabilitar para que no se pueda cambiar
+            }
+        }
 
         return view;
     }

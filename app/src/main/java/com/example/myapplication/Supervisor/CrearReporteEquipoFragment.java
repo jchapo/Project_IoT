@@ -16,20 +16,26 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 public class CrearReporteEquipoFragment extends Fragment {
 
     private MaterialAutoCompleteTextView selectEquipo;
-    private ArrayAdapter<String> equipoAdapter;
+    private ArrayAdapter<String> EquipoAdapter;
+    private String[] EquipoOptions = {"Switch Gillat FP-435", "Router CISCO WIFIMAX", "Huawei Fiber Gateway HGW-004", "ZYXEL Enterprise Switch Z-SWT"};
 
-    private String[] equipoOptions = {"Switch Gillat FP-435", "Router CISCO WIFIMAX", "Huawei Fiber Gateway HGW-004", "ZYXEL Enterprise Switch Z-SWT"};
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.supervisor_fragment_crear_reporte_equipo, container, false);
 
         selectEquipo = view.findViewById(R.id.selectEquipo);
-        equipoAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, equipoOptions);
+        EquipoAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, EquipoOptions);
+        selectEquipo.setAdapter(EquipoAdapter);
 
-        selectEquipo.setAdapter(equipoAdapter);
+        // Verificar si se pasó el nombre del equipo seleccionado en el Bundle
+        Bundle args = getArguments();
+        if (args != null) {
+            String equipoSeleccionado = args.getString("equipo_seleccionado");
+            if (equipoSeleccionado != null) {
+                selectEquipo.setText(equipoSeleccionado, false);
+                selectEquipo.setEnabled(false); // Deshabilitar para que no se pueda cambiar
+            }
+        }
 
         return view;
     }

@@ -81,6 +81,7 @@ public class MasDetallesEquipos extends AppCompatActivity {
         fabEdit.setOnClickListener(v -> {
             Intent intent = new Intent(MasDetallesEquipos.this, CrearReporte.class);
             intent.putExtra("tipo_reporte", "Equipo");
+            intent.putExtra("equipo_seleccionado",element.getName());
             startActivity(intent);
         });
 

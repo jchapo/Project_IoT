@@ -90,6 +90,7 @@ public class MasDetallesSitioSupervisor extends AppCompatActivity {
         fabEdit.setOnClickListener(v -> {
             Intent intent = new Intent(MasDetallesSitioSupervisor.this, CrearReporte.class);
             intent.putExtra("tipo_reporte", "Sitio");
+            intent.putExtra("sitio_seleccionado",element.getName());
             startActivity(intent);
         });
 
