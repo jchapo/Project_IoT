@@ -10,8 +10,9 @@ public class ListElementDevices implements Serializable {
     public String fechaIngreso;
     public String descripcion;
     public String name;
+    public String status;
 
-    public ListElementDevices(String sku, String serie, String marca, String modelo, String fechaIngreso, String descripcion, String name) {
+    public ListElementDevices(String sku, String serie, String marca, String modelo, String fechaIngreso, String descripcion, String name, String status) {
         this.sku = sku;
         this.serie = serie;
         this.marca = marca;
@@ -19,6 +20,15 @@ public class ListElementDevices implements Serializable {
         this.fechaIngreso = fechaIngreso;
         this.descripcion = descripcion;
         this.name = name;
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getName() {

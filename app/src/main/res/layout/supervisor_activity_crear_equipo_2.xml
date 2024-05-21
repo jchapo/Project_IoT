@@ -16,12 +16,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBarEditarEquipo"
+            android:id="@+id/topAppBarNewDevice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_back_outline_black"
-            app:title="Editar Equipo"/>
+            app:navigationIcon="@drawable/ic_back_outline_black" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -39,7 +39,7 @@
             android:padding="16dp">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardViewProfile"
+                android:id="@+id/cardViewDevice"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center_horizontal"
@@ -48,11 +48,11 @@
                 app:cardCornerRadius="75dp">
 
                 <ImageView
-                    android:id="@+id/imageViewProfile"
+                    android:id="@+id/imageViewDevice"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_mas_photo" />
+                    android:src="@drawable/default_device" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -65,16 +65,24 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp">
 
+                <ImageView
+                    android:id="@+id/iconTypeDevice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_equipos"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp"/>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editNombre"
+                        android:id="@+id/editTypeDevice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nombre del Equipo" />
+                        android:hint="Tipo de equipo" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -84,13 +92,22 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp">
 
+                <ImageView
+                    android:id="@+id/iconBrand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_person_outline"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="invisible"/>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editMarca"
+                        android:id="@+id/editBrand"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Marca" />
@@ -103,16 +120,52 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp">
 
+                <ImageView
+                    android:id="@+id/iconSerialNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_person_outline"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="invisible"/>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editDescripcion"
+                        android:id="@+id/editSerialNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:hint="Número de serie" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
+
+                <ImageView
+                    android:id="@+id/iconDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_person_outline"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="invisible"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:hint="Descripción" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -123,21 +176,25 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp">
 
+                <ImageView
+                    android:id="@+id/iconSKU"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_barcode_outline"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <Spinner
-                        android:id="@+id/spinner2"
-                        android:layout_width="350dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:dropDownHeight="50dp"
-                        android:entries="@array/TipodeEquipo"
-                        android:prompt="@string/selecciona_sitio"
-                        android:spinnerMode="dropdown"
-                        android:tooltipText="Selecciona el equipo" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editSKU"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:hint="SKU" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -147,24 +204,13 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
+                <ImageView
+                    android:id="@+id/iconRegistrationDate"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editSku"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Sku" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp">
+                    android:src="@drawable/ic_calendar_outline"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
@@ -172,19 +218,16 @@
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editFecha"
+                        android:id="@+id/editRegistrationDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:hint="Fecha de ingreso" />
+                        android:inputType="textEmailAddress"
+                        android:hint="Fecha de registro" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
-
-
 
         </LinearLayout>
-
     </ScrollView>
 
 
