@@ -72,6 +72,7 @@ public class UsersFragmentSuperAdmin extends Fragment {
 
     public void init(View view) {
         elements = new ArrayList<>();
+        /*
         elements.add(new ListElementUser("74567890", "Pedro", "Suares","Administrador", "Activo", "pedro_correo@gmail.com","978675678", "Calle Manzana"));
         elements.add(new ListElementUser("72903456", "Ana", "Suares","Supervisor", "Activo", "ana_correo@gmail.com","934567890", "Avenida Central"));
         elements.add(new ListElementUser("70234567", "Juan","Suares", "Administrador", "Activo", "juan_correo@gmail.com","956783421", "Calle Primavera"));
@@ -93,7 +94,7 @@ public class UsersFragmentSuperAdmin extends Fragment {
         elements.add(new ListElementUser("72543019", "Isabel", "Suares","Administrador", "Activo", "isabel_correo@gmail.com","978932156", "Avenida del Sol"));
         elements.add(new ListElementUser("70987654", "Roberto", "Suares","Supervisor", "Activo", "roberto_correo@gmail.com","976543218", "Calle de la Arena"));
 
-
+*/
         ListAdapterUser listAdapter = new ListAdapterUser(elements, getContext(), item -> moveToDescription(item));
         RecyclerView recyclerView = view.findViewById(R.id.listElementsSuperAdmin);
         recyclerView.setHasFixedSize(true);
