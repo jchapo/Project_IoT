@@ -92,7 +92,7 @@ public class CrearEquipo_2 extends AppCompatActivity {
                     String description = editDescription.getText().toString();
                     String sku = editSKU.getText().toString();
                     String registrationDate = editRegistrationDate.getText().toString();
-                    String nameDevice = "Supervisor";
+                    String nameDevice = typeDevice + " " + brand + " " + serie;
                     String status = "Activo";
 
                     ListElementDevices listElement = new ListElementDevices(sku, serie, brand, typeDevice, registrationDate, description, nameDevice, status);
