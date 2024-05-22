@@ -2,6 +2,7 @@ package com.example.myapplication.Admin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,9 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Admin.items.ListAdapterUser;
 import com.example.myapplication.Admin.items.ListElementUser;
+import com.example.myapplication.Dto.UsuarioDto;
 import com.example.myapplication.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +38,8 @@ public class Fragment_1_Users extends Fragment {
     private List<ListElementUser> inactiveUsers;
     private ListAdapterUser listAdapterUsers;
     private RecyclerView recyclerViewUsers;
+    FirebaseFirestore db;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,18 +125,30 @@ public class Fragment_1_Users extends Fragment {
         activeUsers = new ArrayList<>();
         inactiveUsers = new ArrayList<>();
 
-        activeUsers.add(new ListElementUser("74567890", "Pedro", "Suares","Administrador", "Activo", "pedro_correo@gmail.com","978675678", "Calle Manzana"));
-        activeUsers.add(new ListElementUser("72903456", "Ana", "Suares","Supervisor", "Activo", "ana_correo@gmail.com","934567890", "Avenida Central"));
-        activeUsers.add(new ListElementUser("70234567", "Juan","Suares", "Administrador", "Activo", "juan_correo@gmail.com","956783421", "Calle Primavera"));
-        activeUsers.add(new ListElementUser("71234567", "María","Suares", "Supervisor", "Activo", "maria_correo@gmail.com","911234567", "Calle San José"));
-        activeUsers.add(new ListElementUser("79908765", "Carlos", "Suares","Administrador", "Activo", "carlos_correo@gmail.com","978564321", "Avenida Libertad"));
 
+        db = FirebaseFirestore. getInstance();
+        db.collection("usuarios")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            ListElementUser listElementUser = document.toObject(ListElementUser.class);
+                            Log.d("msg-test", "Active users: " + listElementUser.getName());
+                            if ("Activo".equals(listElementUser.getStatus())) {
+                                activeUsers.add(listElementUser);
+                            } else if ("Inactivo".equals(listElementUser.getStatus())) {
+                                inactiveUsers.add(listElementUser);
+                            }
+                        }
+                        // Aquí puedes hacer algo con las listas activeUsers y inactiveUsers
+                        // Por ejemplo, imprimir los tamaños de las listas
+                        Log.d("msg-test", "Active users: " + activeUsers.size());
+                        Log.d("msg-test", "Inactive users: " + inactiveUsers.size());
+                    } else {
+                        Log.d("msg-test", "Error getting documents: ", task.getException());
+                    }
+                });
 
-        inactiveUsers.add(new ListElementUser("79908765", "Marta", "Suares","Administrador", "Activo", "marta_correo@gmail.com","978564321", "Avenida de la Costa"));
-        inactiveUsers.add(new ListElementUser("74895673", "Raquel", "Suares","Supervisor", "Activo", "raquel_correo@gmail.com","923456789", "Calle del Mar"));
-
-        allUsers.addAll(activeUsers);
-        allUsers.addAll(inactiveUsers);
 
 
         listAdapterUsers = new ListAdapterUser(activeUsers, getContext(), item -> moveToDescription(item));

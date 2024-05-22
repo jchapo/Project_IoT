@@ -26,7 +26,7 @@ public class CrearEquipo_2 extends AppCompatActivity {
     ArrayAdapter<String> typeDeviceAdapter;
     String[] typeOptions = {"Type A", "Type B", "Type C"};
 
-    private EditText editTypeDevice, editBrand, editSerialNumber, editDescription, editSKU, editRegistrationDate;
+    private EditText editBrand, editSerialNumber, editDescription, editSKU, editRegistrationDate;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
     private boolean isEditing = false; // Indicador para editar o crear nuevo usuario
@@ -86,7 +86,7 @@ public class CrearEquipo_2 extends AppCompatActivity {
                 if (areFieldsEmpty()) {
                     Toast.makeText(CrearEquipo_2.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
                 } else {
-                    String typeDevice = editTypeDevice.getText().toString();
+                    String typeDevice = selectTypeDevice.getText().toString();
                     String brand = editBrand.getText().toString();
                     String serie = editSerialNumber.getText().toString();
                     String description = editDescription.getText().toString();
@@ -106,7 +106,7 @@ public class CrearEquipo_2 extends AppCompatActivity {
                 if (areFieldsEmpty()) {
                     Toast.makeText(CrearEquipo_2.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
                 } else {
-                    String typeDevice = editTypeDevice.getText().toString();
+                    String typeDevice = selectTypeDevice.getText().toString();
                     String brand = editBrand.getText().toString();
                     String serie = editSerialNumber.getText().toString();
                     String description = editDescription.getText().toString();

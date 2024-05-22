@@ -2,7 +2,9 @@ package com.example.myapplication.Admin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -10,19 +12,35 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.Admin.items.ListElementUser;
+import com.example.myapplication.Dto.UsuarioDto;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class MainActivity_1_Users_NewUser extends AppCompatActivity {
-    private EditText editFirstName, editLastName, editDNI, editMail, editAddress, editPhone;
+    private MaterialAutoCompleteTextView selectTypeUser;
+    ArrayAdapter<String> typeUserAdapter;
+    String[] typeOptions = {"Supervisor"};
+    private EditText editFirstName, editLastName, editDNI, editMail, editAddress, editPhone, editFechaCreacion, editPrimerInicio;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
     private boolean isEditing = false; // Indicador para editar o crear nuevo usuario
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_new_user);
+
+        selectTypeUser = findViewById(R.id.selectTypeUser);
+        typeUserAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, typeOptions);
+        selectTypeUser.setAdapter(typeUserAdapter);
+
+        db = FirebaseFirestore.getInstance();
 
         // Obtener el indicador de si se está editando desde el Intent
         isEditing = getIntent().getBooleanExtra("isEditing", false);
@@ -36,6 +54,8 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         editMail = findViewById(R.id.editMail);
         editAddress = findViewById(R.id.editAddress);
         editPhone = findViewById(R.id.editPhone);
+        editFechaCreacion = findViewById(R.id.editFechaCreacion);
+        editPrimerInicio = findViewById(R.id.editPrimerInicio);
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewUser);
         if (isEditing) {
@@ -62,16 +82,27 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                 if (areFieldsEmpty()) {
                     Toast.makeText(MainActivity_1_Users_NewUser.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
                 } else {
+                    String typeUser = selectTypeUser.getText().toString();
                     String firstName = editFirstName.getText().toString();
                     String lastName = editLastName.getText().toString();
                     String dni = editDNI.getText().toString();
                     String mail = editMail.getText().toString();
                     String address = editAddress.getText().toString();
                     String phone = editPhone.getText().toString();
-                    String user = "Supervisor";
                     String status = "Activo";
+                    LocalDate fechaActual = LocalDate.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    String fechaCreacion = fechaActual.format(formatter);
+                    Integer primerInicio = 0;
 
-                    ListElementUser listElement = new ListElementUser(dni, firstName, lastName, user, status, mail, phone, address);
+                    ListElementUser listElement = new ListElementUser(dni, firstName, lastName, typeUser, status, mail, phone, address, primerInicio, fechaCreacion);
+                    db.collection("usuarios")
+                            .document(dni)
+                            .set(listElement)
+                            .addOnSuccessListener(unused -> {
+                                Log. d("msg-test","Data guardada exitosamente");
+                            })
+                            .addOnFailureListener(e -> e.printStackTrace()) ;
 
                     Intent intent2 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetais.class);
                     intent2.putExtra("ListElement", listElement);
@@ -82,16 +113,18 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                 if (areFieldsEmpty()) {
                     Toast.makeText(MainActivity_1_Users_NewUser.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
                 } else {
+                    String typeUser = selectTypeUser.getText().toString();
                     String firstName = editFirstName.getText().toString();
                     String lastName = editLastName.getText().toString();
                     String dni = editDNI.getText().toString();
                     String mail = editMail.getText().toString();
                     String address = editAddress.getText().toString();
                     String phone = editPhone.getText().toString();
-                    String user = "Supervisor";
                     String status = "Activo";
+                    String fechaCreacion = editFechaCreacion.getText().toString();
+                    Integer primerInicio = Integer.parseInt(editPrimerInicio.getText().toString());
 
-                    ListElementUser listElement = new ListElementUser(dni, firstName, lastName, user,status, mail, phone, address);
+                    ListElementUser listElement = new ListElementUser(dni, firstName, lastName, typeUser,status, mail, phone, address, primerInicio, fechaCreacion);
 
                     Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetais.class);
                     intent3.putExtra("ListElement", listElement);
@@ -136,6 +169,8 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         editMail.setText(element.getMail());
         editAddress.setText(element.getAddress());
         editPhone.setText(element.getPhone());
+        editFechaCreacion.setText(element.getFechaCreacion());
+        editPrimerInicio.setText(element.getPrimerInicio());
         // Implementa la lógica para mostrar la imagen de perfil
     }
 
