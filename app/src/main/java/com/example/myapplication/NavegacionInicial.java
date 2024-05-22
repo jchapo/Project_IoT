@@ -10,7 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.myapplication.Admin.MainActivity_navigation_admin;
+import com.example.myapplication.Admin.MainActivity_0_NavigationAdmin;
 import com.example.myapplication.SuperAdmin.MainActivity_navigation_SuperAdmin;
 import com.example.myapplication.Supervisor.NavegacionSupervisor;
 
@@ -33,7 +33,7 @@ public class NavegacionInicial extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Código para iniciar la actividad Admin
-                Intent intent = new Intent(NavegacionInicial.this, MainActivity_navigation_admin.class);
+                Intent intent = new Intent(NavegacionInicial.this, MainActivity_0_NavigationAdmin.class);
                 startActivity(intent);
             }
         });

@@ -6,19 +6,37 @@ public class ListElementDevices implements Serializable {
     public String sku;
     public String serie;
     public String marca;
-    public String modelo;
+    public String tipo;
     public String fechaIngreso;
     public String descripcion;
     public String name;
+    public String status;
 
-    public ListElementDevices(String sku, String serie, String marca, String modelo, String fechaIngreso, String descripcion, String name) {
+    public ListElementDevices(String sku, String serie, String marca, String tipo, String fechaIngreso, String descripcion, String name, String status) {
         this.sku = sku;
         this.serie = serie;
         this.marca = marca;
-        this.modelo = modelo;
+        this.tipo = tipo;
         this.fechaIngreso = fechaIngreso;
         this.descripcion = descripcion;
         this.name = name;
+        this.status = status;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getName() {
@@ -54,11 +72,11 @@ public class ListElementDevices implements Serializable {
     }
 
     public String getModelo() {
-        return modelo;
+        return tipo;
     }
 
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
+    public void setModelo(String tipo) {
+        this.tipo = tipo;
     }
 
     public String getFechaIngreso() {

@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Admin.MainActivity_new_user_admin;
-import com.example.myapplication.Admin.MainActivity_userprofile_admin;
+import com.example.myapplication.Admin.MainActivity_1_Users_NewUser;
+import com.example.myapplication.Admin.MainActivity_1_Users_UserDetais;
 import com.example.myapplication.Admin.items.ListAdapterUser;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
@@ -61,7 +61,7 @@ public class UsersFragmentSuperAdmin extends Fragment {
             @Override
             public void onClick(View v) {
                 // Aquí cambia "NuevaActividad" por la clase de la actividad a la que deseas cambiar
-                Intent intent = new Intent(getActivity(), MainActivity_new_user_admin.class);
+                Intent intent = new Intent(getActivity(), MainActivity_1_Users_NewUser.class);
                 startActivity(intent);
             }
         });
@@ -102,7 +102,7 @@ public class UsersFragmentSuperAdmin extends Fragment {
     }
 
     public void moveToDescription(ListElementUser item){
-        Intent intent = new Intent(getContext(), MainActivity_userprofile_admin.class);
+        Intent intent = new Intent(getContext(), MainActivity_1_Users_UserDetais.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);
     }

@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin.MainActivity_new_user_admin">
+    tools:context=".Admin.MainActivity_1_Users_NewUser">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"

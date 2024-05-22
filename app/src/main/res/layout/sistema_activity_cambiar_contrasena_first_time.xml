@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            app:menu="@menu/top_app_bar"
             app:navigationIcon="@drawable/ic_back_outline_white"
             app:title="Bienvenido a TeleSolver!"
             app:titleTextColor="@color/gris" />

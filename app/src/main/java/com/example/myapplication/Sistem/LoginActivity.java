@@ -52,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
 
         final TextInputLayout textInputLayout = new TextInputLayout(this);
         textInputLayout.setHint("Correo electrónico");
+        int padding = (int) getResources().getDimension(R.dimen.padding_16dp);
+        textInputLayout.setPadding(padding, padding, padding, padding);
 
         final TextInputEditText textInputEditText = new TextInputEditText(this);
         textInputLayout.addView(textInputEditText);
@@ -62,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String userEmail = textInputEditText.getText().toString();
-                Toast.makeText(LoginActivity.this, "Correo electrónico enviado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Correo electrónico enviado", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
