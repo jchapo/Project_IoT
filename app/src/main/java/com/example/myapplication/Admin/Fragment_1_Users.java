@@ -41,6 +41,7 @@ public class Fragment_1_Users extends Fragment {
     NavigationActivityViewModel navigationActivityViewModel;
 
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
