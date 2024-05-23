@@ -46,9 +46,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_0_NavigationAdmin.class);
-                intent.putExtra("comeFrom", "siteProfile");
-                startActivity(intent);
+                finish();
             }
         });
 

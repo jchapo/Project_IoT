@@ -16,6 +16,12 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Text;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
 
@@ -25,6 +31,10 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
     TextView mailDescriptionTextView;
     TextView phoneDescriptionTextView;
     TextView addressDescriptionTextView;
+    TextView textoHabilitar;
+    FirebaseFirestore db;
+    String estado;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +55,7 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
         dniDescriptionTextView.setText(element.getDni());
         phoneDescriptionTextView.setText(element.getPhone());
         addressDescriptionTextView.setText(element.getAddress());
+        estado = element.getStatus();
 
         Toolbar toolbar = findViewById(R.id.topAppBarUserPerfil);
         setSupportActionBar(toolbar);
@@ -78,30 +89,91 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
                 finish();
             }
         });
+        textoHabilitar = findViewById(R.id.deleteUserPerfil);
+        if (estado.equals("Activo")) {
+            // Cambiar el texto, color y ícono para "Inhabilitar Usuario"
+            textoHabilitar.setText("Inhabilitar Usuario");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0); // Icono a la izquierda
+        } else {
+            // Cambiar el texto, color y ícono para "Habilitar Usuario"
+            textoHabilitar.setText("Habilitar Usuario");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme())); // Suponiendo que tienes un color para habilitar
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0); // Icono a la izquierda
+        }
+
+        findViewById(R.id.deleteUserPerfil).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmationDialog(v, estado);
+            }
+        });
+
     }
 
-    public void showConfirmationDialog(View view) {
+    public void showConfirmationDialog(View view, String currentState) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Confirmación");
-        builder.setMessage("¿Está seguro de inhabilitar este usuario?");
+
+        // Configurar el mensaje y el estado objetivo basado en el estado actual
+        final String newState;
+        final String message;
+        if (currentState.equals("Activo")) {
+            message = "¿Está seguro de inhabilitar este usuario?";
+            newState = "Inactivo";
+        } else {
+            message = "¿Está seguro de habilitar este usuario?";
+            newState = "Activo";
+        }
+
+        builder.setMessage(message);
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                // Aquí puedes realizar la acción de inhabilitar el usuario
-                // Muestra el Toast indicando que el usuario ha sido inhabilitado
-                Toast.makeText(MainActivity_1_Users_UserDetais.this, "El usuario ha sido inhabilitado", Toast.LENGTH_SHORT).show();
-                // Termina la actividad actual y regresa a la actividad anterior
-                finish();
+                // Suponiendo que tienes una instancia de FirebaseFirestore llamada db
+                db = FirebaseFirestore.getInstance();
+                // Crear un mapa con el nuevo estado
+                Map<String, Object> update = new HashMap<>();
+                update.put("status", newState);
+
+                // Obtener el documento del usuario y actualizar el campo 'status'
+                db.collection("usuarios")
+                        .document(dniDescriptionTextView.getText().toString())
+                        .update(update)
+                        .addOnSuccessListener(aVoid -> {
+                            // Mostrar el Toast indicando el nuevo estado del usuario
+                            String toastMessage = newState.equals("Inactivo") ? "El usuario ha sido inhabilitado" : "El usuario ha sido habilitado";
+                            Toast.makeText(MainActivity_1_Users_UserDetais.this, toastMessage, Toast.LENGTH_SHORT).show();
+                            // Actualizar la interfaz de usuario
+                            updateUIBasedOnState(newState);
+                            // Terminar la actividad actual y regresar a la actividad anterior
+                            finish();
+                        })
+                        .addOnFailureListener(e -> {
+                            // Manejo de error en caso de fallo
+                            Toast.makeText(MainActivity_1_Users_UserDetais.this, "Error al actualizar el estado del usuario", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        });
             }
         });
 
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss(); // Cierra el diálogo sin hacer nada
-            }
-        });
+
+        builder.setNegativeButton("Cancelar", null);
         builder.show();
+    }
+
+    private void updateUIBasedOnState(String state) {
+        TextView textoHabilitar = findViewById(R.id.deleteUserPerfil);
+
+        if (state.equals("Activo")) {
+            textoHabilitar.setText("Inhabilitar Usuario");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0);
+        } else {
+            textoHabilitar.setText("Habilitar Usuario");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme()));
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0);
+        }
     }
 
     public void showRemoveSiteConfirmationDialog(View view) {

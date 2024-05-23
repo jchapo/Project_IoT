@@ -21,6 +21,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAExTORfkCED6S7JMtHAnYKhJVJ5J9inaw" />
+        <activity
+            android:name=".Supervisor.EquiposDeSitios"
+            android:exported="false" />
 
         <activity
             android:name=".Admin.MainActivity_2_Sites_MappChooser"

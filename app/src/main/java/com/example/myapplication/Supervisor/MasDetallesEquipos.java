@@ -80,17 +80,15 @@ public class MasDetallesEquipos extends AppCompatActivity {
         FloatingActionButton fabEdit = findViewById(R.id.fabEdit);
         fabEdit.setOnClickListener(v -> {
             Intent intent = new Intent(MasDetallesEquipos.this, CrearReporte.class);
+            intent.putExtra("tipo_reporte", "Equipo");
+            intent.putExtra("equipo_seleccionado",element.getName());
             startActivity(intent);
         });
-        TextView textViewEditarEquipo = findViewById(R.id.textViewEditarEquipo);
-        textViewEditarEquipo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Crear Intent para iniciar la actividad EditarEquipo
-                Intent intent = new Intent(MasDetallesEquipos.this, EditarEquipo.class);
-                // Iniciar la actividad EditarEquipo con el Intent
-                startActivity(intent);
-            }
+
+        FloatingActionButton fabEdit2 = findViewById(R.id.fabeditar);
+        fabEdit2.setOnClickListener(v -> {
+            Intent intent = new Intent(MasDetallesEquipos.this, EditarEquipo.class);
+            startActivity(intent);
         });
 
     }
