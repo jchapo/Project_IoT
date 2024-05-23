@@ -110,13 +110,13 @@ public class Fragment_2_Sites extends Fragment {
             navigationActivityViewModel.getActiveSites().observe(getViewLifecycleOwner(), sitiosActivos -> {
                 for (ListElementSite p : sitiosActivos) {
                     activeSites.add(p);
-                    Log.d("msg-test", "Name3: " + activeSites.size());
+                    Log.d("msg-test", "NameSites3: " + activeSites.size());
                 }
             });
             navigationActivityViewModel.getInactiveSites().observe(getViewLifecycleOwner(), sitiosInactivos -> {
                 for (ListElementSite p : sitiosInactivos) {
                     inactiveSites.add(p);
-                    Log.d("msg-test", "Name3: " + inactiveSites.size());
+                    Log.d("msg-test", "NameSites3: " + inactiveSites.size());
                 }
             });
         } else {

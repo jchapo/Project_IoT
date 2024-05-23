@@ -54,6 +54,7 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         bottomNavigationView = binding.bottomNavigation;
         navigationActivityViewModel = new ViewModelProvider(this).get(NavigationActivityViewModel.class);
         binding.topAppBarUserFragment.setTitle("Usuarios");
+
         activeUsers = new ArrayList<>();
         inactiveUsers = new ArrayList<>();
         db = FirebaseFirestore. getInstance();
@@ -72,14 +73,14 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
                         }
                         // Aquí puedes hacer algo con las listas activeUsers y inactiveUsers
                         // Por ejemplo, imprimir los tamaños de las listas
-                        Log.d("msg-test", "Active users: " + activeUsers.size());
-                        Log.d("msg-test", "Inactive users: " + inactiveUsers.size());
+                        //Log.d("msg-test", "Active users: " + activeUsers.size());
+                        //Log.d("msg-test", "Inactive users: " + inactiveUsers.size());
                         // Crear el fragmento y pasar los datos
                         Fragment_1_Users fragment = new Fragment_1_Users();
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("activeUsers", activeUsers);
-                        bundle.putSerializable("inactiveUsers", inactiveUsers);
-                        fragment.setArguments(bundle);
+                        //Bundle bundle = new Bundle();
+                        //bundle.putSerializable("activeUsers", activeUsers);
+                        //bundle.putSerializable("inactiveUsers", inactiveUsers);
+                        //fragment.setArguments(bundle);
 
                         // Reemplazar el fragmento
                         replaceFragment(fragment);
@@ -87,8 +88,36 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
                         Log.d("msg-test", "Error getting documents: ", task.getException());
                     }
                 });
+
+        activeSites = new ArrayList<>();
+        inactiveSites = new ArrayList<>();
+        db.collection("sitios")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            ListElementSite listElementSite = document.toObject(ListElementSite.class);
+                            Log.d("msg-test", "Active sites: " + listElementSite.getName());
+                            if ("Activo".equals(listElementSite.getStatus())) {
+                                activeSites.add(listElementSite);
+                            } else if ("Inactivo".equals(listElementSite.getStatus())) {
+                                inactiveSites.add(listElementSite);
+                            }
+                        }
+                        // Aquí puedes hacer algo con las listas activeUsers y inactiveUsers
+                        // Por ejemplo, imprimir los tamaños de las listas
+                        //Log.d("msg-test", "Active sites: " + activeSites.size());
+                        //Log.d("msg-test", "Inactive sites: " + inactiveSites.size());
+                    } else {
+                        Log.d("msg-test", "Error getting documents: ", task.getException());
+                    }
+                });
+
+
         navigationActivityViewModel.getActiveUsers().setValue(activeUsers);
+        navigationActivityViewModel.getActiveSites().setValue(activeSites);
         navigationActivityViewModel.getInactiveUsers().setValue(inactiveUsers);
+        navigationActivityViewModel.getInactiveSites().setValue(inactiveSites);
 
         Toolbar toolbar = binding.topAppBarUserFragment;
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarUserFragment);
@@ -102,67 +131,11 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.usuarios_menu) {
                 binding.topAppBarUserFragment.setTitle("Usuarios");
-                activeUsers = new ArrayList<>();
-                inactiveUsers = new ArrayList<>();
-                db = FirebaseFirestore. getInstance();
-                db.collection("usuarios")
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    ListElementUser listElementUser = document.toObject(ListElementUser.class);
-                                    Log.d("msg-test", "Active users: " + listElementUser.getName());
-                                    if ("Activo".equals(listElementUser.getStatus())) {
-                                        activeUsers.add(listElementUser);
-                                    } else if ("Inactivo".equals(listElementUser.getStatus())) {
-                                        inactiveUsers.add(listElementUser);
-                                    }
-                                }
-                                // Aquí puedes hacer algo con las listas activeUsers y inactiveUsers
-                                // Por ejemplo, imprimir los tamaños de las listas
-                                Log.d("msg-test", "Active users: " + activeUsers.size());
-                                Log.d("msg-test", "Inactive users: " + inactiveUsers.size());
-                                // Crear el fragmento y pasar los datos
-                                Fragment_1_Users fragment = new Fragment_1_Users();
-
-                                // Reemplazar el fragmento
-                                replaceFragment(fragment);
-                            } else {
-                                Log.d("msg-test", "Error getting documents: ", task.getException());
-                            }
-                        });
+                replaceFragment(new Fragment_1_Users());
                 return true;
             } else if (item.getItemId() == R.id.sitios_menu) {
                 binding.topAppBarUserFragment.setTitle("Sitios");
-                activeSites = new ArrayList<>();
-                inactiveSites = new ArrayList<>();
-                db = FirebaseFirestore. getInstance();
-                db.collection("sitios")
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    ListElementSite listElementSite = document.toObject(ListElementSite.class);
-                                    Log.d("msg-test", "Active sites: " + listElementSite.getName());
-                                    if ("Activo".equals(listElementSite.getStatus())) {
-                                        activeSites.add(listElementSite);
-                                    } else if ("Inactivo".equals(listElementSite.getStatus())) {
-                                        inactiveSites.add(listElementSite);
-                                    }
-                                }
-                                // Aquí puedes hacer algo con las listas activeUsers y inactiveUsers
-                                // Por ejemplo, imprimir los tamaños de las listas
-                                Log.d("msg-test", "Active sites: " + activeSites.size());
-                                Log.d("msg-test", "Inactive sites: " + inactiveSites.size());
-                                // Crear el fragmento y pasar los datos
-                                Fragment_2_Sites fragment = new Fragment_2_Sites();
-                                Bundle bundle = new Bundle();
-                                // Reemplazar el fragmento
-                                replaceFragment(fragment);
-                            } else {
-                                Log.d("msg-test", "Error getting documents: ", task.getException());
-                            }
-                        });
+                replaceFragment(new Fragment_2_Sites());
                 return true;
             } else if (item.getItemId() == R.id.chat_menu) {
                 binding.topAppBarUserFragment.setTitle("Chats");
