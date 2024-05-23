@@ -46,8 +46,8 @@ public class MasDetallesSitioSupervisor extends AppCompatActivity {
         addressDescriptionTextView.setText(fullDirection);
         tipoZonatextView.setText(element.getZonetype());
         tipoSitiotextView.setText(element.getSitetype());
-        latitud.setText(element.getLatitud());
-        longitud.setText(element.getLongitud());
+        latitud.setText(element.getLatitud().toString());
+        longitud.setText(element.getLongitud().toString());
         ubigeo.setText(element.getUbigeo());
 
 
