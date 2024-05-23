@@ -9,30 +9,33 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ListAdapterUser extends RecyclerView.Adapter<ListAdapterUser.ViewHolder> {
-    private List<ListElementUser> nData;
+public class ListAdapterSuperAdminUser extends RecyclerView.Adapter<ListAdapterSuperAdminUser.ViewHolder> {
+    private List<ListElementSuperAdminUser> nData;
+    private List<ListElementSuperAdminUser> nDataFull;
     private LayoutInflater nInflater;
     private Context context;
     final OnItemClickListener listener;
 
     public interface  OnItemClickListener{
-        void onItemClick(ListElementUser item);
+        void onItemClick(ListElementSuperAdminUser item);
     }
 
-    public ListAdapterUser(List<ListElementUser> itemList, Context context, OnItemClickListener listener) {
+    public ListAdapterSuperAdminUser(List<ListElementSuperAdminUser> itemList, Context context, OnItemClickListener listener) {
         this.nInflater = LayoutInflater.from(context);
         this.context = context;
         this.nData = itemList;
+        this.nDataFull = new ArrayList<>(itemList);
         this.listener = listener;
     }
 
     @Override
     public int getItemCount(){
-
         return nData.size();
     }
 
@@ -47,8 +50,25 @@ public class ListAdapterUser extends RecyclerView.Adapter<ListAdapterUser.ViewHo
         holder.bindData(nData.get(position));
     }
 
-    public void setItems(List<ListElementUser> items) {
+    public void setItems(List<ListElementSuperAdminUser> items) {
         nData = items;
+        nDataFull = new ArrayList<>(items);
+        notifyDataSetChanged();
+    }
+
+    public void filter(String text) {
+        nData.clear();
+        if (text.isEmpty()) {
+            nData.addAll(nDataFull);
+        } else {
+            text = text.toLowerCase();
+            for (ListElementSuperAdminUser item : nDataFull) {
+                if (item.getName().toLowerCase().contains(text) || item.getLastname().toLowerCase().contains(text)) {
+                    nData.add(item);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -63,7 +83,7 @@ public class ListAdapterUser extends RecyclerView.Adapter<ListAdapterUser.ViewHo
             status = itemView.findViewById(R.id.statusTextView);
         }
 
-        void bindData(final ListElementUser item){
+        void bindData(final ListElementSuperAdminUser item){
             String fullName = item.getName() + " " + item.getLastname();
             name.setText(fullName);
             user.setText(item.getUser());
