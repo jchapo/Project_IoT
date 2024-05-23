@@ -16,12 +16,19 @@ import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.ImagenesSitio;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
 
 
     TextView nameTextViewSite;
-    TextView departmentDescriptionTextView,provinceDescriptionTextView,districtDescriptionTextView;
+    TextView departmentDescriptionTextView, provinceDescriptionTextView, districtDescriptionTextView;
+    TextView textoHabilitar;
+    FirebaseFirestore db;
+    String estado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         departmentDescriptionTextView.setText(element.getDepartment());
         provinceDescriptionTextView.setText(element.getProvince());
         districtDescriptionTextView.setText(element.getDistrict());
+        estado = element.getStatus();
 
 
         Toolbar toolbar = findViewById(R.id.topAppBarSitePerfilAdmin);
@@ -86,31 +94,82 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        textoHabilitar = findViewById(R.id.deleteUserSite);
+        if (estado.equals("Activo")) {
+            // Cambiar el texto, color y ícono para "Inhabilitar Sitio"
+            textoHabilitar.setText("Inhabilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0); // Icono a la izquierda
+        } else {
+            // Cambiar el texto, color y ícono para "Habilitar Sitio"
+            textoHabilitar.setText("Habilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme())); // Suponiendo que tienes un color para habilitar
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0); // Icono a la izquierda
+        }
+
+        findViewById(R.id.deleteUserSite).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmationDialog(v, estado);
+            }
+        });
     }
 
-    public void showConfirmationDialog(View view) {
+    public void showConfirmationDialog(View view, String currentState) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Confirmación");
-        builder.setMessage("¿Está seguro de inhabilitar este sitio?");
+
+        final String newState;
+        final String message;
+        if (currentState.equals("Activo")) {
+            message = "¿Está seguro de inhabilitar este sitio?";
+            newState = "Inactivo";
+        } else {
+            message = "¿Está seguro de habilitar este sitio?";
+            newState = "Activo";
+        }
+
+        builder.setMessage(message);
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                // Aquí puedes realizar la acción de inhabilitar el sitio
-                // Muestra un toast después de inhabilitar el sitio
-                Toast.makeText(MainActivity_2_Sites_SiteDetails.this, "El sitio ha sido inhabilitado", Toast.LENGTH_LONG).show();
-                // Termina la actividad actual y regresa a la actividad anterior
-                finish();
+                db = FirebaseFirestore.getInstance();
+                Map<String, Object> update = new HashMap<>();
+                update.put("status", newState);
+
+                db.collection("sitios")
+                        .document(nameTextViewSite.getText().toString())
+                        .update(update)
+                        .addOnSuccessListener(aVoid -> {
+                            String toastMessage = newState.equals("Inactivo") ? "El sitio ha sido inhabilitado" : "El sitio ha sido habilitado";
+                            Toast.makeText(MainActivity_2_Sites_SiteDetails.this, toastMessage, Toast.LENGTH_SHORT).show();
+                            updateUIBasedOnState(newState);
+                            finish();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(MainActivity_2_Sites_SiteDetails.this, "Error al actualizar el estado del sitio", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        });
             }
         });
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss(); // Cierra el diálogo sin hacer nada
-            }
-        });
+
+        builder.setNegativeButton("Cancelar", null);
         builder.show();
     }
+    private void updateUIBasedOnState(String state) {
+        TextView textoHabilitar = findViewById(R.id.deleteUserSite);
 
+        if (state.equals("Activo")) {
+            textoHabilitar.setText("Inhabilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0);
+        } else {
+            textoHabilitar.setText("Habilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme()));
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0);
+        }
+    }
     public void showRemoveSupervisorConfirmationDialog(View view) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setMessage("¿Está seguro de que desea eliminar este supervisor?")
