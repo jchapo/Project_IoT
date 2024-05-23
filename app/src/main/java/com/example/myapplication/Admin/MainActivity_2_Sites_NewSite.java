@@ -149,13 +149,15 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
                 Double longitud = longitude;
                 String coordenadas = String.valueOf(latitud) + " ; " + String.valueOf(longitud);
                 String name = (item.getItemId() == R.id.createNewTopAppBar) ? department.substring(0, 3) + "-" + String.valueOf(resultSize+1) : element.getName();
+                String address = editAddress.getText().toString();
                 String status = "Activo";
+                String ubigeo = editUbigeo.getText().toString();
                 LocalDate fechaActual = LocalDate.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 String fechaCreacion = fechaActual.format(formatter);
 
                 // Crear el objeto ListElementSite con los valores seleccionados
-                ListElementSite listElement = new ListElementSite(department, name, status, province, district, "", location, "", zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion);
+                ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion);
                 db.collection("sitios")
                         .document(name)
                         .set(listElement)

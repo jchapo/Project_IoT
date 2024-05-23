@@ -133,12 +133,12 @@ public class Fragment_1_Users extends Fragment {
                     Log.d("msg-test", "Name3: " + activeUsers.size());
                 }
             });
-        navigationActivityViewModel.getInactiveUsers().observe(getViewLifecycleOwner(), usuarioInactivos -> {
-            for (ListElementUser p : usuarioInactivos) {
-                inactiveUsers.add(p);
-                Log.d("msg-test", "Name3: " + inactiveUsers.size());
-            }
-        });
+            navigationActivityViewModel.getInactiveUsers().observe(getViewLifecycleOwner(), usuarioInactivos -> {
+                for (ListElementUser p : usuarioInactivos) {
+                    inactiveUsers.add(p);
+                    Log.d("msg-test", "Name3: " + inactiveUsers.size());
+                }
+            });
         } else {
             // Manejar el caso en el que navigationActivityViewModel es nulo
         }

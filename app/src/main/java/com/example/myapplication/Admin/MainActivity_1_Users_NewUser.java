@@ -1,6 +1,14 @@
 package com.example.myapplication.Admin;
 
+import static android.Manifest.permission.POST_NOTIFICATIONS;
+
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,6 +18,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Dto.UsuarioDto;
@@ -22,6 +33,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class MainActivity_1_Users_NewUser extends AppCompatActivity {
+    String canal1 = "importanteDefault2";
     private MaterialAutoCompleteTextView selectTypeUser;
     ArrayAdapter<String> typeUserAdapter;
     String[] typeOptions = {"Supervisor"};
@@ -35,7 +47,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_new_user);
-
+        crearCanalesNotificacion();
         selectTypeUser = findViewById(R.id.selectTypeUser);
         typeUserAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, typeOptions);
         selectTypeUser.setAdapter(typeUserAdapter);
@@ -94,6 +106,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     String fechaCreacion = fechaActual.format(formatter);
                     Integer primerInicio = 0;
+                    String fullName = firstName + " " + lastName;
 
                     ListElementUser listElement = new ListElementUser(dni, firstName, lastName, typeUser, status, mail, phone, address, primerInicio, fechaCreacion);
                     db.collection("usuarios")
@@ -106,6 +119,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
 
                     Intent intent2 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetais.class);
                     intent2.putExtra("ListElement", listElement);
+                    notificarImportanceDefault(fullName, fechaCreacion);
                     startActivity(intent2);
                 }
                 return true;
@@ -124,7 +138,16 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                     String fechaCreacion = editFechaCreacion.getText().toString();
                     Integer primerInicio = Integer.parseInt(editPrimerInicio.getText().toString());
 
-                    ListElementUser listElement = new ListElementUser(dni, firstName, lastName, typeUser,status, mail, phone, address, primerInicio, fechaCreacion);
+                    ListElementUser listElement = new ListElementUser(dni, firstName, lastName, typeUser, status, mail, phone, address, primerInicio, fechaCreacion);
+
+                    // Actualizamos el documento existente
+                    db.collection("usuarios")
+                            .document(dni) // Utilizamos el identificador del documento
+                            .set(listElement) // Sobreescribimos los datos con los nuevos valores
+                            .addOnSuccessListener(unused -> {
+                                Log.d("msg-test", "Datos actualizados exitosamente");
+                            })
+                            .addOnFailureListener(e -> e.printStackTrace());
 
                     Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetais.class);
                     intent3.putExtra("ListElement", listElement);
@@ -170,7 +193,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         editAddress.setText(element.getAddress());
         editPhone.setText(element.getPhone());
         editFechaCreacion.setText(element.getFechaCreacion());
-        editPrimerInicio.setText(element.getPrimerInicio());
+        editPrimerInicio.setText(String.valueOf(element.getPrimerInicio()));
         // Implementa la lógica para mostrar la imagen de perfil
     }
 
@@ -180,5 +203,53 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
 
     private void createNewUser() {
         // Implementa la lógica para crear un nuevo usuario
+    }
+    public void crearCanalesNotificacion() {
+
+        NotificationChannel channel = new NotificationChannel(canal1,
+                "Canal Users Creation",
+                NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription("Canal para notificaciones de creación de perfiles de usuario con prioridad default");
+        channel.enableVibration(true);
+
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+
+        pedirPermisos();
+    }
+
+    public void pedirPermisos() {
+        // TIRAMISU = 33
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{POST_NOTIFICATIONS}, 101);
+        }
+    }
+    public void notificarImportanceDefault(String fullname, String fechaCreacion){
+
+        //Crear notificación
+        //Agregar información a la notificación que luego sea enviada a la actividad que se abre
+        Intent intent = new Intent(this, MainActivity_0_NavigationAdmin.class);
+        intent.putExtra("pid",4616);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        //
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, canal1)
+                .setSmallIcon(R.drawable.ic_addperson_filled_black)
+                .setContentTitle("Nuevo registrado")
+                .setContentText("Usuario : " + fullname + "\nFecha: "+ fechaCreacion)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        Notification notification = builder.build();
+
+        //Lanzar notificación
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            notificationManager.notify(1, notification);
+        }
+
     }
 }
