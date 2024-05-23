@@ -16,11 +16,13 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.SearchView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Admin.items.ListAdapterUser;
 import com.example.myapplication.Admin.items.ListElementUser;
+import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.Dto.UsuarioDto;
 import com.example.myapplication.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,6 +40,8 @@ public class Fragment_1_Users extends Fragment {
     private List<ListElementUser> inactiveUsers;
     private ListAdapterUser listAdapterUsers;
     private RecyclerView recyclerViewUsers;
+    private NavigationActivityViewModel viewModel;
+
     FirebaseFirestore db;
 
 
@@ -83,7 +87,6 @@ public class Fragment_1_Users extends Fragment {
         setHasOptionsMenu(true);
         init(view);
         
-        
         FloatingActionButton agregarUsuarioButton = view.findViewById(R.id.agregarUsuariofloatingActionButton);
         agregarUsuarioButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,28 +129,8 @@ public class Fragment_1_Users extends Fragment {
         inactiveUsers = new ArrayList<>();
 
 
-        db = FirebaseFirestore. getInstance();
-        db.collection("usuarios")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            ListElementUser listElementUser = document.toObject(ListElementUser.class);
-                            Log.d("msg-test", "Active users: " + listElementUser.getName());
-                            if ("Activo".equals(listElementUser.getStatus())) {
-                                activeUsers.add(listElementUser);
-                            } else if ("Inactivo".equals(listElementUser.getStatus())) {
-                                inactiveUsers.add(listElementUser);
-                            }
-                        }
-                        // Aquí puedes hacer algo con las listas activeUsers y inactiveUsers
-                        // Por ejemplo, imprimir los tamaños de las listas
-                        Log.d("msg-test", "Active users: " + activeUsers.size());
-                        Log.d("msg-test", "Inactive users: " + inactiveUsers.size());
-                    } else {
-                        Log.d("msg-test", "Error getting documents: ", task.getException());
-                    }
-                });
+        NavigationActivityViewModel navigationActivityViewModel = new ViewModelProvider(requireActivity()).get(NavigationActivityViewModel.class);
+
 
 
 

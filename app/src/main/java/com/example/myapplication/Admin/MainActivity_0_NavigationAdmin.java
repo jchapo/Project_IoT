@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,21 +18,30 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.Admin.items.ListElementUser;
+import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.AdminActivityMainNavigationBinding;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
 
     AdminActivityMainNavigationBinding binding;
+    private NavigationActivityViewModel viewModel;
     private DrawerLayout drawerLayout;
     private boolean isSearchViewActive = false;
     private BottomNavigationView bottomNavigationView;
     FirebaseFirestore db;
+    private List<ListElementUser> activeUsers, inactiveUsers, activeUsers2, inactiveUsers2;
+
 
 
 
@@ -40,6 +50,44 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = AdminActivityMainNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        viewModel = new ViewModelProvider(this).get(NavigationActivityViewModel.class);
+
+        activeUsers = new ArrayList<>();
+        inactiveUsers = new ArrayList<>();
+        db = FirebaseFirestore. getInstance();
+        db.collection("usuarios")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            ListElementUser listElementUser = document.toObject(ListElementUser.class);
+                            Log.d("msg-test", "Active users: " + listElementUser.getName());
+                            if ("Activo".equals(listElementUser.getStatus())) {
+                                activeUsers.add(listElementUser);
+                            } else if ("Inactivo".equals(listElementUser.getStatus())) {
+                                inactiveUsers.add(listElementUser);
+                            }
+                            // Seteamos los datos en el ViewModel
+                            viewModel.getActiveUsersLiveData().setValue(activeUsers);
+                            viewModel.getInactiveUsersLiveData().setValue(inactiveUsers);
+
+                            activeUsers2 = new ArrayList<>();
+                            inactiveUsers2 = new ArrayList<>();
+                            activeUsers2 = viewModel.getActiveUsersLiveData().getValue();
+                            inactiveUsers2 =viewModel.getInactiveUsersLiveData().getValue();
+                            Log.d("msg-test", "Active users 2: " + activeUsers2.size());
+                            Log.d("msg-test", "Inactive users 2: " + inactiveUsers2.size());
+                        }
+                        // Aquí puedes hacer algo con las listas activeUsers y inactiveUsers
+                        // Por ejemplo, imprimir los tamaños de las listas
+                        Log.d("msg-test", "Active users: " + activeUsers.size());
+                        Log.d("msg-test", "Inactive users: " + inactiveUsers.size());
+                    } else {
+                        Log.d("msg-test", "Error getting documents: ", task.getException());
+                    }
+                });
+
         bottomNavigationView = binding.bottomNavigation;
         binding.topAppBarUserFragment.setTitle("Lista de usuarios");
         replaceFragment(new Fragment_1_Users());
@@ -56,6 +104,33 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.usuarios_menu) {
                 binding.topAppBarUserFragment.setTitle("Usuarios");
+                activeUsers = new ArrayList<>();
+                inactiveUsers = new ArrayList<>();
+                db = FirebaseFirestore. getInstance();
+                db.collection("usuarios")
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    ListElementUser listElementUser = document.toObject(ListElementUser.class);
+                                    Log.d("msg-test", "Active users: " + listElementUser.getName());
+                                    if ("Activo".equals(listElementUser.getStatus())) {
+                                        activeUsers.add(listElementUser);
+                                    } else if ("Inactivo".equals(listElementUser.getStatus())) {
+                                        inactiveUsers.add(listElementUser);
+                                    }
+                                    // Seteamos los datos en el ViewModel
+                                    viewModel.setActiveUsers(activeUsers);
+                                    viewModel.setInactiveUsers(inactiveUsers);
+                                }
+                                // Aquí puedes hacer algo con las listas activeUsers y inactiveUsers
+                                // Por ejemplo, imprimir los tamaños de las listas
+                                Log.d("msg-test", "Active users: " + activeUsers.size());
+                                Log.d("msg-test", "Inactive users: " + inactiveUsers.size());
+                            } else {
+                                Log.d("msg-test", "Error getting documents: ", task.getException());
+                            }
+                        });
                 replaceFragment(new Fragment_1_Users());
                 return true;
             } else if (item.getItemId() == R.id.sitios_menu) {
