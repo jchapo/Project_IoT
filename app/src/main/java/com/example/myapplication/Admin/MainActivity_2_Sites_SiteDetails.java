@@ -25,10 +25,11 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
 
 
     TextView nameTextViewSite;
-    TextView departmentDescriptionTextView,provinceDescriptionTextView,districtDescriptionTextView;
+    TextView departmentDescriptionTextView, provinceDescriptionTextView, districtDescriptionTextView;
     TextView textoHabilitar;
     FirebaseFirestore db;
     String estado;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,13 +109,32 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
                 showConfirmationDialog(v, estado);
             }
         });
+
+        textoHabilitar = findViewById(R.id.deleteUserSite);
+        if (estado.equals("Activo")) {
+            // Cambiar el texto, color y ícono para "Inhabilitar Sitio"
+            textoHabilitar.setText("Inhabilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0); // Icono a la izquierda
+        } else {
+            // Cambiar el texto, color y ícono para "Habilitar Sitio"
+            textoHabilitar.setText("Habilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme())); // Suponiendo que tienes un color para habilitar
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0); // Icono a la izquierda
+        }
+
+        findViewById(R.id.deleteUserSite).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmationDialog(v, estado);
+            }
+        });
     }
 
     public void showConfirmationDialog(View view, String currentState) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Confirmación");
 
-        // Configurar el mensaje y el estado objetivo basado en el estado actual
         final String newState;
         final String message;
         if (currentState.equals("Activo")) {
@@ -126,43 +146,34 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         }
 
         builder.setMessage(message);
-        builder.setPositiveButton("Aceptar", (dialogInterface, i) -> {
-            // Suponiendo que tienes una instancia de FirebaseFirestore llamada db
-            db = FirebaseFirestore.getInstance();
-            // Crear un mapa con el nuevo estado
-            Map<String, Object> update = new HashMap<>();
-            update.put("status", newState);
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                db = FirebaseFirestore.getInstance();
+                Map<String, Object> update = new HashMap<>();
+                update.put("status", newState);
 
-            // Obtener el documento del sitio y actualizar el campo 'status'
-            db.collection("sitios")
-                    .document(nameTextViewSite.getText().toString())
-                    .update(update)
-                    .addOnSuccessListener(aVoid -> {
-                        // Mostrar el Toast indicando el nuevo estado del sitio
-                        String toastMessage = newState.equals("Inactivo") ? "El sitio ha sido inhabilitado" : "El sitio ha sido habilitado";
-                        Toast.makeText(MainActivity_2_Sites_SiteDetails.this, toastMessage, Toast.LENGTH_SHORT).show();
-                        // Actualizar la interfaz de usuario
-                        updateUIBasedOnState(newState);
-                        // Terminar la actividad actual y regresar a la actividad anterior
-                        finish();
-                    })
-                    .addOnFailureListener(e -> {
-                        // Manejo de error en caso de fallo
-                        Toast.makeText(MainActivity_2_Sites_SiteDetails.this, "Error al actualizar el estado del sitio", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    });
+                db.collection("sitios")
+                        .document(nameTextViewSite.getText().toString())
+                        .update(update)
+                        .addOnSuccessListener(aVoid -> {
+                            String toastMessage = newState.equals("Inactivo") ? "El sitio ha sido inhabilitado" : "El sitio ha sido habilitado";
+                            Toast.makeText(MainActivity_2_Sites_SiteDetails.this, toastMessage, Toast.LENGTH_SHORT).show();
+                            updateUIBasedOnState(newState);
+                            finish();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(MainActivity_2_Sites_SiteDetails.this, "Error al actualizar el estado del sitio", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        });
+            }
         });
 
-        builder.setNegativeButton("Cancelar", (dialogInterface, i) -> {
-            // Cancelar el diálogo sin hacer nada
-            dialogInterface.dismiss();
-        });
-
-        // Mostrar el diálogo
+        builder.setNegativeButton("Cancelar", null);
         builder.show();
     }
     private void updateUIBasedOnState(String state) {
-        TextView textoHabilitar = findViewById(R.id.deleteSitePerfil);
+        TextView textoHabilitar = findViewById(R.id.deleteUserSite);
 
         if (state.equals("Activo")) {
             textoHabilitar.setText("Inhabilitar Sitio");
@@ -174,7 +185,6 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
             textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0);
         }
     }
-
 
     public void showRemoveSupervisorConfirmationDialog(View view) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);

@@ -300,7 +300,7 @@
                         android:onClick="showConfirmationDialog" />
 
                     <TextView
-                        android:id="@+id/deleteSitePerfil"
+                        android:id="@+id/deleteUserSite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="8dp"
@@ -308,7 +308,6 @@
                         android:clickable="true"
                         android:layout_gravity="center_vertical"
                         android:focusable="true"
-                        android:onClick="showConfirmationDialog"
                         android:gravity="start" />
 
                 </LinearLayout>
