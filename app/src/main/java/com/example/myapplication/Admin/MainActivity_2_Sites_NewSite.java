@@ -1,17 +1,10 @@
 package com.example.myapplication.Admin;
 
-import static android.content.ContentValues.TAG;
-
 import android.os.Bundle;
 import android.content.Intent;
-import android.net.Uri;
 
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementUser;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -25,43 +18,29 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-public class MainActivity_new_site_admin extends AppCompatActivity {
+public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
 
     ListElementSite element;
     private EditText editAddress, editUbigeo, editSiteCoordenadas;
-    private static final int PICK_LOCATION_REQUEST = 1;
-    private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
     double latitude, longitude;
     String nombredesitio;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
     private boolean isEditing = false; // Indicador para editar o crear nuevo sitio
+    private MaterialAutoCompleteTextView selectDepartment, selectProvince, selectDistrict, selectZoneType, selectSiteType;
+    ArrayAdapter<String> departmentAdapter,provinceAdapter,districtAdapter,zoneTypeAdapter, siteTypeAdapter;
 
-    // Declarar los elementos MaterialAutoCompleteTextView para los campos de autocompletado
-    private MaterialAutoCompleteTextView selectDepartment;
-    private MaterialAutoCompleteTextView selectProvince;
-    private MaterialAutoCompleteTextView selectDistrict;
-    private MaterialAutoCompleteTextView selectZoneType;
-    private MaterialAutoCompleteTextView selectSiteType;
-
-    // Declarar los adaptadores para los campos de autocompletado
-    ArrayAdapter<String> departmentAdapter;
-    ArrayAdapter<String> provinceAdapter;
-    ArrayAdapter<String> districtAdapter;
-    ArrayAdapter<String> zoneTypeAdapter;
-    ArrayAdapter<String> siteTypeAdapter;
-
-    // Declarar los arrays de opciones para los campos de autocompletado
     String[] departmentOptions = {
             "Amazonas", "Áncash","Apurímac","Arequipa","Ayacucho","Cajamarca","Callao","Cusco","Huancavelica","Huánuco","Ica","Junín","La Libertad","Lambayeque","Lima","Loreto","Madre de Dios","Moquegua","Pasco","Piura",
             "Puno","San Martín","Tacna","Tumbes","Ucayali","Amazonas","Áncash","Apurímac","Arequipa","Ayacucho","Cajamarca","Callao",
@@ -72,7 +51,8 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
     String[] districtOptions = {"District X", "District Y", "District Z"}; // Cambia a tus opciones reales
     String[] zoneTypeOptions = {"Zone Type 1", "Zone Type 2", "Zone Type 3"}; // Cambia a tus opciones reales
     String[] siteTypeOptions = {"Site Type 1", "Site Type 2", "Site Type 3"}; // Cambia a tus opciones reales
-
+    FirebaseFirestore db;
+    int resultSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +81,8 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         selectZoneType.setAdapter(zoneTypeAdapter);
         selectSiteType.setAdapter(siteTypeAdapter);
 
+        db = FirebaseFirestore.getInstance();
+
         TextInputLayout textInputLayout = findViewById(R.id.textInputLayoutLongitud);
 
         // Obtener el indicador de si se está editando desde el Intent
@@ -113,15 +95,28 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
         editUbigeo = findViewById(R.id.editUbigeo);
         editSiteCoordenadas = findViewById(R.id.editCoordenadas);
 
+        db.collection("sitios")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        resultSize = 0;
+                        if (task.getResult() != null) {
+                            resultSize = task.getResult().size();
+                        }
+                        Log.d("msg-test", "Cantidad de documentos en la colección 'sitios': " + resultSize);
+                    } else {
+                        Log.d("msg-test", "Error getting documents: ", task.getException());
+                    }
+                });
 
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewSite);
         if (isEditing) {
             // Si se está editando, inflar el menú de editar sitio
-            topAppBar.inflateMenu(R.menu.top_app_bar_admin_edit);
+            topAppBar.inflateMenu(R.menu.top_app_bar_edit);
         } else {
             // Si se está creando, inflar el menú de crear sitio
-            topAppBar.inflateMenu(R.menu.top_app_bar_admin_new);
+            topAppBar.inflateMenu(R.menu.top_app_bar_new);
         }
 
         // Verificar si se está editando un sitio existente o creando uno nuevo
@@ -135,6 +130,86 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
             topAppBar.setTitle("Nuevo Sitio"); // Cambiar título de la actividad
         }
 
+
+        topAppBar.setOnMenuItemClickListener(item -> {
+                    if (item.getItemId() == R.id.createNewTopAppBar) {
+                        if (areFieldsEmpty()) {
+                            Toast.makeText(MainActivity_2_Sites_NewSite.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String department = selectDepartment.getText().toString();
+                            String province = selectProvince.getText().toString();
+                            String district = selectDistrict.getText().toString();
+                            String zonetype = selectZoneType.getText().toString();
+                            String sitetype = selectSiteType.getText().toString();
+                            String location = editSiteCoordenadas.getText().toString();
+                            Double latitud = latitude;
+                            Double longitud = longitude;
+                            String coordenadas = String.valueOf(latitud) + " ; " + String.valueOf(longitud);
+                            String name = department.substring(0, 3) + "-" + String.valueOf(resultSize+1);
+                            String address = editAddress.getText().toString();
+                            String status = "Activo";
+                            String ubigeo = editUbigeo.getText().toString();
+                            LocalDate fechaActual = LocalDate.now();
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                            String fechaCreacion = fechaActual.format(formatter);
+
+                            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion);
+                            db.collection("sitios")
+                                    .document(name)
+                                    .set(listElement)
+                                    .addOnSuccessListener(unused -> {
+                                        Log. d("msg-test","Data guardada exitosamente");
+                                    })
+                                    .addOnFailureListener(e -> e.printStackTrace()) ;
+
+                            // Iniciar la actividad de perfil de sitio y pasar los datos
+                            Intent intent2 = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_SiteDetails.class);
+                            intent2.putExtra("ListElementSite", listElement);
+                            startActivity(intent2);
+                            finish();
+                        }
+                        return true;
+                    }else if (item.getItemId() == R.id.saveOldTopAppBar) {
+                        if (areFieldsEmpty()) {
+                            Toast.makeText(MainActivity_2_Sites_NewSite.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String department = selectDepartment.getText().toString();
+                            String province = selectProvince.getText().toString();
+                            String district = selectDistrict.getText().toString();
+                            String zonetype = selectZoneType.getText().toString();
+                            String sitetype = selectSiteType.getText().toString();
+                            String location = editSiteCoordenadas.getText().toString();
+                            Double latitud = latitude;
+                            Double longitud = longitude;
+                            String coordenadas = String.valueOf(latitud) + " ; " + String.valueOf(longitud);
+                            String name = department.substring(0, 3) + "-" + String.valueOf(resultSize+1);
+                            String address = editAddress.getText().toString();
+                            String status = "Activo";
+                            String ubigeo = editUbigeo.getText().toString();
+                            LocalDate fechaActual = LocalDate.now();
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                            String fechaCreacion = fechaActual.format(formatter);
+
+                            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion);
+
+                            db.collection("sitios")
+                                    .document(name)
+                                    .set(listElement)
+                                    .addOnSuccessListener(unused -> {
+                                        Log. d("msg-test","Data guardada exitosamente");
+                                    })
+                                    .addOnFailureListener(e -> e.printStackTrace()) ;
+
+                            Intent intent3 = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_SiteDetails.class);
+                            intent3.putExtra("ListElement", listElement);
+                            startActivity(intent3);
+                        }
+                        return true;
+                    } else{
+                        return false;
+                    }
+        });
+/*
         topAppBar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.createNewTopAppBar || item.getItemId() == R.id.saveOldTopAppBar) {
                 // Obtener los valores seleccionados de los menús desplegables
@@ -147,22 +222,36 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
                 // Verificar si los campos están vacíos
                 if (TextUtils.isEmpty(department) || TextUtils.isEmpty(province) || TextUtils.isEmpty(district) ||
                         TextUtils.isEmpty(zonetype) || TextUtils.isEmpty(sitetype)) {
-                    Toast.makeText(MainActivity_new_site_admin.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity_2_Sites_NewSite.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
                     return false; // No continuar si falta algún dato
                 }
 
+
                 // Si todos los datos están completos, crear el elemento de sitio
                 String location = editSiteCoordenadas.getText().toString();
-                String latitud = String.valueOf(latitude);
-                String longitud = String.valueOf(longitude);;
-                String name = (item.getItemId() == R.id.createNewTopAppBar) ? "NombreGeneradoAutomáticamente" : element.getName();
+                Double latitud = latitude;
+                Double longitud = longitude;
+                String coordenadas = String.valueOf(latitud) + " ; " + String.valueOf(longitud);
+                String name = (item.getItemId() == R.id.createNewTopAppBar) ? department.substring(0, 3) + "-" + String.valueOf(resultSize+1) : element.getName();
+                String address = editAddress.getText().toString();
                 String status = "Activo";
+                String ubigeo = editUbigeo.getText().toString();
+                LocalDate fechaActual = LocalDate.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                String fechaCreacion = fechaActual.format(formatter);
 
                 // Crear el objeto ListElementSite con los valores seleccionados
-                ListElementSite listElement = new ListElementSite(department, name, status, province, district, "", location, "", zonetype, sitetype, latitud, longitud);
+                ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion);
+                db.collection("sitios")
+                        .document(name)
+                        .set(listElement)
+                        .addOnSuccessListener(unused -> {
+                            Log. d("msg-test","Data guardada exitosamente");
+                        })
+                        .addOnFailureListener(e -> e.printStackTrace()) ;
 
                 // Iniciar la actividad de perfil de sitio y pasar los datos
-                Intent intent2 = new Intent(MainActivity_new_site_admin.this, MainActivity_siteprofile_admin.class);
+                Intent intent2 = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_SiteDetails.class);
                 intent2.putExtra("ListElementSite", listElement);
                 startActivity(intent2);
 
@@ -171,7 +260,7 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
                 return false;
             }
         });
-
+*/
         topAppBar.setNavigationOnClickListener(v -> {
             finish();
         });
@@ -198,7 +287,7 @@ public class MainActivity_new_site_admin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Aquí iniciamos la actividad MapActivity para que el usuario pueda seleccionar la ubicación
-                Intent intent = new Intent(MainActivity_new_site_admin.this, MainActivity_mapchooser_admin.class);
+                Intent intent = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_MappChooser.class);
                 launcher.launch(intent);
             }
         });

@@ -17,7 +17,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity_addSupervisor_admin extends AppCompatActivity {
+public class MainActivity_2_Sites_AddSupervisor extends AppCompatActivity {
 
     List<ListElementUser> elements;
 
@@ -26,13 +26,13 @@ public class MainActivity_addSupervisor_admin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_add_supervisor);
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarAddSuperSite);
-        topAppBar.inflateMenu(R.menu.top_app_bar_admin_select);
+        topAppBar.inflateMenu(R.menu.top_app_bar_select);
         View view = getWindow().getDecorView().getRootView();
         init(view);
 
         topAppBar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.chooseSuper) {
-                Toast.makeText(MainActivity_addSupervisor_admin.this, "Supervisor asignado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity_2_Sites_AddSupervisor.this, "Supervisor asignado", Toast.LENGTH_SHORT).show();
                 finish();
             } else {
                 return false;
@@ -47,6 +47,7 @@ public class MainActivity_addSupervisor_admin extends AppCompatActivity {
 
     public void init(View view) {
         elements = new ArrayList<>();
+        /*
         elements.add(new ListElementUser("74567890", "Pedro", "Suares","Administrador", "Activo", "pedro_correo@gmail.com","978675678", "Calle Manzana"));
         elements.add(new ListElementUser("72903456", "Ana", "Suares","Supervisor", "Activo", "ana_correo@gmail.com","934567890", "Avenida Central"));
         elements.add(new ListElementUser("70234567", "Juan","Suares", "Administrador", "Activo", "juan_correo@gmail.com","956783421", "Calle Primavera"));
@@ -68,7 +69,7 @@ public class MainActivity_addSupervisor_admin extends AppCompatActivity {
         elements.add(new ListElementUser("72543019", "Isabel", "Suares","Administrador", "Activo", "isabel_correo@gmail.com","978932156", "Avenida del Sol"));
         elements.add(new ListElementUser("70987654", "Roberto", "Suares","Supervisor", "Activo", "roberto_correo@gmail.com","976543218", "Calle de la Arena"));
 
-
+*/
         ListAdapterAddSuper simpleListAdapter = new ListAdapterAddSuper( this, elements);
         RecyclerView recyclerView = view.findViewById(R.id.listElementsUsersAdd);
         recyclerView.setHasFixedSize(true);
@@ -77,7 +78,7 @@ public class MainActivity_addSupervisor_admin extends AppCompatActivity {
     }
 
     public void moveToDescription(ListElementUser item){
-        Intent intent = new Intent(this,MainActivity_userprofile_admin.class);
+        Intent intent = new Intent(this, MainActivity_1_Users_UserDetais.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);
     }

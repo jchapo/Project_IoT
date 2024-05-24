@@ -60,9 +60,9 @@ public class EquiposDeSitios extends AppCompatActivity {
 
     private void initRecyclerView() {
         elements = new ArrayList<>();
-        elements.add(new ListElementDevices("SW145XS", "SWI103", "GILLAT", "T-GAP", "2024-04-18", "Switch con capacidad para soportar varios equipos.", "Switch Gillat FP-435"));
-        elements.add(new ListElementDevices("RO82DAS", "SWI102", "CISCO", "C-SWS", "2024-04-19", "Router preparado para WIFI7", "Router CISCO WIFIMAX"));
-        elements.add(new ListElementDevices("RE123FD", "RTI209", "HUAWEI", "HGW-004", "2024-04-20", "Gateway de Huawei para redes de fibra óptica.", "Huawei Fiber Gateway HGW-004"));
+        elements.add(new ListElementDevices("SW145XS", "SWI103", "GILLAT", "T-GAP", "2024-04-18", "Switch con capacidad para soportar varios equipos.", "Switch Gillat FP-435","Activo"));
+        elements.add(new ListElementDevices("RO82DAS", "SWI102", "CISCO", "C-SWS", "2024-04-19", "Router preparado para WIFI7", "Router CISCO WIFIMAX","Activo"));
+        elements.add(new ListElementDevices("RE123FD", "RTI209", "HUAWEI", "HGW-004", "2024-04-20", "Gateway de Huawei para redes de fibra óptica.", "Huawei Fiber Gateway HGW-004","Activo"));
 
 
         // Añadir más elementos según sea necesario

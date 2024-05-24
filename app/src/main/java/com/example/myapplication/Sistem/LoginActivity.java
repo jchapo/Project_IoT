@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.NavegacionInicial;
 import com.example.myapplication.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -44,18 +47,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showForgotPasswordPopup() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Correo de recuperación:");
 
-        final EditText editTextEmail = new EditText(this);
-        editTextEmail.setHint("Correo electrónico");
-        builder.setView(editTextEmail);
+        final TextInputLayout textInputLayout = new TextInputLayout(this);
+        textInputLayout.setHint("Correo electrónico");
+        int padding = (int) getResources().getDimension(R.dimen.padding_16dp);
+        textInputLayout.setPadding(padding, padding, padding, padding);
+
+        final TextInputEditText textInputEditText = new TextInputEditText(this);
+        textInputLayout.addView(textInputEditText);
+
+        builder.setView(textInputLayout);
 
         builder.setPositiveButton("Enviar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String userEmail = editTextEmail.getText().toString();
-                Toast.makeText(LoginActivity.this, "Correo electrónico enviado", Toast.LENGTH_SHORT).show();
+                String userEmail = textInputEditText.getText().toString();
+                Toast.makeText(getBaseContext(), "Correo electrónico enviado", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -67,9 +76,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        builder.show();
     }
+
 
 
 }

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_theme_background"
-    tools:context=".Admin.UsersFragment">
+    tools:context=".Admin.Fragment_1_Users">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -25,18 +25,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBarUserFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:minHeight="?attr/actionBarSize"
-                app:menu="@menu/top_app_bar_admin_users"
-                app:navigationIcon="@drawable/ic_perfil_outline"
-                app:title="Lista de usuarios" />
-
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
+                android:id="@+id/tabLayoutUsers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/topAppBarUserFragment"
@@ -44,11 +34,14 @@
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabActivo"
                     android:text="Activos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabInactivo"
+
                     android:text="Inactivos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

@@ -130,15 +130,14 @@
 
                     <Spinner
                         android:id="@+id/spinner2"
-                        android:layout_width="345dp"
-                        android:layout_height="49dp"
+                        android:layout_width="350dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:dropDownHeight="50dp"
                         android:entries="@array/TipodeEquipo"
                         android:prompt="@string/selecciona_sitio"
                         android:spinnerMode="dropdown"
-                        android:tooltipText="Selecciona el equipo"
-                        android:dropDownHeight="50dp"
-                        />
+                        android:tooltipText="Selecciona el equipo" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

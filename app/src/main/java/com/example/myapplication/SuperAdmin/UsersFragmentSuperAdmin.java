@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Admin.MainActivity_new_user_admin;
-import com.example.myapplication.Admin.MainActivity_userprofile_admin;
+import com.example.myapplication.Admin.MainActivity_1_Users_NewUser;
+import com.example.myapplication.Admin.MainActivity_1_Users_UserDetais;
 import com.example.myapplication.Admin.items.ListAdapterUser;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
@@ -61,7 +61,7 @@ public class UsersFragmentSuperAdmin extends Fragment {
             @Override
             public void onClick(View v) {
                 // Aquí cambia "NuevaActividad" por la clase de la actividad a la que deseas cambiar
-                Intent intent = new Intent(getActivity(), MainActivity_new_user_admin.class);
+                Intent intent = new Intent(getActivity(), MainActivity_1_Users_NewUser.class);
                 startActivity(intent);
             }
         });
@@ -72,6 +72,7 @@ public class UsersFragmentSuperAdmin extends Fragment {
 
     public void init(View view) {
         elements = new ArrayList<>();
+        /*
         elements.add(new ListElementUser("74567890", "Pedro", "Suares","Administrador", "Activo", "pedro_correo@gmail.com","978675678", "Calle Manzana"));
         elements.add(new ListElementUser("72903456", "Ana", "Suares","Supervisor", "Activo", "ana_correo@gmail.com","934567890", "Avenida Central"));
         elements.add(new ListElementUser("70234567", "Juan","Suares", "Administrador", "Activo", "juan_correo@gmail.com","956783421", "Calle Primavera"));
@@ -93,7 +94,7 @@ public class UsersFragmentSuperAdmin extends Fragment {
         elements.add(new ListElementUser("72543019", "Isabel", "Suares","Administrador", "Activo", "isabel_correo@gmail.com","978932156", "Avenida del Sol"));
         elements.add(new ListElementUser("70987654", "Roberto", "Suares","Supervisor", "Activo", "roberto_correo@gmail.com","976543218", "Calle de la Arena"));
 
-
+*/
         ListAdapterUser listAdapter = new ListAdapterUser(elements, getContext(), item -> moveToDescription(item));
         RecyclerView recyclerView = view.findViewById(R.id.listElementsSuperAdmin);
         recyclerView.setHasFixedSize(true);
@@ -102,7 +103,7 @@ public class UsersFragmentSuperAdmin extends Fragment {
     }
 
     public void moveToDescription(ListElementUser item){
-        Intent intent = new Intent(getContext(), MainActivity_userprofile_admin.class);
+        Intent intent = new Intent(getContext(), MainActivity_1_Users_UserDetais.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);
     }

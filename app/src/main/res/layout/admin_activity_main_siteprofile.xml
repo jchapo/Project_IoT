@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin.MainActivity_siteprofile_admin">
+    tools:context=".Admin.MainActivity_2_Sites_SiteDetails">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutSite"
@@ -54,12 +54,22 @@
                 android:layout_margin="16dp"
                 android:orientation="horizontal">
 
-                <ImageView
+                <LinearLayout
                     android:id="@+id/imageView"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    app:srcCompat="@drawable/location_silhouette" />
+                    android:background="@color/md_theme_tertiaryFixedDim"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_location_outline"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -281,27 +291,23 @@
                     app:layout_constraintStart_toStartOf="parent">
 
                     <ImageView
-                        android:id="@+id/iconDNI"
+                        android:id="@+id/iconDeleteSite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_delete_outline"
                         android:layout_gravity="center_vertical"
                         android:clickable="true"
                         android:focusable="true"
                         android:onClick="showConfirmationDialog" />
 
                     <TextView
-                        android:id="@+id/deleteUser"
+                        android:id="@+id/deleteUserSite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/md_theme_error"
-                        android:text="Inhabilitar sitio"
                         android:padding="8dp"
                         android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
                         android:layout_gravity="center_vertical"
                         android:focusable="true"
-                        android:onClick="showConfirmationDialog"
                         android:gravity="start" />
 
                 </LinearLayout>
