@@ -63,6 +63,18 @@
         <activity
             android:name=".SuperAdmin.MainActivity_navigation_SuperAdmin"
             android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.MainActivity_NavigationSearch"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.UserDetais"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.EditAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.NewAdmin"
+            android:exported="false" />
 
         <!-- Actividades Admin -->
         <activity
