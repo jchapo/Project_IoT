@@ -48,6 +48,7 @@ public class ImagenesSitio extends AppCompatActivity {
 
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), this::onImagePicked);
 
+
     }
 
     @Override

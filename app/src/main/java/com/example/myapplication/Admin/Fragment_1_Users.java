@@ -2,6 +2,7 @@ package com.example.myapplication.Admin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,25 +16,31 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.SearchView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Admin.items.ListAdapterUser;
 import com.example.myapplication.Admin.items.ListElementUser;
+import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
+import com.example.myapplication.Dto.UsuarioDto;
 import com.example.myapplication.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Fragment_1_Users extends Fragment {
 
-    private List<ListElementUser> allUsers;
-    private List<ListElementUser> activeUsers;
-    private List<ListElementUser> inactiveUsers;
+    private ArrayList<ListElementUser> activeUsers, inactiveUsers;
     private ListAdapterUser listAdapterUsers;
     private RecyclerView recyclerViewUsers;
+    NavigationActivityViewModel navigationActivityViewModel;
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,9 +82,10 @@ public class Fragment_1_Users extends Fragment {
         View view = inflater.inflate(R.layout.admin_fragment_users, container, false);
 
         setHasOptionsMenu(true);
+
+        navigationActivityViewModel = new ViewModelProvider(requireActivity()) .get(NavigationActivityViewModel. class);
         init(view);
-        
-        
+
         FloatingActionButton agregarUsuarioButton = view.findViewById(R.id.agregarUsuariofloatingActionButton);
         agregarUsuarioButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,22 +123,39 @@ public class Fragment_1_Users extends Fragment {
     }
 
     public void init(View view) {
-        allUsers = new ArrayList<>();
         activeUsers = new ArrayList<>();
         inactiveUsers = new ArrayList<>();
 
-        activeUsers.add(new ListElementUser("74567890", "Pedro", "Suares","Administrador", "Activo", "pedro_correo@gmail.com","978675678", "Calle Manzana"));
-        activeUsers.add(new ListElementUser("72903456", "Ana", "Suares","Supervisor", "Activo", "ana_correo@gmail.com","934567890", "Avenida Central"));
-        activeUsers.add(new ListElementUser("70234567", "Juan","Suares", "Administrador", "Activo", "juan_correo@gmail.com","956783421", "Calle Primavera"));
-        activeUsers.add(new ListElementUser("71234567", "María","Suares", "Supervisor", "Activo", "maria_correo@gmail.com","911234567", "Calle San José"));
-        activeUsers.add(new ListElementUser("79908765", "Carlos", "Suares","Administrador", "Activo", "carlos_correo@gmail.com","978564321", "Avenida Libertad"));
+        if (navigationActivityViewModel != null) {
+            navigationActivityViewModel.getActiveUsers().observe(getViewLifecycleOwner(), usuarioActivos -> {
+                for (ListElementUser p : usuarioActivos) {
+                    activeUsers.add(p);
+                    Log.d("msg-test", "Name3: " + activeUsers.size());
+                }
+            });
+            navigationActivityViewModel.getInactiveUsers().observe(getViewLifecycleOwner(), usuarioInactivos -> {
+                for (ListElementUser p : usuarioInactivos) {
+                    inactiveUsers.add(p);
+                    Log.d("msg-test", "Name3: " + inactiveUsers.size());
+                }
+            });
+        } else {
+            // Manejar el caso en el que navigationActivityViewModel es nulo
+        }
+/*
+        activeUsers.add(new ListElementUser("74567890", "Pedro", "Suares","Administrador", "Activo", "pedro_correo@gmail.com","978675678", "Calle Manzana", 0,"11/11/2022"));
+        activeUsers.add(new ListElementUser("72903456", "Ana", "Suares","Supervisor", "Activo", "ana_correo@gmail.com","934567890", "Avenida Central", 0,"11/11/2022"));
+        activeUsers.add(new ListElementUser("70234567", "Juan","Suares", "Administrador", "Activo", "juan_correo@gmail.com","956783421", "Calle Primavera", 0,"11/11/2022"));
+        activeUsers.add(new ListElementUser("71234567", "María","Suares", "Supervisor", "Activo", "maria_correo@gmail.com","911234567", "Calle San José", 0,"11/11/2022"));
+        activeUsers.add(new ListElementUser("79908765", "Carlos", "Suares","Administrador", "Activo", "carlos_correo@gmail.com","978564321", "Avenida Libertad", 0,"11/11/2022"));
 
 
-        inactiveUsers.add(new ListElementUser("79908765", "Marta", "Suares","Administrador", "Activo", "marta_correo@gmail.com","978564321", "Avenida de la Costa"));
-        inactiveUsers.add(new ListElementUser("74895673", "Raquel", "Suares","Supervisor", "Activo", "raquel_correo@gmail.com","923456789", "Calle del Mar"));
+        inactiveUsers.add(new ListElementUser("79908765", "Marta", "Suares","Administrador", "Activo", "marta_correo@gmail.com","978564321", "Avenida de la Costa", 0,"11/11/2022"));
+        inactiveUsers.add(new ListElementUser("74895673", "Raquel", "Suares","Supervisor", "Activo", "raquel_correo@gmail.com","923456789", "Calle del Mar", 0,"11/11/2022"));
 
         allUsers.addAll(activeUsers);
         allUsers.addAll(inactiveUsers);
+       */
 
 
         listAdapterUsers = new ListAdapterUser(activeUsers, getContext(), item -> moveToDescription(item));

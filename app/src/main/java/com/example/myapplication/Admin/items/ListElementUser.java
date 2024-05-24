@@ -11,9 +11,12 @@ public class ListElementUser implements Serializable {
     public String mail;
     public String phone;
     public String address;
+    private Integer primerInicio;
+    private String fechaCreacion;
 
-
-    public ListElementUser(String dni, String name, String lastname, String user, String status, String mail, String phone, String address) {
+    public ListElementUser() {
+    }
+    public ListElementUser(String dni, String name, String lastname, String user, String status, String mail, String phone, String address, Integer primerInicio, String fechaCreacion) {
         this.dni = dni;
         this.name = name;
         this.lastname = lastname;
@@ -22,6 +25,24 @@ public class ListElementUser implements Serializable {
         this.mail = mail;
         this.phone = phone;
         this.address = address;
+        this.primerInicio = primerInicio;
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public Integer getPrimerInicio() {
+        return primerInicio;
+    }
+
+    public void setPrimerInicio(Integer primerInicio) {
+        this.primerInicio = primerInicio;
+    }
+
+    public String getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(String fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
     public String getLastname() {

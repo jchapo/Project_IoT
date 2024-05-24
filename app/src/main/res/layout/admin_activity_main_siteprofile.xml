@@ -291,27 +291,23 @@
                     app:layout_constraintStart_toStartOf="parent">
 
                     <ImageView
-                        android:id="@+id/iconDNI"
+                        android:id="@+id/iconDeleteSite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_delete_outline"
                         android:layout_gravity="center_vertical"
                         android:clickable="true"
                         android:focusable="true"
                         android:onClick="showConfirmationDialog" />
 
                     <TextView
-                        android:id="@+id/deleteUser"
+                        android:id="@+id/deleteSitePerfil"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/md_theme_error"
-                        android:text="Inhabilitar sitio"
                         android:padding="8dp"
                         android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
                         android:layout_gravity="center_vertical"
                         android:focusable="true"
-                        android:onClick="showConfirmationDialog"
                         android:gravity="start" />
 
                 </LinearLayout>

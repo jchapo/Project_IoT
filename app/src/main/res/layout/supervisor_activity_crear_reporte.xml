@@ -20,7 +20,7 @@
             android:id="@+id/topAppBarCrearReporte"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="Creación de reporte"
+            app:title="@string/crear_reporte"
             app:navigationIcon="@drawable/ic_back_outline_black" />
 
         <com.google.android.material.tabs.TabLayout

@@ -5,24 +5,25 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Supervisor.CrearEquipo">
-
+    tools:context=".SuperAdmin.EditAdmin">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/md_theme_inverseOnSurface"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBarNewEquipo"
+            android:id="@+id/topAppBarEditUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:menu="@menu/top_app_bar_edit"
             app:navigationIcon="@drawable/ic_back_outline_black"
-            app:title="Nuevo Equipo"/>
+            app:title="Editar usuario" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -49,11 +50,11 @@
                 app:cardCornerRadius="75dp">
 
                 <ImageView
-                    android:id="@+id/imageViewNewEquipment"
+                    android:id="@+id/imageViewProfile"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_mas_photo" />
+                    android:src="@drawable/default_profile" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -66,16 +67,24 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp">
 
+                <ImageView
+                    android:id="@+id/iconFirstName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_person_outline"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp"/>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editNombre"
+                        android:id="@+id/editTextFirstName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nombre del Equipo" />
+                        android:hint="Nombre" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -85,16 +94,25 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp">
 
+                <ImageView
+                    android:id="@+id/iconLastName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_person_outline"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="invisible"/>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editMarca"
+                        android:id="@+id/editFirstName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Marca" />
+                        android:hint="Apellido" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -104,17 +122,25 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp">
 
+                <ImageView
+                    android:id="@+id/iconDNI"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_card_outline"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editDescripcion"
+                        android:id="@+id/editDNI"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
-                        android:hint="Descripción" />
+                        android:hint="DNI" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -124,27 +150,13 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/editTipoEquipo"
-                    android:layout_width="0dp"
+                <ImageView
+                    android:id="@+id/iconMail"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_weight="1"
-                    android:hint="Tipo de Equipo">
-
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/selectTipoDeEquipo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="none" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp">
+                    android:src="@drawable/ic_mail_outline"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
@@ -152,10 +164,11 @@
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editSku"
+                        android:id="@+id/editMail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Sku" />
+                        android:inputType="textEmailAddress"
+                        android:hint="Mail" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -165,17 +178,52 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp">
 
+                <ImageView
+                    android:id="@+id/iconDirection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_location_outline"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editFecha"
+                        android:id="@+id/editAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Dirección" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
+
+                <ImageView
+                    android:id="@+id/iconPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_phone_outline"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editPhone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="phone"
-                        android:hint="Fecha de ingreso" />
+                        android:hint="Teléfono" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -183,8 +231,6 @@
 
 
         </LinearLayout>
-
     </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

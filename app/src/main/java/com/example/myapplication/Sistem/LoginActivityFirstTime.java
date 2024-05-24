@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.NavegacionInicial;
 import com.example.myapplication.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -28,7 +29,7 @@ public class LoginActivityFirstTime extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(LoginActivityFirstTime.this, MainActivityCambiarPrimeraContra.class);
+                Intent intent = new Intent(LoginActivityFirstTime.this, NavegacionInicial.class);
                 startActivity(intent);
             }
         });

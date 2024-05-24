@@ -21,6 +21,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAExTORfkCED6S7JMtHAnYKhJVJ5J9inaw" />
+        <activity
+            android:name=".Supervisor.EquiposDeSitios"
+            android:exported="false" />
 
         <activity
             android:name=".Admin.MainActivity_2_Sites_MappChooser"
@@ -59,6 +62,18 @@
 
         <activity
             android:name=".SuperAdmin.MainActivity_navigation_SuperAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.MainActivity_NavigationSearch"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.UserDetais"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.EditAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.NewAdmin"
             android:exported="false" />
 
         <!-- Actividades Admin -->
