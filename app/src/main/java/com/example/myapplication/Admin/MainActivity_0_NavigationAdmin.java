@@ -49,9 +49,9 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     FirebaseFirestore db;
     NavigationActivityViewModel navigationActivityViewModel;
-
     private ArrayList<ListElementUser> activeUsers, inactiveUsers;
     private ArrayList<ListElementSite> activeSites, inactiveSites;
+    String actual;
 
 
     @Override
@@ -102,6 +102,7 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
             return true;
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -130,8 +131,6 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
                             }
                         }
                         // Aquí puedes hacer algo con las listas activeUsers y inactiveUsers
-                        Fragment_1_Users fragment = new Fragment_1_Users();
-                        replaceFragment(fragment);
                     } else {
                         Log.d("msg-test", "Error getting documents: ", task.getException());
                     }

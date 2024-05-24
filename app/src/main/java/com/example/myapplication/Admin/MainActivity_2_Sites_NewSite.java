@@ -95,6 +95,19 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         editUbigeo = findViewById(R.id.editUbigeo);
         editSiteCoordenadas = findViewById(R.id.editCoordenadas);
 
+        db.collection("sitios")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        resultSize = 0;
+                        if (task.getResult() != null) {
+                            resultSize = task.getResult().size();
+                        }
+                        Log.d("msg-test", "Cantidad de documentos en la colección 'sitios': " + resultSize);
+                    } else {
+                        Log.d("msg-test", "Error getting documents: ", task.getException());
+                    }
+                });
 
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarNewSite);
@@ -117,6 +130,86 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
             topAppBar.setTitle("Nuevo Sitio"); // Cambiar título de la actividad
         }
 
+
+        topAppBar.setOnMenuItemClickListener(item -> {
+                    if (item.getItemId() == R.id.createNewTopAppBar) {
+                        if (areFieldsEmpty()) {
+                            Toast.makeText(MainActivity_2_Sites_NewSite.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String department = selectDepartment.getText().toString();
+                            String province = selectProvince.getText().toString();
+                            String district = selectDistrict.getText().toString();
+                            String zonetype = selectZoneType.getText().toString();
+                            String sitetype = selectSiteType.getText().toString();
+                            String location = editSiteCoordenadas.getText().toString();
+                            Double latitud = latitude;
+                            Double longitud = longitude;
+                            String coordenadas = String.valueOf(latitud) + " ; " + String.valueOf(longitud);
+                            String name = department.substring(0, 3) + "-" + String.valueOf(resultSize+1);
+                            String address = editAddress.getText().toString();
+                            String status = "Activo";
+                            String ubigeo = editUbigeo.getText().toString();
+                            LocalDate fechaActual = LocalDate.now();
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                            String fechaCreacion = fechaActual.format(formatter);
+
+                            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion);
+                            db.collection("sitios")
+                                    .document(name)
+                                    .set(listElement)
+                                    .addOnSuccessListener(unused -> {
+                                        Log. d("msg-test","Data guardada exitosamente");
+                                    })
+                                    .addOnFailureListener(e -> e.printStackTrace()) ;
+
+                            // Iniciar la actividad de perfil de sitio y pasar los datos
+                            Intent intent2 = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_SiteDetails.class);
+                            intent2.putExtra("ListElementSite", listElement);
+                            startActivity(intent2);
+                            finish();
+                        }
+                        return true;
+                    }else if (item.getItemId() == R.id.saveOldTopAppBar) {
+                        if (areFieldsEmpty()) {
+                            Toast.makeText(MainActivity_2_Sites_NewSite.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String department = selectDepartment.getText().toString();
+                            String province = selectProvince.getText().toString();
+                            String district = selectDistrict.getText().toString();
+                            String zonetype = selectZoneType.getText().toString();
+                            String sitetype = selectSiteType.getText().toString();
+                            String location = editSiteCoordenadas.getText().toString();
+                            Double latitud = latitude;
+                            Double longitud = longitude;
+                            String coordenadas = String.valueOf(latitud) + " ; " + String.valueOf(longitud);
+                            String name = department.substring(0, 3) + "-" + String.valueOf(resultSize+1);
+                            String address = editAddress.getText().toString();
+                            String status = "Activo";
+                            String ubigeo = editUbigeo.getText().toString();
+                            LocalDate fechaActual = LocalDate.now();
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                            String fechaCreacion = fechaActual.format(formatter);
+
+                            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion);
+
+                            db.collection("sitios")
+                                    .document(name)
+                                    .set(listElement)
+                                    .addOnSuccessListener(unused -> {
+                                        Log. d("msg-test","Data guardada exitosamente");
+                                    })
+                                    .addOnFailureListener(e -> e.printStackTrace()) ;
+
+                            Intent intent3 = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_SiteDetails.class);
+                            intent3.putExtra("ListElement", listElement);
+                            startActivity(intent3);
+                        }
+                        return true;
+                    } else{
+                        return false;
+                    }
+        });
+/*
         topAppBar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.createNewTopAppBar || item.getItemId() == R.id.saveOldTopAppBar) {
                 // Obtener los valores seleccionados de los menús desplegables
@@ -133,15 +226,6 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
                     return false; // No continuar si falta algún dato
                 }
 
-                db.collection("sitios")
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                resultSize = task.getResult().size();
-                            } else {
-                                Log.d("msg-test", "Error getting documents: ", task.getException());
-                            }
-                        });
 
                 // Si todos los datos están completos, crear el elemento de sitio
                 String location = editSiteCoordenadas.getText().toString();
@@ -176,7 +260,7 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
                 return false;
             }
         });
-
+*/
         topAppBar.setNavigationOnClickListener(v -> {
             finish();
         });
