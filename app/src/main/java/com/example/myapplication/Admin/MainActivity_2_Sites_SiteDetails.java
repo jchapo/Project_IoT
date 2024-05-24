@@ -47,7 +47,6 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         districtDescriptionTextView.setText(element.getDistrict());
         estado = element.getStatus();
 
-
         Toolbar toolbar = findViewById(R.id.topAppBarSitePerfilAdmin);
         setSupportActionBar(toolbar);
 
@@ -60,7 +59,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
 
         // Agregar Listener al botón flotante de editar
         findViewById(R.id.fabEditSiteAdmin).setOnClickListener(new View.OnClickListener() {
-            // Código para abrir MainActivity_new_user_admin desde la actividad del perfil de usuario
+            // Código para abrir MainActivity_new_user_admin desde la actividad del perfil de Sitio
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_2_Sites_NewSite.class);
@@ -88,10 +87,26 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         btnAddSupervisor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Crear Intent para iniciar la actividad MainActivity_addSupervisor_admin
-                Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_2_Sites_AddSupervisor.class);
-                // Iniciar la actividad MainActivity_addSupervisor_admin con el Intent
-                startActivity(intent);
+               finish();
+            }
+        });
+        textoHabilitar = findViewById(R.id.deleteSitePerfil);
+        if (estado.equals("Activo")) {
+            // Cambiar el texto, color y ícono para "Inhabilitar Sitio"
+            textoHabilitar.setText("Inhabilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0); // Icono a la izquierda
+        } else {
+            // Cambiar el texto, color y ícono para "Habilitar Sitio"
+            textoHabilitar.setText("Habilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme())); // Suponiendo que tienes un color para habilitar
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0); // Icono a la izquierda
+        }
+
+        findViewById(R.id.deleteSitePerfil).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmationDialog(v, estado);
             }
         });
 
@@ -170,6 +185,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
             textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0);
         }
     }
+
     public void showRemoveSupervisorConfirmationDialog(View view) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setMessage("¿Está seguro de que desea eliminar este supervisor?")
