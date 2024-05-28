@@ -35,10 +35,14 @@ import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.AdminActivityMainNavigationBinding;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +56,7 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
     NavigationActivityViewModel navigationActivityViewModel;
     private ArrayList<ListElementUser> activeUsers, inactiveUsers;
     private ArrayList<ListElementSite> activeSites, inactiveSites;
+
 
 
     @Override
@@ -88,10 +93,12 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                binding.topAppBarUserFragment.setTitle("Usuarios_0");
+                binding.topAppBarUserFragment.setTitle("Usuarios");
                 replaceFragment(new Fragment_1_Users());
             }
         }, 1000); // 1000 milisegundos = 1 segundo
+
+
 
 
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
@@ -134,7 +141,12 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         activeSites.clear();
         inactiveSites.clear();
         db = FirebaseFirestore.getInstance();
+
         // Cargar usuarios desde Firestore
+        loadUsersFromFirestore();
+    }
+
+    private void loadUsersFromFirestore() {
         db.collection("usuarios")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -148,19 +160,22 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
                                 inactiveUsers.add(listElementUser);
                             }
                         }
-                        // Aquí puedes hacer algo con las listas activeUsers y inactiveUsers
+                        // Una vez que se cargan los usuarios, cargar sitios desde Firestore
+                        db = FirebaseFirestore.getInstance();
+                        loadSitesFromFirestore();
                     } else {
-                        Log.d("msg-test", "Error getting documents: ", task.getException());
+                        Log.d("msg-test", "Error getting user documents: ", task.getException());
                     }
                 });
+    }
 
-        // Cargar sitios desde Firestore
+    private void loadSitesFromFirestore() {
         db.collection("sitios")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            ListElementSite listElementSite = document.toObject(ListElementSite.class);
+                        for (QueryDocumentSnapshot document2 : task.getResult()) {
+                            ListElementSite listElementSite = document2.toObject(ListElementSite.class);
                             Log.d("msg-test", "Active sites: " + listElementSite.getName());
                             if ("Activo".equals(listElementSite.getStatus())) {
                                 activeSites.add(listElementSite);
@@ -168,18 +183,18 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
                                 inactiveSites.add(listElementSite);
                             }
                         }
-                        // Aquí puedes hacer algo con las listas activeSites y inactiveSites
+                        // Una vez que se cargan los sitios, actualizar el ViewModel con los datos
+                        navigationActivityViewModel.getActiveUsers().setValue(activeUsers);
+                        navigationActivityViewModel.getInactiveUsers().setValue(inactiveUsers);
+                        navigationActivityViewModel.getActiveSites().setValue(activeSites);
+                        navigationActivityViewModel.getInactiveSites().setValue(inactiveSites);
                     } else {
-                        Log.d("msg-test", "Error getting documents: ", task.getException());
+                        Log.d("msg-test", "Error getting site documents: ", task.getException());
                     }
                 });
-
-        navigationActivityViewModel.getActiveUsers().setValue(activeUsers);
-        navigationActivityViewModel.getActiveSites().setValue(activeSites);
-        navigationActivityViewModel.getInactiveUsers().setValue(inactiveUsers);
-        navigationActivityViewModel.getInactiveSites().setValue(inactiveSites);
-
     }
+
+
 
     public void crearCanalesNotificacion() {
 
