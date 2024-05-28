@@ -16,6 +16,15 @@ public class NavigationActivityViewModel extends ViewModel {
     private MutableLiveData<ArrayList<ListElementSite>> activeSites = new MutableLiveData<>();
     private MutableLiveData<ArrayList<ListElementUser>> inactiveUsers = new MutableLiveData<>();
     private MutableLiveData<ArrayList<ListElementSite>> inactiveSites = new MutableLiveData<>();
+    private MutableLiveData<String> inicio = new MutableLiveData<>();
+
+    public MutableLiveData<String> getInicio() {
+        return inicio;
+    }
+
+    public void setInicio(MutableLiveData<String> inicio) {
+        this.inicio = inicio;
+    }
 
     public MutableLiveData<ArrayList<ListElementSite>> getActiveSites() {
         return activeSites;

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +27,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.Admin.items.ListElementSite;
@@ -45,13 +47,11 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
     String canal1 = "importanteDefault";
     AdminActivityMainNavigationBinding binding;
     private DrawerLayout drawerLayout;
-    private boolean isSearchViewActive = false;
     private BottomNavigationView bottomNavigationView;
     FirebaseFirestore db;
     NavigationActivityViewModel navigationActivityViewModel;
     private ArrayList<ListElementUser> activeUsers, inactiveUsers;
     private ArrayList<ListElementSite> activeSites, inactiveSites;
-    String actual;
 
 
     @Override
@@ -62,13 +62,18 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         crearCanalesNotificacion();
         bottomNavigationView = binding.bottomNavigation;
         navigationActivityViewModel = new ViewModelProvider(this).get(NavigationActivityViewModel.class);
-        binding.topAppBarUserFragment.setTitle("Usuarios");
 
+        // Recuperar el valor de inicio desde el Intent
+        String inicio = getIntent().getStringExtra("inicio");
+        if (inicio != null) {
+            navigationActivityViewModel.getInicio().setValue(inicio);
+        }
+
+        binding.topAppBarUserFragment.setTitle("Usuarios");
         activeUsers = new ArrayList<>();
         inactiveUsers = new ArrayList<>();
         activeSites = new ArrayList<>();
         inactiveSites = new ArrayList<>();
-        db = FirebaseFirestore.getInstance();
 
         loadData();
 
@@ -80,6 +85,14 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
                 MainActivity_0_NavigationAdmin.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                binding.topAppBarUserFragment.setTitle("Usuarios_0");
+                replaceFragment(new Fragment_1_Users());
+            }
+        }, 1000); // 1000 milisegundos = 1 segundo
+
 
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.usuarios_menu) {
@@ -103,10 +116,15 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         });
     }
 
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout_Admin, fragment);
+        fragmentTransaction.commit();
+    }
     @Override
     protected void onResume() {
         super.onResume();
-        // Recargar datos cada vez que se reanude la actividad
         loadData();
     }
     private void loadData() {
@@ -115,7 +133,7 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         inactiveUsers.clear();
         activeSites.clear();
         inactiveSites.clear();
-
+        db = FirebaseFirestore.getInstance();
         // Cargar usuarios desde Firestore
         db.collection("usuarios")
                 .get()
@@ -160,14 +178,9 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         navigationActivityViewModel.getActiveSites().setValue(activeSites);
         navigationActivityViewModel.getInactiveUsers().setValue(inactiveUsers);
         navigationActivityViewModel.getInactiveSites().setValue(inactiveSites);
+
     }
 
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout_Admin, fragment);
-        fragmentTransaction.commit();
-    }
     public void crearCanalesNotificacion() {
 
         NotificationChannel channel = new NotificationChannel(canal1,
