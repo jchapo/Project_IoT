@@ -38,6 +38,7 @@ public class Fragment_1_Users extends Fragment {
 
     private ArrayList<ListElementUser> activeUsers = new ArrayList<>();
     private ArrayList<ListElementUser> inactiveUsers = new ArrayList<>();
+
     private ListAdapterUser listAdapterUsers;
     private RecyclerView recyclerViewUsers;
     private NavigationActivityViewModel navigationActivityViewModel;
@@ -56,13 +57,15 @@ public class Fragment_1_Users extends Fragment {
         if (navigationActivityViewModel != null) {
             navigationActivityViewModel.getActiveUsers().observe(getViewLifecycleOwner(), usuarioActivos -> {
                 activeUsers.clear();
-                activeUsers.addAll(usuarioActivos);
                 listAdapterUsers.notifyDataSetChanged();
+                activeUsers.addAll(usuarioActivos);
+
             });
             navigationActivityViewModel.getInactiveUsers().observe(getViewLifecycleOwner(), usuarioInactivos -> {
                 inactiveUsers.clear();
-                inactiveUsers.addAll(usuarioInactivos);
                 listAdapterUsers.notifyDataSetChanged();
+                inactiveUsers.addAll(usuarioInactivos);
+
             });
         }
     }
