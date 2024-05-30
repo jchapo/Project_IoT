@@ -1,6 +1,7 @@
 package com.example.myapplication.Admin;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -8,8 +9,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
@@ -17,18 +23,29 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.Admin.items.ListElementUser;
-import com.example.myapplication.Dto.UsuarioDto;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -38,15 +55,40 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
     ArrayAdapter<String> typeUserAdapter;
     String[] typeOptions = {"Supervisor"};
     private EditText editFirstName, editLastName, editDNI, editMail, editAddress, editPhone, editFechaCreacion, editPrimerInicio;
-    private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
     private boolean isEditing = false; // Indicador para editar o crear nuevo usuario
+    private boolean isImageAdded = false; // Variable para indicar si se ha agregado una imagen
+
     FirebaseFirestore db;
+    private Uri imageUri;
+    FirebaseStorage storage;
+    StorageReference storageReference;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_new_user);
+
+        // Initialize Firebase Storage
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
+        imageView = findViewById(R.id.imageViewProfile);
+        imageView.setOnClickListener(v -> openFileChooser());
+
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        imageUri = result.getData().getData();
+                        imageView.setImageURI(imageUri);
+                        isImageAdded = true; // Actualizar la variable cuando se selecciona una imagen
+                    }
+                });
+
+        pedirPermisos();
+
         crearCanalesNotificacion();
         selectTypeUser = findViewById(R.id.selectTypeUser);
         typeUserAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, typeOptions);
@@ -56,9 +98,6 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
 
         // Obtener el indicador de si se está editando desde el Intent
         isEditing = getIntent().getBooleanExtra("isEditing", false);
-
-        imageView = findViewById(R.id.imageViewProfile);
-        imageView.setOnClickListener(v -> openFileChooser());
 
         editFirstName = findViewById(R.id.editFirstName);
         editLastName = findViewById(R.id.editLastttName);
@@ -91,82 +130,102 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
 
         topAppBar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.createNewTopAppBar) {
-                if (areFieldsEmpty()) {
-                    Toast.makeText(MainActivity_1_Users_NewUser.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
-                } else {
-                    String typeUser = selectTypeUser.getText().toString();
-                    String firstName = editFirstName.getText().toString();
-                    String lastName = editLastName.getText().toString();
-                    String dni = editDNI.getText().toString();
-                    String mail = editMail.getText().toString();
-                    String address = editAddress.getText().toString();
-                    String phone = editPhone.getText().toString();
-                    String status = "Activo";
-                    LocalDate fechaActual = LocalDate.now();
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    String fechaCreacion = fechaActual.format(formatter);
-                    Integer primerInicio = 0;
-                    String fullName = firstName + " " + lastName;
-
-                    ListElementUser listElement = new ListElementUser(dni, firstName, lastName, typeUser, status, mail, phone, address, primerInicio, fechaCreacion);
-                    db.collection("usuarios")
-                            .document(dni)
-                            .set(listElement)
-                            .addOnSuccessListener(unused -> {
-                                Log. d("msg-test","Data guardada exitosamente");
-                            })
-                            .addOnFailureListener(e -> e.printStackTrace()) ;
-
-                    Intent intent2 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetais.class);
-                    intent2.putExtra("ListElement", listElement);
-                    notificarImportanceDefault(fullName, fechaCreacion);
-                    startActivity(intent2);
-                }
+                createNewUser();
                 return true;
             } else if (item.getItemId() == R.id.saveOldTopAppBar) {
-                if (areFieldsEmpty()) {
-                    Toast.makeText(MainActivity_1_Users_NewUser.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
-                } else {
-                    String typeUser = selectTypeUser.getText().toString();
-                    String firstName = editFirstName.getText().toString();
-                    String lastName = editLastName.getText().toString();
-                    String dni = editDNI.getText().toString();
-                    String mail = editMail.getText().toString();
-                    String address = editAddress.getText().toString();
-                    String phone = editPhone.getText().toString();
-                    String status = "Activo";
-                    String fechaCreacion = editFechaCreacion.getText().toString();
-                    Integer primerInicio = Integer.parseInt(editPrimerInicio.getText().toString());
-
-                    ListElementUser listElement = new ListElementUser(dni, firstName, lastName, typeUser, status, mail, phone, address, primerInicio, fechaCreacion);
-
-                    // Actualizamos el documento existente
-                    db.collection("usuarios")
-                            .document(dni) // Utilizamos el identificador del documento
-                            .set(listElement) // Sobreescribimos los datos con los nuevos valores
-                            .addOnSuccessListener(unused -> {
-                                Log.d("msg-test", "Datos actualizados exitosamente");
-                            })
-                            .addOnFailureListener(e -> e.printStackTrace());
-
-                    Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetais.class);
-                    intent3.putExtra("ListElement", listElement);
-                    startActivity(intent3);
-                }
+                updateExistingUser();
                 return true;
-            } else{
+            } else {
                 return false;
             }
         });
+
         topAppBar.setNavigationOnClickListener(v -> {
             finish();
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_app_bar_new, menu);
-        return true;
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        activityResultLauncher.launch(Intent.createChooser(intent, "Select Picture"));
+    }
+
+    private void uploadImageAndSaveUser(ListElementUser listElement, boolean isEditing) {
+        // Obtener el bitmap desde el ImageView
+        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+
+        // Convertir el bitmap a byte array
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+
+        // Convertir byte array a base64
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        listElement.setImageUrl(encodedImage);
+
+        saveUserToFirestore(listElement, isEditing);
+    }
+
+
+
+    private void saveUserToFirestore(ListElementUser listElement, boolean isEditing) {
+        Log.d("msg-test", "entro a saveUserToFirestore");
+        db.collection("usuarios")
+                .document(listElement.getDni())
+                .set(listElement, SetOptions.merge())
+                .addOnSuccessListener(unused -> {
+                    Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
+                })
+                .addOnFailureListener(e -> e.printStackTrace());
+        Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetais.class);
+        intent3.putExtra("ListElement", listElement);
+        startActivity(intent3);
+    }
+
+    private void createNewUser() {
+        if (areFieldsEmpty() || !isImageAdded) {
+            Toast.makeText(MainActivity_1_Users_NewUser.this, "Debe completar todos los datos y seleccionar una imagen", Toast.LENGTH_SHORT).show();
+        } else {
+            String typeUser = selectTypeUser.getText().toString();
+            String firstName = editFirstName.getText().toString();
+            String lastName = editLastName.getText().toString();
+            String dni = editDNI.getText().toString();
+            String mail = editMail.getText().toString();
+            String address = editAddress.getText().toString();
+            String phone = editPhone.getText().toString();
+            String status = "Activo";
+            LocalDate fechaActual = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String fechaCreacion = fechaActual.format(formatter);
+            Integer primerInicio = 0;
+            String imagen = "";
+
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagen);
+            uploadImageAndSaveUser(listElement, false);
+        }
+    }
+
+    private void updateExistingUser() {
+        if (areFieldsEmpty()) {
+            Toast.makeText(MainActivity_1_Users_NewUser.this, "Debe completar todos los datos y seleccionar una imagen", Toast.LENGTH_SHORT).show();
+        } else {
+            String typeUser = selectTypeUser.getText().toString();
+            String firstName = editFirstName.getText().toString();
+            String lastName = editLastName.getText().toString();
+            String dni = editDNI.getText().toString();
+            String mail = editMail.getText().toString();
+            String address = editAddress.getText().toString();
+            String phone = editPhone.getText().toString();
+            String status = "Activo";
+            String fechaCreacion = editFechaCreacion.getText().toString();
+            Integer primerInicio = Integer.parseInt(editPrimerInicio.getText().toString());
+            String imagen = "";
+
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagen);
+            uploadImageAndSaveUser(listElement, true);
+        }
     }
 
     private boolean areFieldsEmpty() {
@@ -178,13 +237,6 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                 editPhone.getText().toString().isEmpty();
     }
 
-    private void openFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }
-
     private void fillFields(ListElementUser element) {
         editFirstName.setText(element.getName());
         editLastName.setText(element.getLastname());
@@ -194,18 +246,21 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         editPhone.setText(element.getPhone());
         editFechaCreacion.setText(element.getFechaCreacion());
         editPrimerInicio.setText(String.valueOf(element.getPrimerInicio()));
-        // Implementa la lógica para mostrar la imagen de perfil
+
+        // Rellenar el campo del tipo de usuario
+        selectTypeUser.setText(element.getUser(), false);
+
+        if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
+            byte[] decodedString = Base64.decode(element.getImageUrl(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            imageView.setImageBitmap(decodedByte);
+            isImageAdded = true; // Actualizar la variable cuando se rellena una imagen existente
+        }
     }
 
-    private void updateExistingUser() {
-        // Implementa la lógica para actualizar los datos del usuario existente
-    }
 
-    private void createNewUser() {
-        // Implementa la lógica para crear un nuevo usuario
-    }
+
     public void crearCanalesNotificacion() {
-
         NotificationChannel channel = new NotificationChannel(canal1,
                 "Canal Users Creation",
                 NotificationManager.IMPORTANCE_DEFAULT);
@@ -220,24 +275,24 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
 
     public void pedirPermisos() {
         // TIRAMISU = 33
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                 ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
 
-            ActivityCompat.requestPermissions(this, new String[]{POST_NOTIFICATIONS}, 101);
+            ActivityCompat.requestPermissions(this, new String[]{POST_NOTIFICATIONS, READ_EXTERNAL_STORAGE}, 101);
         }
     }
-    public void notificarImportanceDefault(String fullname, String fechaCreacion){
 
+    public void notificarImportanceDefault(String fullname, String fechaCreacion) {
         //Crear notificación
         //Agregar información a la notificación que luego sea enviada a la actividad que se abre
         Intent intent = new Intent(this, MainActivity_0_NavigationAdmin.class);
-        intent.putExtra("pid",4616);
+        intent.putExtra("pid", 4616);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         //
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, canal1)
                 .setSmallIcon(R.drawable.ic_addperson_filled_black)
                 .setContentTitle("Nuevo registrado")
-                .setContentText("Usuario : " + fullname + "\nFecha: "+ fechaCreacion)
+                .setContentText("Usuario : " + fullname + "\nFecha: " + fechaCreacion)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
@@ -250,6 +305,5 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             notificationManager.notify(1, notification);
         }
-
     }
 }

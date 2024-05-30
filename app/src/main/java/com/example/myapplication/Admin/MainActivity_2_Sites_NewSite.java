@@ -1,5 +1,7 @@
 package com.example.myapplication.Admin;
 
+import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.content.Intent;
 
@@ -16,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,6 +57,7 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
     String[] siteTypeOptions = {"Site Type 1", "Site Type 2", "Site Type 3"}; // Cambia a tus opciones reales
     FirebaseFirestore db;
     int resultSize;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +71,6 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         selectZoneType = findViewById(R.id.selectZoneType);
         selectSiteType = findViewById(R.id.selectSiteType);
 
-        // Establece el adaptador con las opciones en el AutoCompleteTextView
         // Inicializa los adaptadores con las opciones
         departmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, departmentOptions);
         provinceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, provinceOptions);
@@ -80,6 +84,22 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         selectDistrict.setAdapter(districtAdapter);
         selectZoneType.setAdapter(zoneTypeAdapter);
         selectSiteType.setAdapter(siteTypeAdapter);
+
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data != null && data.getData() != null) {
+                                Uri selectedImageUri = data.getData();
+                                imageView.setImageURI(selectedImageUri);
+                            }
+                        }
+                    }
+                }
+        );
 
         db = FirebaseFirestore.getInstance();
 
@@ -209,58 +229,7 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
                         return false;
                     }
         });
-/*
-        topAppBar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.createNewTopAppBar || item.getItemId() == R.id.saveOldTopAppBar) {
-                // Obtener los valores seleccionados de los menús desplegables
-                String department = selectDepartment.getText().toString();
-                String province = selectProvince.getText().toString();
-                String district = selectDistrict.getText().toString();
-                String zonetype = selectZoneType.getText().toString();
-                String sitetype = selectSiteType.getText().toString();
 
-                // Verificar si los campos están vacíos
-                if (TextUtils.isEmpty(department) || TextUtils.isEmpty(province) || TextUtils.isEmpty(district) ||
-                        TextUtils.isEmpty(zonetype) || TextUtils.isEmpty(sitetype)) {
-                    Toast.makeText(MainActivity_2_Sites_NewSite.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
-                    return false; // No continuar si falta algún dato
-                }
-
-
-                // Si todos los datos están completos, crear el elemento de sitio
-                String location = editSiteCoordenadas.getText().toString();
-                Double latitud = latitude;
-                Double longitud = longitude;
-                String coordenadas = String.valueOf(latitud) + " ; " + String.valueOf(longitud);
-                String name = (item.getItemId() == R.id.createNewTopAppBar) ? department.substring(0, 3) + "-" + String.valueOf(resultSize+1) : element.getName();
-                String address = editAddress.getText().toString();
-                String status = "Activo";
-                String ubigeo = editUbigeo.getText().toString();
-                LocalDate fechaActual = LocalDate.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                String fechaCreacion = fechaActual.format(formatter);
-
-                // Crear el objeto ListElementSite con los valores seleccionados
-                ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion);
-                db.collection("sitios")
-                        .document(name)
-                        .set(listElement)
-                        .addOnSuccessListener(unused -> {
-                            Log. d("msg-test","Data guardada exitosamente");
-                        })
-                        .addOnFailureListener(e -> e.printStackTrace()) ;
-
-                // Iniciar la actividad de perfil de sitio y pasar los datos
-                Intent intent2 = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_SiteDetails.class);
-                intent2.putExtra("ListElementSite", listElement);
-                startActivity(intent2);
-
-                return true;
-            } else {
-                return false;
-            }
-        });
-*/
         topAppBar.setNavigationOnClickListener(v -> {
             finish();
         });
@@ -299,9 +268,8 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        activityResultLauncher.launch(Intent.createChooser(intent, "Select Picture"));
     }
-
 
     private boolean areFieldsEmpty() {
         return selectDepartment.getText().toString().isEmpty() ||
