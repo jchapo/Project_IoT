@@ -17,7 +17,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.bumptech.glide.Glide;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -72,8 +71,7 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity_1_Users_UserDetais.this, MainActivity_0_NavigationAdmin.class);
-            startActivity(intent);
+            finish();
         });
 
         // Agregar Listener al botón flotante de editar
