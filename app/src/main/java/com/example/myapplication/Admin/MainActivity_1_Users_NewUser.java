@@ -93,6 +93,8 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         selectTypeUser = findViewById(R.id.selectTypeUser);
         typeUserAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, typeOptions);
         selectTypeUser.setAdapter(typeUserAdapter);
+        // Establecer la opción preseleccionada en "Supervisor"
+        selectTypeUser.setText("Supervisor", false);
 
         db = FirebaseFirestore.getInstance();
 
