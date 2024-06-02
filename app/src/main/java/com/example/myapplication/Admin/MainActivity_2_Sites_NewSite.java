@@ -1,7 +1,19 @@
 package com.example.myapplication.Admin;
 
+import static android.Manifest.permission.POST_NOTIFICATIONS;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.content.Intent;
 
@@ -11,6 +23,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -23,18 +36,23 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
-
+    String canal1 = "importanteDefault3";
     ListElementSite element;
     private EditText editAddress, editUbigeo, editSiteCoordenadas;
     double latitude, longitude;
@@ -42,6 +60,8 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
     private boolean isEditing = false; // Indicador para editar o crear nuevo sitio
+    private boolean isImageAdded = false; // Variable para indicar si se ha agregado una imagen
+    private Uri imageUri;
     private MaterialAutoCompleteTextView selectDepartment, selectProvince, selectDistrict, selectZoneType, selectSiteType;
     ArrayAdapter<String> departmentAdapter,provinceAdapter,districtAdapter,zoneTypeAdapter, siteTypeAdapter;
 
@@ -87,19 +107,13 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
 
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
-                            Intent data = result.getData();
-                            if (data != null && data.getData() != null) {
-                                Uri selectedImageUri = data.getData();
-                                imageView.setImageURI(selectedImageUri);
-                            }
-                        }
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null){
+                        imageUri = result.getData().getData();
+                        imageView.setImageURI(imageUri);
+                        isImageAdded = true; // Actualizar la variable cuando se selecciona una imagen
                     }
-                }
-        );
+                });
 
         db = FirebaseFirestore.getInstance();
 
@@ -150,8 +164,20 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
             topAppBar.setTitle("Nuevo Sitio"); // Cambiar título de la actividad
         }
 
-
         topAppBar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.createNewTopAppBar) {
+                createNewSite();
+                return true;
+            } else if (item.getItemId() == R.id.saveOldTopAppBar) {
+                updateExistingSite();
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+
+        /*topAppBar.setOnMenuItemClickListener(item -> {
                     if (item.getItemId() == R.id.createNewTopAppBar) {
                         if (areFieldsEmpty()) {
                             Toast.makeText(MainActivity_2_Sites_NewSite.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
@@ -173,7 +199,7 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                             String fechaCreacion = fechaActual.format(formatter);
 
-                            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion);
+                            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion,imagen);
                             db.collection("sitios")
                                     .document(name)
                                     .set(listElement)
@@ -228,11 +254,12 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
                     } else{
                         return false;
                     }
-        });
+        }); */
 
         topAppBar.setNavigationOnClickListener(v -> {
             finish();
         });
+
         // Primero, registra un ActivityResultLauncher en tu actividad
         ActivityResultLauncher<Intent> launcher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -271,6 +298,90 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         activityResultLauncher.launch(Intent.createChooser(intent, "Select Picture"));
     }
 
+    private void uploadImageAndSaveSite(ListElementSite listElement, boolean isEditing) {
+        // Obtener el bitmap desde el ImageView
+        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+
+        // Convertir el bitmap a byte array
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+
+        // Convertir byte array a base64
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        listElement.setImageUrl(encodedImage);
+
+        saveSiteToFirestore(listElement, isEditing);
+    }
+
+    private void saveSiteToFirestore(ListElementSite listElement, boolean isEditing) {
+        Log.d("msg-test", "entro a saveSiteToFirestore");
+        db.collection("sitios")
+                .document(listElement.getName())
+                .set(listElement, SetOptions.merge())
+                .addOnSuccessListener(unused -> {
+                    Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
+                })
+                .addOnFailureListener(e -> e.printStackTrace());
+        Intent intent3 = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_SiteDetails.class);
+        intent3.putExtra("ListElement", listElement);
+        startActivity(intent3);
+    }
+
+    private void createNewSite() {
+        if (areFieldsEmpty() || !isImageAdded) {
+            Toast.makeText(MainActivity_2_Sites_NewSite.this, "Debe completar todos los datos y seleccionar una imagen", Toast.LENGTH_SHORT).show();
+        } else {
+            String department = selectDepartment.getText().toString();
+            String province = selectProvince.getText().toString();
+            String district = selectDistrict.getText().toString();
+            String zonetype = selectZoneType.getText().toString();
+            String sitetype = selectSiteType.getText().toString();
+            String location = editSiteCoordenadas.getText().toString();
+            Double latitud = latitude;
+            Double longitud = longitude;
+            String coordenadas = String.valueOf(latitud) + " ; " + String.valueOf(longitud);
+            String name = department.substring(0, 3) + "-" + String.valueOf(resultSize+1);
+            String address = editAddress.getText().toString();
+            String status = "Activo";
+            String ubigeo = editUbigeo.getText().toString();
+            LocalDate fechaActual = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String fechaCreacion = fechaActual.format(formatter);
+            String imagen = "";
+
+            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion, imagen);
+            uploadImageAndSaveSite(listElement, false);
+        }
+    }
+
+    private void updateExistingSite() {
+        if (areFieldsEmpty()) {
+            Toast.makeText(MainActivity_2_Sites_NewSite.this, "Debe completar todos los datos y seleccionar una imagen", Toast.LENGTH_SHORT).show();
+        } else {
+            String department = selectDepartment.getText().toString();
+            String province = selectProvince.getText().toString();
+            String district = selectDistrict.getText().toString();
+            String zonetype = selectZoneType.getText().toString();
+            String sitetype = selectSiteType.getText().toString();
+            String location = editSiteCoordenadas.getText().toString();
+            Double latitud = latitude;
+            Double longitud = longitude;
+            String coordenadas = String.valueOf(latitud) + " ; " + String.valueOf(longitud);
+            String name = department.substring(0, 3) + "-" + String.valueOf(resultSize+1);
+            String address = editAddress.getText().toString();
+            String status = "Activo";
+            String ubigeo = editUbigeo.getText().toString();
+            LocalDate fechaActual = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String fechaCreacion = fechaActual.format(formatter);
+            String imagen = "";
+
+            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion, imagen);
+            uploadImageAndSaveSite(listElement, true);
+        }
+    }
+
     private boolean areFieldsEmpty() {
         return selectDepartment.getText().toString().isEmpty() ||
                 selectProvince.getText().toString().isEmpty() ||
@@ -293,6 +404,60 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         editUbigeo.setText(element.getUbigeo());
         editSiteCoordenadas.setText(element.getCoordenadas());
         nombredesitio = element.getName();
+
+        if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
+            byte[] decodedString = Base64.decode(element.getImageUrl(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            imageView.setImageBitmap(decodedByte);
+            isImageAdded = true; // Actualizar la variable cuando se rellena una imagen existente
+        }
+    }
+
+    public void crearCanalesNotificacion() {
+        NotificationChannel channel = new NotificationChannel(canal1,
+                "Canal Users Creation",
+                NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription("Canal para notificaciones de creación de perfiles de usuario con prioridad default");
+        channel.enableVibration(true);
+
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+
+        pedirPermisos();
+    }
+
+    public void pedirPermisos() {
+        // TIRAMISU = 33
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{POST_NOTIFICATIONS, READ_EXTERNAL_STORAGE}, 101);
+        }
+    }
+
+    public void notificarImportanceDefault(String fullname, String fechaCreacion) {
+        //Crear notificación
+        //Agregar información a la notificación que luego sea enviada a la actividad que se abre
+        Intent intent = new Intent(this, MainActivity_0_NavigationAdmin.class);
+        intent.putExtra("pid", 4616);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        //
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, canal1)
+                .setSmallIcon(R.drawable.ic_addperson_filled_black)
+                .setContentTitle("Nuevo registrado")
+                .setContentText("Usuario : " + fullname + "\nFecha: " + fechaCreacion)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        Notification notification = builder.build();
+
+        //Lanzar notificación
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            notificationManager.notify(1, notification);
+        }
     }
 
 }

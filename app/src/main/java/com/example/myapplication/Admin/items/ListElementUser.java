@@ -19,7 +19,10 @@ public class ListElementUser implements Serializable {
     public ListElementUser() {
     }
 
-    public ListElementUser(String name, String lastname, String user, String status, String dni, String mail, String phone, String address, Integer primerInicio, String fechaCreacion, String imageUrl) {
+    public ListElementUser(String name, String lastname, String user,
+                           String status, String dni, String mail,
+                           String phone, String address, Integer primerInicio,
+                           String fechaCreacion, String imageUrl) {
         this.name = name;
         this.lastname = lastname;
         this.user = user;
