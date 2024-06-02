@@ -3,22 +3,25 @@ package com.example.myapplication.Admin;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +37,7 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
     TextView textoHabilitar;
     FirebaseFirestore db;
     String estado;
-
+    ImageView profileImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
         mailDescriptionTextView = findViewById(R.id.textViewMail);
         phoneDescriptionTextView = findViewById(R.id.textViewPhone);
         addressDescriptionTextView = findViewById(R.id.textViewAddress);
+        profileImageView = findViewById(R.id.imageViewProfileAdmin);
 
         nameDescriptionTextView.setText(element.getName());
         mailDescriptionTextView.setText(element.getMail());
@@ -57,38 +61,35 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
         addressDescriptionTextView.setText(element.getAddress());
         estado = element.getStatus();
 
+        // Cargar la imagen en el ImageView
+        if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
+            byte[] decodedString = Base64.decode(element.getImageUrl(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            profileImageView.setImageBitmap(decodedByte);
+        }
+
         Toolbar toolbar = findViewById(R.id.topAppBarUserPerfil);
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity_1_Users_UserDetais.this, MainActivity_0_NavigationAdmin.class);
-                startActivity(intent);
-            }
+        toolbar.setNavigationOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity_1_Users_UserDetais.this, MainActivity_0_NavigationAdmin.class);
+            startActivity(intent);
         });
 
         // Agregar Listener al botón flotante de editar
-        findViewById(R.id.fabEditUserAdmin).setOnClickListener(new View.OnClickListener() {
-            // Código para abrir MainActivity_new_user_admin desde la actividad del perfil de usuario
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity_1_Users_UserDetais.this, MainActivity_1_Users_NewUser.class);
-                intent.putExtra("isEditing", true);
-                intent.putExtra("ListElement", element);
-                startActivity(intent);
-            }
+        findViewById(R.id.fabEditUserAdmin).setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity_1_Users_UserDetais.this, MainActivity_1_Users_NewUser.class);
+            intent.putExtra("isEditing", true);
+            intent.putExtra("ListElement", element);
+            startActivity(intent);
         });
+
         // Obtener referencia al FrameLayout que actuará como botón
         FrameLayout btnAddSiteUserProfile = findViewById(R.id.btnAddSiteUserProfile);
 
         // Agregar un OnClickListener al FrameLayout
-        btnAddSiteUserProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        btnAddSiteUserProfile.setOnClickListener(v -> finish());
+
         textoHabilitar = findViewById(R.id.deleteUserPerfil);
         if (estado.equals("Activo")) {
             // Cambiar el texto, color y ícono para "Inhabilitar Usuario"
@@ -102,12 +103,7 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
             textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0); // Icono a la izquierda
         }
 
-        findViewById(R.id.deleteUserPerfil).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showConfirmationDialog(v, estado);
-            }
-        });
+        findViewById(R.id.deleteUserPerfil).setOnClickListener(v -> showConfirmationDialog(v, estado));
 
     }
 
@@ -127,36 +123,32 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
         }
 
         builder.setMessage(message);
-        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // Suponiendo que tienes una instancia de FirebaseFirestore llamada db
-                db = FirebaseFirestore.getInstance();
-                // Crear un mapa con el nuevo estado
-                Map<String, Object> update = new HashMap<>();
-                update.put("status", newState);
+        builder.setPositiveButton("Aceptar", (dialogInterface, i) -> {
+            // Suponiendo que tienes una instancia de FirebaseFirestore llamada db
+            db = FirebaseFirestore.getInstance();
+            // Crear un mapa con el nuevo estado
+            Map<String, Object> update = new HashMap<>();
+            update.put("status", newState);
 
-                // Obtener el documento del usuario y actualizar el campo 'status'
-                db.collection("usuarios")
-                        .document(dniDescriptionTextView.getText().toString())
-                        .update(update)
-                        .addOnSuccessListener(aVoid -> {
-                            // Mostrar el Toast indicando el nuevo estado del usuario
-                            String toastMessage = newState.equals("Inactivo") ? "El usuario ha sido inhabilitado" : "El usuario ha sido habilitado";
-                            Toast.makeText(MainActivity_1_Users_UserDetais.this, toastMessage, Toast.LENGTH_SHORT).show();
-                            // Actualizar la interfaz de usuario
-                            updateUIBasedOnState(newState);
-                            // Terminar la actividad actual y regresar a la actividad anterior
-                            finish();
-                        })
-                        .addOnFailureListener(e -> {
-                            // Manejo de error en caso de fallo
-                            Toast.makeText(MainActivity_1_Users_UserDetais.this, "Error al actualizar el estado del usuario", Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
-                        });
-            }
+            // Obtener el documento del usuario y actualizar el campo 'status'
+            db.collection("usuarios")
+                    .document(dniDescriptionTextView.getText().toString())
+                    .update(update)
+                    .addOnSuccessListener(aVoid -> {
+                        // Mostrar el Toast indicando el nuevo estado del usuario
+                        String toastMessage = newState.equals("Inactivo") ? "El usuario ha sido inhabilitado" : "El usuario ha sido habilitado";
+                        Toast.makeText(MainActivity_1_Users_UserDetais.this, toastMessage, Toast.LENGTH_SHORT).show();
+                        // Actualizar la interfaz de usuario
+                        updateUIBasedOnState(newState);
+                        // Terminar la actividad actual y regresar a la actividad anterior
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejo de error en caso de fallo
+                        Toast.makeText(MainActivity_1_Users_UserDetais.this, "Error al actualizar el estado del usuario", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    });
         });
-
 
         builder.setNegativeButton("Cancelar", null);
         builder.show();
@@ -179,18 +171,14 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
     public void showRemoveSiteConfirmationDialog(View view) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setMessage("¿Está seguro de que desea remover este sitio?")
-                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Eliminar el supervisor y mostrar el toast
-                        Toast.makeText(MainActivity_1_Users_UserDetais.this, "Sitio removido", Toast.LENGTH_SHORT).show();
-                        // Aquí debes agregar el código para eliminar el supervisor
-                    }
+                .setPositiveButton("Aceptar", (dialog, id) -> {
+                    // Eliminar el supervisor y mostrar el toast
+                    Toast.makeText(MainActivity_1_Users_UserDetais.this, "Sitio removido", Toast.LENGTH_SHORT).show();
+                    // Aquí debes agregar el código para eliminar el supervisor
                 })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // No hacer nada, simplemente cerrar el diálogo
-                        dialog.dismiss();
-                    }
+                .setNegativeButton("Cancelar", (dialog, id) -> {
+                    // No hacer nada, simplemente cerrar el diálogo
+                    dialog.dismiss();
                 });
         builder.show();
     }

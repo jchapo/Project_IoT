@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin.MainActivity_1_Users_NewUser">
+    tools:context=".SuperAdmin.NewAdmin">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -50,7 +50,7 @@
                 app:cardCornerRadius="75dp">
 
                 <ImageView
-                    android:id="@+id/imageViewProfileAdmin"
+                    android:id="@+id/imageViewProfile"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -217,122 +217,6 @@
                 android:layout_marginBottom="16dp"
                 android:background="@android:color/darker_gray" />
 
-            <TextView
-                android:id="@+id/textViewDevider2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="Sitios asignados"
-                tools:layout_editor_absoluteX="176dp"
-                tools:layout_editor_absoluteY="234dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <!-- Primer CardView -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardElevation="0dp"
-                    android:layout_marginBottom="8dp"
-                    app:cardBackgroundColor="@color/md_theme_inverseOnSurface_mediumContrast"
-                    app:cardCornerRadius="8dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <!-- Imagen a la izquierda -->
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:padding="8dp"
-                            android:layout_gravity="center"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_person_outline" />
-
-                        <!-- Texto en el centro -->
-                        <TextView
-                            android:id="@+id/siteAsignedTextView"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:padding="8dp"
-                            android:text="ARQ-01" />
-
-                        <!-- Icono a la derecha -->
-                        <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:padding="8dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_remove_outline"
-                            android:onClick="showRemoveSiteConfirmationDialog" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardElevation="0dp"
-
-                    android:layout_marginBottom="8dp"
-                    app:cardCornerRadius="8dp">
-
-                    <FrameLayout
-                        android:id="@+id/btnAddSiteUserProfile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <!-- Imagen a la izquierda -->
-                            <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:padding="8dp"
-                                android:layout_gravity="center"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/ic_locationadd_outline" />
-
-                            <!-- Texto en el centro -->
-                            <TextView
-                                android:id="@+id/textViewLocation"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical"
-                                android:padding="8dp"
-                                android:text="Asignar nuevo sitio" />
-
-                            <!-- Icono a la derecha -->
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:padding="8dp"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/ic_mas_anadir" />
-
-                        </LinearLayout>
-
-                    </FrameLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Resto de CardViews similares -->
-
-            </LinearLayout>
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -349,23 +233,27 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <ImageView
-                    android:id="@+id/iconDeleteUser"
+                    android:id="@+id/iconDelete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:src="@drawable/ic_delete_outline"
                     android:layout_gravity="center_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:onClick="showConfirmationDialog" />
 
                 <TextView
-                    android:id="@+id/deleteUserPerfil"
+                    android:id="@+id/deleteUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/md_theme_error"
+                    android:text="Inhabilitar Usuario"
                     android:padding="8dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:clickable="true"
                     android:layout_gravity="center_vertical"
                     android:focusable="true"
+                    android:onClick="showConfirmationDialog"
                     android:gravity="start" />
 
             </LinearLayout>
@@ -375,7 +263,7 @@
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabEditUserAdmin"
+        android:id="@+id/fabEditUserSuperAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

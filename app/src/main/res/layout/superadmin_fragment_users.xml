@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_theme_background"
@@ -13,7 +14,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayoutSuperAdmin"
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/md_theme_inverseOnSurface"
@@ -24,20 +25,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBarUserFragmentSuperAdmin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:minHeight="?attr/actionBarSize"
-                app:menu="@menu/top_app_bar_admin_users"
-                app:title="Lista de usuarios" />
-
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayoutSuperAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/topAppBarUserFragmentSuperAdmin"
+                app:layout_constraintTop_toBottomOf="@id/topAppBarUserFragment"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
@@ -61,11 +53,10 @@
             android:id="@+id/listElementsSuperAdmin"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/agregarUsuariofloatingActionButtonSuperAdmin"
-            app:layout_constraintTop_toBottomOf="@id/appBarLayoutSuperAdmin" />
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/agregarUsuariofloatingActionButtonSuperAdmin"
+            android:id="@+id/agregarAdminfloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -76,5 +67,12 @@
             android:contentDescription="Agregar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/menu_lateral" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

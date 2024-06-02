@@ -110,7 +110,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
             }
         });
 
-        textoHabilitar = findViewById(R.id.deleteUserSite);
+        textoHabilitar = findViewById(R.id.deleteSitePerfil);
         if (estado.equals("Activo")) {
             // Cambiar el texto, color y ícono para "Inhabilitar Sitio"
             textoHabilitar.setText("Inhabilitar Sitio");
@@ -123,7 +123,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
             textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0); // Icono a la izquierda
         }
 
-        findViewById(R.id.deleteUserSite).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.deleteSitePerfil).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showConfirmationDialog(v, estado);
@@ -173,7 +173,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         builder.show();
     }
     private void updateUIBasedOnState(String state) {
-        TextView textoHabilitar = findViewById(R.id.deleteUserSite);
+        TextView textoHabilitar = findViewById(R.id.deleteSitePerfil);
 
         if (state.equals("Activo")) {
             textoHabilitar.setText("Inhabilitar Sitio");

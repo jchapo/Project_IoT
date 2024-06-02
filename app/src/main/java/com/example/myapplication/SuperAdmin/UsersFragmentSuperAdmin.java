@@ -2,6 +2,7 @@ package com.example.myapplication.SuperAdmin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,23 +13,30 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Admin.MainActivity_1_Users_NewUser;
-import com.example.myapplication.Admin.MainActivity_1_Users_UserDetais;
-import com.example.myapplication.Admin.items.ListAdapterUser;
-import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
+import com.example.myapplication.SuperAdmin.list.ListAdapterSuperAdminUser;
+import com.example.myapplication.SuperAdmin.list.ListElementSuperAdminUser;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsersFragmentSuperAdmin extends Fragment {
-    List<ListElementUser> elements;
+    private List<ListElementSuperAdminUser> elements;
+    private List<ListElementSuperAdminUser> activeUsers;
+    private List<ListElementSuperAdminUser> inactiveUsers;
+    private ListAdapterSuperAdminUser ListAdapterSuperAdminUser;
+    private RecyclerView recyclerViewUsers;
+    FirebaseFirestore db;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +46,23 @@ public class UsersFragmentSuperAdmin extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.top_app_bar_admin_users, menu);
+        inflater.inflate(R.menu.top_app_bar_superadmin_users, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.searchUser);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ListAdapterSuperAdminUser.filter(newText);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -52,58 +76,83 @@ public class UsersFragmentSuperAdmin extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.superadmin_fragment_users, container, false);
-        Toolbar toolbar = view.findViewById(R.id.topAppBarUserFragmentSuperAdmin);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         init(view);
-        FloatingActionButton agregarUsuarioButton = view.findViewById(R.id.agregarUsuariofloatingActionButtonSuperAdmin);
+
+        FloatingActionButton agregarUsuarioButton = view.findViewById(R.id.agregarAdminfloatingActionButton);
         agregarUsuarioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Aquí cambia "NuevaActividad" por la clase de la actividad a la que deseas cambiar
-                Intent intent = new Intent(getActivity(), MainActivity_1_Users_NewUser.class);
+                Intent intent = new Intent(getActivity(), NewAdmin.class);
                 startActivity(intent);
             }
         });
 
+        TabLayout tabLayout = view.findViewById(R.id.tabLayoutSuperAdmin);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        ListAdapterSuperAdminUser.setItems(activeUsers);
+                        ListAdapterSuperAdminUser.notifyDataSetChanged();
+                        break;
+                    case 1:
+                        ListAdapterSuperAdminUser.setItems(inactiveUsers);
+                        ListAdapterSuperAdminUser.notifyDataSetChanged();
+                        break;
+                }
+            }
 
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
         return view;
     }
 
     public void init(View view) {
         elements = new ArrayList<>();
-        /*
-        elements.add(new ListElementUser("74567890", "Pedro", "Suares","Administrador", "Activo", "pedro_correo@gmail.com","978675678", "Calle Manzana"));
-        elements.add(new ListElementUser("72903456", "Ana", "Suares","Supervisor", "Activo", "ana_correo@gmail.com","934567890", "Avenida Central"));
-        elements.add(new ListElementUser("70234567", "Juan","Suares", "Administrador", "Activo", "juan_correo@gmail.com","956783421", "Calle Primavera"));
-        elements.add(new ListElementUser("71234567", "María","Suares", "Supervisor", "Activo", "maria_correo@gmail.com","911234567", "Calle San José"));
-        elements.add(new ListElementUser("79908765", "Carlos", "Suares","Administrador", "Activo", "carlos_correo@gmail.com","978564321", "Avenida Libertad"));
-        elements.add(new ListElementUser("74895673", "Laura", "Suares","Supervisor", "Activo", "laura_correo@gmail.com","923456789", "Calle del Sol"));
-        elements.add(new ListElementUser("71234567", "Roberto","Suares", "Administrador", "Activo", "roberto_correo@gmail.com","989765432", "Avenida del Parque"));
-        elements.add(new ListElementUser("75789234", "Sofía", "Suares","Supervisor", "Activo", "sofia_correo@gmail.com","957684321", "Calle de la Luna"));
-        elements.add(new ListElementUser("72543019", "Fernando","Suares", "Administrador", "Activo", "fernando_correo@gmail.com","978932156", "Avenida Central"));
-        elements.add(new ListElementUser("70987654", "Ana","Suares", "Supervisor", "Activo", "ana_correo@gmail.com","976543218", "Calle de las Flores"));
-        elements.add(new ListElementUser("74891230", "Elena","Suares", "Administrador", "Activo", "elena_correo@gmail.com","923456789", "Avenida de la Paz"));
-        elements.add(new ListElementUser("71234567", "David","Suares", "Supervisor", "Activo", "david_correo@gmail.com","934567890", "Avenida del Bosque"));
-        elements.add(new ListElementUser("75678901", "Lucía", "Suares","Administrador", "Activo", "lucia_correo@gmail.com","956783421", "Calle del Río"));
-        elements.add(new ListElementUser("70234567", "Andrés", "Suares","Supervisor", "Activo", "andres_correo@gmail.com","911234567", "Calle de la Montaña"));
-        elements.add(new ListElementUser("79908765", "Marta", "Suares","Administrador", "Activo", "marta_correo@gmail.com","978564321", "Avenida de la Costa"));
-        elements.add(new ListElementUser("74895673", "Raquel", "Suares","Supervisor", "Activo", "raquel_correo@gmail.com","923456789", "Calle del Mar"));
-        elements.add(new ListElementUser("71234567", "José","Suares", "Administrador", "Activo", "jose_correo@gmail.com","989765432", "Avenida del Lago"));
-        elements.add(new ListElementUser("75789234", "Laura", "Suares","Supervisor", "Activo", "laura_correo@gmail.com","957684321", "Calle de la Playa"));
-        elements.add(new ListElementUser("72543019", "Isabel", "Suares","Administrador", "Activo", "isabel_correo@gmail.com","978932156", "Avenida del Sol"));
-        elements.add(new ListElementUser("70987654", "Roberto", "Suares","Supervisor", "Activo", "roberto_correo@gmail.com","976543218", "Calle de la Arena"));
+        activeUsers = new ArrayList<>();
+        inactiveUsers = new ArrayList<>();
 
-*/
-        ListAdapterUser listAdapter = new ListAdapterUser(elements, getContext(), item -> moveToDescription(item));
-        RecyclerView recyclerView = view.findViewById(R.id.listElementsSuperAdmin);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(listAdapter);
+        db = FirebaseFirestore. getInstance();
+        db.collection("usuarios")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            ListElementSuperAdminUser listElementSuperAdminUser = document.toObject(ListElementSuperAdminUser.class);
+                            Log.d("msg-test", "Active users: " + listElementSuperAdminUser.getName());
+                            if ("Activo".equals(listElementSuperAdminUser.getStatus())) {
+                                activeUsers.add(listElementSuperAdminUser);
+                            } else if ("Inactivo".equals(listElementSuperAdminUser.getStatus())) {
+                                inactiveUsers.add(listElementSuperAdminUser);
+                            }
+                        }
+                        // Aquí puedes hacer algo con las listas activeUsers y inactiveUsers
+                        // Por ejemplo, imprimir los tamaños de las listas
+                        Log.d("msg-test", "Active users: " + activeUsers.size());
+                        Log.d("msg-test", "Inactive users: " + inactiveUsers.size());
+                    } else {
+                        Log.d("msg-test", "Error getting documents: ", task.getException());
+                    }
+                });
+
+
+
+        ListAdapterSuperAdminUser = new ListAdapterSuperAdminUser(activeUsers, getContext(), item -> moveToDescription(item));
+        recyclerViewUsers = view.findViewById(R.id.listElementsSuperAdmin);
+        recyclerViewUsers.setHasFixedSize(true);
+        recyclerViewUsers.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewUsers.setAdapter(ListAdapterSuperAdminUser);
     }
 
-    public void moveToDescription(ListElementUser item){
-        Intent intent = new Intent(getContext(), MainActivity_1_Users_UserDetais.class);
+    public void moveToDescription(ListElementSuperAdminUser item){
+        Intent intent = new Intent(getContext(), UserDetais.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);
     }
