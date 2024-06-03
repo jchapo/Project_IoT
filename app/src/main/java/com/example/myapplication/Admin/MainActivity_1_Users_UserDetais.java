@@ -68,6 +68,7 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
         }
 
         Toolbar toolbar = findViewById(R.id.topAppBarUserPerfil);
+        toolbar.setTitle("Perfil "+element.getName().toUpperCase());
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(v -> {
@@ -86,7 +87,10 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
         FrameLayout btnAddSiteUserProfile = findViewById(R.id.btnAddSiteUserProfile);
 
         // Agregar un OnClickListener al FrameLayout
-        btnAddSiteUserProfile.setOnClickListener(v -> finish());
+        btnAddSiteUserProfile.setOnClickListener(v -> {
+            Intent intent7 = new Intent(MainActivity_1_Users_UserDetais.this, MainActivity_2_Sites_AddSite.class);
+            startActivity(intent7);
+        });
 
         textoHabilitar = findViewById(R.id.deleteUserPerfil);
         if (estado.equals("Activo")) {

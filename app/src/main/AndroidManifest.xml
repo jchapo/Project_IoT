@@ -31,7 +31,6 @@
         <activity
             android:name=".Supervisor.EditarEquipo"
             android:exported="false" />
-
         <activity
             android:name=".Sistem.LoginActivityFirstTime"
             android:exported="true">
@@ -49,6 +48,9 @@
             android:exported="false" />
         <activity
             android:name=".Admin.MainActivity_3_Chat_ChatAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.MainActivity_2_SiteLocation"
             android:exported="false" />
         <activity
             android:name=".NavegacionInicial"

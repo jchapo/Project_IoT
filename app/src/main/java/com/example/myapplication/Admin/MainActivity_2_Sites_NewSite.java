@@ -18,21 +18,18 @@ import android.os.Bundle;
 import android.content.Intent;
 
 import com.example.myapplication.Admin.items.ListElementSite;
-import com.example.myapplication.Admin.items.ListElementUser;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 
-import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,7 +40,6 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.io.ByteArrayOutputStream;
@@ -65,23 +61,19 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
     private boolean isImageAdded = false; // Variable para indicar si se ha agregado una imagen
     private Uri imageUri;
     private MaterialAutoCompleteTextView selectDepartment, selectProvince, selectZoneType, selectSiteType;
-    ArrayAdapter<String> departmentAdapter,provinceAdapter,zoneTypeAdapter, siteTypeAdapter;
+    ArrayAdapter<String> departmentAdapter, provinceAdapter, zoneTypeAdapter, siteTypeAdapter;
 
     String[] departmentOptions = {
             "Amazonas", "Áncash","Apurímac","Arequipa","Ayacucho","Cajamarca","Callao","Cusco","Huancavelica","Huánuco","Ica","Junín","La Libertad","Lambayeque","Lima","Loreto","Madre de Dios","Moquegua","Pasco","Piura",
-            "Puno","San Martín","Tacna","Tumbes","Ucayali","Amazonas","Áncash","Apurímac","Arequipa","Ayacucho","Cajamarca","Callao",
-            "Cusco","Huancavelica","Huánuco","Ica","Junín","La Libertad","Lambayeque","Lima","Loreto","Madre de Dios","Moquegua",
-            "Pasco","Piura","Puno","San Martín","Tacna","Tumbes","Ucayali"};
-    // Cambia a tus opciones reales
-    //String[] provinceOptions = {"Province A", "Province B", "Province C"}; // Cambia a tus opciones reales
-    //String[] districtOptions = {"District X", "District Y", "District Z"}; // Cambia a tus opciones reales
-    String[] zoneTypeOptions = {"Rural", "Urbano"}; // Cambia a tus opciones reales
-    String[] siteTypeOptions = {"Fijo", "Móvil"}; // Cambia a tus opciones reales
+            "Puno","San Martín","Tacna","Tumbes","Ucayali"};
+    // Opciones para tipos de zona y sitio
+    String[] zoneTypeOptions = {"Rural", "Urbano"};
+    String[] siteTypeOptions = {"Fijo", "Móvil"};
     FirebaseFirestore db;
     int resultSize;
     private ActivityResultLauncher<Intent> activityResultLauncher;
     Map<String, String[]> provincesMap = new HashMap<>();
-    //Map<String, String[]> districtsMap = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,15 +81,22 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         // Inicializar los Maps
         initializeLocationData();
 
+        LinearLayout layoutDepartamento = findViewById(R.id.layoutDepartmento);
+        LinearLayout layoutProvincia = findViewById(R.id.layoutProvincia);
+        LinearLayout layoutDistrito = findViewById(R.id.layoutDistrito);
+
+
         // Encuentra las referencias a los campos de autocompletado
         selectDepartment = findViewById(R.id.selectDepartment);
         selectProvince = findViewById(R.id.selectProvince);
+        selectZoneType = findViewById(R.id.selectZoneType);
+        selectSiteType = findViewById(R.id.selectSiteType);
 
         // Inicializa los adaptadores con las opciones
         departmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, departmentOptions);
         selectDepartment.setAdapter(departmentAdapter);
 
-        // Listener para el departamento
+        // Configurar el listener para el departamento
         selectDepartment.setOnItemClickListener((parent, view, position, id) -> {
             String selectedDepartment = departmentOptions[position];
             String[] provinces = provincesMap.get(selectedDepartment);
@@ -108,21 +107,12 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
             }
         });
 
-        // Encuentra las referencias a los campos de autocompletado
-        selectDepartment = findViewById(R.id.selectDepartment);
-        selectProvince = findViewById(R.id.selectProvince);
-        selectZoneType = findViewById(R.id.selectZoneType);
-        selectSiteType = findViewById(R.id.selectSiteType);
-
         // Inicializa los adaptadores con las opciones
-        //departmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, departmentOptions);
-        //provinceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, provinceOptions);
         zoneTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, zoneTypeOptions);
         siteTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, siteTypeOptions);
 
         // Asigna los adaptadores a los campos de autocompletado
         selectDepartment.setAdapter(departmentAdapter);
-        selectProvince.setAdapter(provinceAdapter);
         selectZoneType.setAdapter(zoneTypeAdapter);
         selectSiteType.setAdapter(siteTypeAdapter);
 
@@ -142,7 +132,6 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
 
         // Obtener el indicador de si se está editando desde el Intent
         isEditing = getIntent().getBooleanExtra("isEditing", false);
-
 
         imageView = findViewById(R.id.imageViewNewSite);
         imageView.setOnClickListener(v -> openFileChooser());
@@ -170,6 +159,10 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         if (isEditing) {
             // Si se está editando, inflar el menú de editar sitio
             topAppBar.inflateMenu(R.menu.top_app_bar_edit);
+            layoutDepartamento.setVisibility(View.GONE);
+            layoutProvincia.setVisibility(View.GONE);
+            layoutDistrito.setVisibility(View.GONE);
+
         } else {
             // Si se está creando, inflar el menú de crear sitio
             topAppBar.inflateMenu(R.menu.top_app_bar_new);
@@ -181,7 +174,7 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
             element = (ListElementSite) intent.getSerializableExtra("ListElementSite");
             isEditing = true; // Indicar que se está editando un sitio existente
             fillFields(element); // Llenar campos con los datos del sitio existente
-            topAppBar.setTitle("Editar Sitio"); // Cambiar título de la actividad
+            topAppBar.setTitle("Editar "+element.getName().toUpperCase()); // Cambiar título de la actividad
         } else {
             topAppBar.setTitle("Nuevo Sitio"); // Cambiar título de la actividad
         }
@@ -198,88 +191,9 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
             }
         });
 
-
-        /*topAppBar.setOnMenuItemClickListener(item -> {
-                    if (item.getItemId() == R.id.createNewTopAppBar) {
-                        if (areFieldsEmpty()) {
-                            Toast.makeText(MainActivity_2_Sites_NewSite.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
-                        } else {
-                            String department = selectDepartment.getText().toString();
-                            String province = selectProvince.getText().toString();
-                            String district = selectDistrict.getText().toString();
-                            String zonetype = selectZoneType.getText().toString();
-                            String sitetype = selectSiteType.getText().toString();
-                            String location = editSiteCoordenadas.getText().toString();
-                            Double latitud = latitude;
-                            Double longitud = longitude;
-                            String coordenadas = String.valueOf(latitud) + " ; " + String.valueOf(longitud);
-                            String name = department.substring(0, 3) + "-" + String.valueOf(resultSize+1);
-                            String address = editAddress.getText().toString();
-                            String status = "Activo";
-                            String ubigeo = editUbigeo.getText().toString();
-                            LocalDate fechaActual = LocalDate.now();
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                            String fechaCreacion = fechaActual.format(formatter);
-
-                            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion,imagen);
-                            db.collection("sitios")
-                                    .document(name)
-                                    .set(listElement)
-                                    .addOnSuccessListener(unused -> {
-                                        Log. d("msg-test","Data guardada exitosamente");
-                                    })
-                                    .addOnFailureListener(e -> e.printStackTrace()) ;
-
-                            // Iniciar la actividad de perfil de sitio y pasar los datos
-                            Intent intent2 = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_SiteDetails.class);
-                            intent2.putExtra("ListElementSite", listElement);
-                            startActivity(intent2);
-                            finish();
-                        }
-                        return true;
-                    }else if (item.getItemId() == R.id.saveOldTopAppBar) {
-                        if (areFieldsEmpty()) {
-                            Toast.makeText(MainActivity_2_Sites_NewSite.this, "Debe completar todos los datos", Toast.LENGTH_SHORT).show();
-                        } else {
-                            String department = selectDepartment.getText().toString();
-                            String province = selectProvince.getText().toString();
-                            String district = selectDistrict.getText().toString();
-                            String zonetype = selectZoneType.getText().toString();
-                            String sitetype = selectSiteType.getText().toString();
-                            String location = editSiteCoordenadas.getText().toString();
-                            Double latitud = latitude;
-                            Double longitud = longitude;
-                            String coordenadas = String.valueOf(latitud) + " ; " + String.valueOf(longitud);
-                            String name = department.substring(0, 3) + "-" + String.valueOf(resultSize+1);
-                            String address = editAddress.getText().toString();
-                            String status = "Activo";
-                            String ubigeo = editUbigeo.getText().toString();
-                            LocalDate fechaActual = LocalDate.now();
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                            String fechaCreacion = fechaActual.format(formatter);
-
-                            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion);
-
-                            db.collection("sitios")
-                                    .document(name)
-                                    .set(listElement)
-                                    .addOnSuccessListener(unused -> {
-                                        Log. d("msg-test","Data guardada exitosamente");
-                                    })
-                                    .addOnFailureListener(e -> e.printStackTrace()) ;
-
-                            Intent intent3 = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_SiteDetails.class);
-                            intent3.putExtra("ListElement", listElement);
-                            startActivity(intent3);
-                        }
-                        return true;
-                    } else{
-                        return false;
-                    }
-        }); */
-
         topAppBar.setNavigationOnClickListener(v -> {
             finish();
+
         });
 
         // Primero, registra un ActivityResultLauncher en tu actividad
@@ -300,17 +214,12 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
                     }
                 });
 
-// Luego, en tu onClickListener, usa el ActivityResultLauncher para iniciar la actividad
-        textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Aquí iniciamos la actividad MapActivity para que el usuario pueda seleccionar la ubicación
-                Intent intent = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_MappChooser.class);
-                launcher.launch(intent);
-            }
+        // Luego, en tu onClickListener, usa el ActivityResultLauncher para iniciar la actividad
+        textInputLayout.setEndIconOnClickListener(v -> {
+            // Aquí iniciamos la actividad MapActivity para que el usuario pueda seleccionar la ubicación
+            Intent intent2 = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_MappChooser.class);
+            launcher.launch(intent2);
         });
-
-
     }
 
     private void openFileChooser() {
@@ -372,7 +281,6 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     private void createNewSite() {
         if (areFieldsEmpty() || !isImageAdded) {
             Toast.makeText(MainActivity_2_Sites_NewSite.this, "Debe completar todos los datos y seleccionar una imagen", Toast.LENGTH_SHORT).show();
@@ -412,8 +320,9 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
             String location = editSiteCoordenadas.getText().toString();
             Double latitud = latitude;
             Double longitud = longitude;
-            String coordenadas = String.valueOf(latitud) + " ; " + String.valueOf(longitud);
-            String name = department.substring(0, 3) + "-" + String.valueOf(resultSize+1);
+            String coordenadas_edit = String.valueOf(latitud) + " ; " + String.valueOf(longitud);
+            String coordenadas = (latitude != 0.0 && longitude != 0.0) ? coordenadas_edit : element.getCoordenadas();
+            String name = element.getName();
             String address = editAddress.getText().toString();
             String status = "Activo";
             String ubigeo = editUbigeo.getText().toString();
@@ -438,70 +347,41 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
     }
 
     private void fillFields(ListElementSite element) {
-        selectDepartment.setText(element.getDepartment());
-        selectProvince.setText(element.getProvince());
-        editDistrict.setText(element.getDistrict());
-        selectZoneType.setText(element.getZonetype());
-        selectSiteType.setText(element.getSitetype());
-        editSiteCoordenadas.setText(element.getCoordenadas());
-        nombredesitio = element.getName();
+        // Establecer el valor del departamento sin filtrar el adaptador
+        selectDepartment.setText(element.getDepartment(), false);
+
+        // Obtener las provincias correspondientes al departamento
+        String selectedDepartment = element.getDepartment();
+        String[] provinces = provincesMap.get(selectedDepartment);
+        if (provinces != null) {
+            provinceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, provinces);
+            selectProvince.setAdapter(provinceAdapter);
+        }
+
+        // Establecer el valor de la provincia sin filtrar el adaptador
+        selectProvince.setText(element.getProvince(), false);
+
+        // Configurar los adaptadores para los tipos de zona y sitio
+        zoneTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, zoneTypeOptions);
+        selectZoneType.setAdapter(zoneTypeAdapter);
+        selectZoneType.setText(element.getZonetype(), false); // Establecer el valor de la zona
+
+        siteTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, siteTypeOptions);
+        selectSiteType.setAdapter(siteTypeAdapter);
+        selectSiteType.setText(element.getSitetype(), false); // Establecer el valor del tipo de sitio
+
+        // Rellenar los demás campos
         editAddress.setText(element.getAddress());
+        editDistrict.setText(element.getDistrict());
         editUbigeo.setText(element.getUbigeo());
         editSiteCoordenadas.setText(element.getCoordenadas());
-        nombredesitio = element.getName();
 
+        // Si hay una imagen existente, decodificarla y mostrarla
         if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
             byte[] decodedString = Base64.decode(element.getImageUrl(), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             imageView.setImageBitmap(decodedByte);
             isImageAdded = true; // Actualizar la variable cuando se rellena una imagen existente
-        }
-    }
-
-    public void crearCanalesNotificacion() {
-        NotificationChannel channel = new NotificationChannel(canal1,
-                "Canal Users Creation",
-                NotificationManager.IMPORTANCE_DEFAULT);
-        channel.setDescription("Canal para notificaciones de creación de perfiles de usuario con prioridad default");
-        channel.enableVibration(true);
-
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
-
-        pedirPermisos();
-    }
-
-    public void pedirPermisos() {
-        // TIRAMISU = 33
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{POST_NOTIFICATIONS, READ_EXTERNAL_STORAGE}, 101);
-        }
-    }
-
-    public void notificarImportanceDefault(String fullname, String fechaCreacion) {
-        //Crear notificación
-        //Agregar información a la notificación que luego sea enviada a la actividad que se abre
-        Intent intent = new Intent(this, MainActivity_0_NavigationAdmin.class);
-        intent.putExtra("pid", 4616);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        //
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, canal1)
-                .setSmallIcon(R.drawable.ic_addperson_filled_black)
-                .setContentTitle("Nuevo registrado")
-                .setContentText("Usuario : " + fullname + "\nFecha: " + fechaCreacion)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
-
-        Notification notification = builder.build();
-
-        //Lanzar notificación
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-        if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            notificationManager.notify(1, notification);
         }
     }
 

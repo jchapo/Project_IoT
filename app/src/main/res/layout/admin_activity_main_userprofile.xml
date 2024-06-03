@@ -22,8 +22,7 @@
             android:id="@+id/topAppBarUserPerfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_back_outline_black"
-            app:title="Perfil de usuario" />
+            app:navigationIcon="@drawable/ic_back_outline_black" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -41,75 +40,90 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal"
-                app:cardCornerRadius="75dp">
-
-                <ImageView
-                    android:id="@+id/imageViewProfileAdmin"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/default_profile" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:id="@+id/fullNameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nombre y apellido"
-                android:textStyle="bold"
-                android:textSize="16sp"
-
-                android:layout_gravity="center_horizontal"/>
-
-            <TextView
-                android:id="@+id/cargoTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cargo"
-                android:layout_marginBottom="16dp"
-
-                android:layout_gravity="center_horizontal"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_gravity="center_horizontal"
                 android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/icono1"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_chat_outline"
-                    android:clickable="true"
-                    android:layout_marginEnd="16dp"
-                    android:onClick="icono1Click"/>
+                    android:gravity="center">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        app:cardCornerRadius="75dp">
 
-                <ImageView
-                    android:id="@+id/icono2"
-                    android:layout_width="wrap_content"
+                        <ImageView
+                            android:id="@+id/imageViewProfileAdmin"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/default_profile" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_mail_outline"
-                    android:clickable="true"
-                    android:layout_marginEnd="16dp"
-                    android:onClick="icono2Click"/>
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/fullNameTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre y apellido"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_gravity="center_horizontal"/>
+                    <TextView
+                        android:id="@+id/cargoTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cargo"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_gravity="center_horizontal"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center">
 
-                <ImageView
-                    android:id="@+id/icono3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_phone_outline"
-                    android:clickable="true"
-                    android:onClick="icono3Click"/>
+                        <ImageView
+                            android:id="@+id/icono1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_chat_outline"
+                            android:clickable="true"
+                            android:layout_marginEnd="16dp"
+                            android:onClick="icono1Click"/>
 
+                        <ImageView
+                            android:id="@+id/icono2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_mail_outline"
+                            android:clickable="true"
+                            android:layout_marginEnd="16dp"
+                            android:onClick="icono2Click"/>
+
+                        <ImageView
+                            android:id="@+id/icono3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_phone_outline"
+                            android:clickable="true"
+                            android:onClick="icono3Click"/>
+
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Divider -->
@@ -238,7 +252,8 @@
                     app:cardElevation="0dp"
                     android:layout_marginBottom="8dp"
                     app:cardBackgroundColor="@color/md_theme_inverseOnSurface_mediumContrast"
-                    app:cardCornerRadius="8dp">
+                    app:cardCornerRadius="8dp"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"

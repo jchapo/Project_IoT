@@ -18,9 +18,11 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -63,6 +65,8 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
     private Uri imageUri;
     FirebaseStorage storage;
     StorageReference storageReference;
+    ListElementUser element;
+
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
@@ -73,6 +77,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         // Initialize Firebase Storage
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        LinearLayout layoutDNI = findViewById(R.id.layoutDNI);
 
         imageView = findViewById(R.id.imageViewProfile);
         imageView.setOnClickListener(v -> openFileChooser());
@@ -114,6 +119,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         if (isEditing) {
             // Si se está editando, inflar el menú de editar usuario
             topAppBar.inflateMenu(R.menu.top_app_bar_edit);
+            layoutDNI.setVisibility(View.GONE);
         } else {
             // Si se está creando, inflar el menú de crear usuario
             topAppBar.inflateMenu(R.menu.top_app_bar_new);
@@ -122,7 +128,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         // Verificar si se está editando un usuario existente o creando uno nuevo
         Intent intent = getIntent();
         if (intent.hasExtra("ListElement")) {
-            ListElementUser element = (ListElementUser) intent.getSerializableExtra("ListElement");
+            element = (ListElementUser) intent.getSerializableExtra("ListElement");
             isEditing = true; // Indicar que se está editando un usuario existente
             fillFields(element); // Llenar campos con los datos del usuario existente
             topAppBar.setTitle("Editar Usuario"); // Cambiar título de la actividad
@@ -216,7 +222,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String typeUser = selectTypeUser.getText().toString();
             String firstName = editFirstName.getText().toString();
             String lastName = editLastName.getText().toString();
-            String dni = editDNI.getText().toString();
+            String dni = element.getDni();
             String mail = editMail.getText().toString();
             String address = editAddress.getText().toString();
             String phone = editPhone.getText().toString();
