@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Admin.dataHolder.DataHolder;
 import com.example.myapplication.Admin.items.ListAdapterAddSite;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
@@ -21,18 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
-    private NavigationActivityViewModel viewModel;
     private ListAdapterAddSite listAdapter;
     private RecyclerView recyclerView;
     private List<ListElementSite> elements;
+    private static final int REQUEST_CODE_ADD_SITE = 1; // Define el código de solicitud
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_add_site_admin);
-
-        // Utiliza el mismo ViewModel
-        viewModel = new ViewModelProvider(this).get(NavigationActivityViewModel.class);
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarAddSiteUser);
         topAppBar.inflateMenu(R.menu.top_app_bar_select);
@@ -40,7 +40,11 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
         init();
 
         topAppBar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.chooseSuper) {
+            if (item.getItemId() == R.id.chooseSite) {
+                ArrayList<String> selectedSitesNames = getSelectedSitesNames();
+                Intent resultIntent = new Intent();
+                resultIntent.putStringArrayListExtra("selectedSites", selectedSitesNames);
+                setResult(RESULT_OK, resultIntent);
                 Toast.makeText(this, "Sitio asignado", Toast.LENGTH_SHORT).show();
                 finish();
             } else {
@@ -50,6 +54,16 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
         });
 
         topAppBar.setNavigationOnClickListener(v -> finish());
+    }
+
+
+
+    private ArrayList<String> getSelectedSitesNames() {
+        ArrayList<String> selectedNames = new ArrayList<>();
+        for (ListElementSite site : listAdapter.getSelectedItems()) {
+            selectedNames.add(site.getName());
+        }
+        return selectedNames;
     }
 
     private void init() {
@@ -62,24 +76,14 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
         listAdapter = new ListAdapterAddSite(this, elements);
         recyclerView.setAdapter(listAdapter);
 
-        // Observar cambios en activeSites para actualizar automáticamente la lista
-        viewModel.getActiveSites().observe(this, new Observer<ArrayList<ListElementSite>>() {
-            @Override
-            public void onChanged(ArrayList<ListElementSite> sites) {
-                if (sites != null) {
-                    elements.clear();
-                    elements.addAll(sites);
-                    listAdapter.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(MainActivity_2_Sites_AddSite.this, "No active sites found", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        ArrayList<ListElementSite> activeSitesHolder = DataHolder.getInstance().getActiveSites();
+        if (activeSitesHolder != null) {
+            elements.clear();
+            elements.addAll(activeSitesHolder);
+            listAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(MainActivity_2_Sites_AddSite.this, "No active sites found", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    public void moveToDescription(ListElementSite item) {
-        Intent intent = new Intent(this, MainActivity_2_Sites_SiteDetails.class);
-        intent.putExtra("ListElementSite", item);
-        startActivity(intent);
-    }
 }

@@ -32,6 +32,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myapplication.Admin.dataHolder.DataHolder;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
@@ -56,6 +57,7 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
     AdminActivityMainNavigationBinding binding;
     private DrawerLayout drawerLayout;
     private BottomNavigationView bottomNavigationView;
+
     FirebaseFirestore db;
     NavigationActivityViewModel navigationActivityViewModel;
     private ArrayList<ListElementUser> activeUsers, inactiveUsers;
@@ -180,7 +182,8 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
 
                         navigationActivityViewModel.getActiveUsers().setValue(activeUsers);
                         navigationActivityViewModel.getInactiveUsers().setValue(inactiveUsers);
-
+                        DataHolder.getInstance().setActiveUsers(activeUsers);
+                        DataHolder.getInstance().setInactiveUsers(inactiveUsers);
                         // Una vez que se cargan los usuarios, cargar sitios desde Firestore
                         db = FirebaseFirestore.getInstance();
                         loadSitesFromFirestore();
@@ -215,6 +218,9 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
                         // Una vez que se cargan los sitios, actualizar el ViewModel con los datos
                         navigationActivityViewModel.getActiveSites().setValue(activeSites);
                         navigationActivityViewModel.getInactiveSites().setValue(inactiveSites);
+                        DataHolder.getInstance().setActiveSites(activeSites);
+                        DataHolder.getInstance().setInactiveSites(inactiveSites);
+
                     } else {
                         Log.d("msg-test", "Error getting site documents: ", task.getException());
                     }

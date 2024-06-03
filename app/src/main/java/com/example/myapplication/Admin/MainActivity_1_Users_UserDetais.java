@@ -8,12 +8,16 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -22,6 +26,7 @@ import com.example.myapplication.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,11 +42,32 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
     FirebaseFirestore db;
     String estado;
     ImageView profileImageView;
+    private static final int REQUEST_CODE_ADD_SITE = 1; // Define el código de solicitud
+    private ActivityResultLauncher<Intent> addSiteLauncher;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_userprofile);
+
+        // Inicializa el ActivityResultLauncher
+        addSiteLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            ArrayList<String> selectedSites = data.getStringArrayListExtra("selectedSites");
+                            // Procesa la lista de sitios seleccionados
+                            for (String site : selectedSites) {
+                                Log.d("SelectedSite", site);
+                            }
+                        }
+                    }
+                }
+        );
 
         ListElementUser element = (ListElementUser) getIntent().getSerializableExtra("ListElement");
         nameDescriptionTextView = findViewById(R.id.fullNameTextView);
@@ -88,8 +114,8 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
 
         // Agregar un OnClickListener al FrameLayout
         btnAddSiteUserProfile.setOnClickListener(v -> {
-            Intent intent7 = new Intent(MainActivity_1_Users_UserDetais.this, MainActivity_2_Sites_AddSite.class);
-            startActivity(intent7);
+            Intent intent = new Intent(this, MainActivity_2_Sites_AddSite.class);
+            addSiteLauncher.launch(intent);
         });
 
         textoHabilitar = findViewById(R.id.deleteUserPerfil);
@@ -107,6 +133,17 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
 
         findViewById(R.id.deleteUserPerfil).setOnClickListener(v -> showConfirmationDialog(v, estado));
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_ADD_SITE && resultCode == RESULT_OK) {
+            if (data != null) {
+                ArrayList<String> selectedSites = data.getStringArrayListExtra("selectedSites");
+                // Procesa la lista de sitios seleccionados
+            }
+        }
     }
 
     public void showConfirmationDialog(View view, String currentState) {
