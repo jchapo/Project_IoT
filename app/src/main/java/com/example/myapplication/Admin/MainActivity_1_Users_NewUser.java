@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -27,13 +26,11 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.bumptech.glide.Glide;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -42,12 +39,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -187,7 +180,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                     Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
-        Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetais.class);
+        Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetails.class);
         intent3.putExtra("ListElement", listElement);
         startActivity(intent3);
     }
@@ -209,8 +202,9 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String fechaCreacion = fechaActual.format(formatter);
             Integer primerInicio = 0;
             String imagen = "";
+            String sitiosAsignados = "";
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagen);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagen,sitiosAsignados);
             uploadImageAndSaveUser(listElement, false);
         }
     }
@@ -230,8 +224,9 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String fechaCreacion = editFechaCreacion.getText().toString();
             Integer primerInicio = Integer.parseInt(editPrimerInicio.getText().toString());
             String imagen = "";
+            String sitiosAsignados = element.getSitiosAsignados();
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagen);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagen, sitiosAsignados);
             uploadImageAndSaveUser(listElement, true);
         }
     }

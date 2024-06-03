@@ -1,36 +1,35 @@
 package com.example.myapplication.Admin;
 
 import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
+public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
 
     TextView nameDescriptionTextView;
     TextView userDescriptionTextView;
@@ -38,36 +37,20 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
     TextView mailDescriptionTextView;
     TextView phoneDescriptionTextView;
     TextView addressDescriptionTextView;
-    TextView textoHabilitar;
+    TextView textoHabilitar,textViewDevider2;
     FirebaseFirestore db;
     String estado;
     ImageView profileImageView;
-    private static final int REQUEST_CODE_ADD_SITE = 1; // Define el código de solicitud
-    private ActivityResultLauncher<Intent> addSiteLauncher;
-
-
+    LinearLayout assignedSitesLayout;
+    View deviderSitiosAsignados;
+    FrameLayout FrameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_userprofile);
 
-        // Inicializa el ActivityResultLauncher
-        addSiteLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        Intent data = result.getData();
-                        if (data != null) {
-                            ArrayList<String> selectedSites = data.getStringArrayListExtra("selectedSites");
-                            // Procesa la lista de sitios seleccionados
-                            for (String site : selectedSites) {
-                                Log.d("SelectedSite", site);
-                            }
-                        }
-                    }
-                }
-        );
+        db = FirebaseFirestore.getInstance();
 
         ListElementUser element = (ListElementUser) getIntent().getSerializableExtra("ListElement");
         nameDescriptionTextView = findViewById(R.id.fullNameTextView);
@@ -77,6 +60,9 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
         phoneDescriptionTextView = findViewById(R.id.textViewPhone);
         addressDescriptionTextView = findViewById(R.id.textViewAddress);
         profileImageView = findViewById(R.id.imageViewProfileAdmin);
+        textViewDevider2 = findViewById(R.id.textViewDevider2);
+        deviderSitiosAsignados = findViewById(R.id.deviderSitiosAsignados);
+        FrameLayout = findViewById(R.id.btnAddSiteUserProfile);
 
         nameDescriptionTextView.setText(element.getName());
         mailDescriptionTextView.setText(element.getMail());
@@ -94,7 +80,7 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
         }
 
         Toolbar toolbar = findViewById(R.id.topAppBarUserPerfil);
-        toolbar.setTitle("Perfil "+element.getName().toUpperCase());
+        toolbar.setTitle("Perfil " + element.getName().toUpperCase());
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(v -> {
@@ -103,19 +89,22 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
 
         // Agregar Listener al botón flotante de editar
         findViewById(R.id.fabEditUserAdmin).setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity_1_Users_UserDetais.this, MainActivity_1_Users_NewUser.class);
+            Intent intent = new Intent(MainActivity_1_Users_UserDetails.this, MainActivity_1_Users_NewUser.class);
             intent.putExtra("isEditing", true);
             intent.putExtra("ListElement", element);
             startActivity(intent);
         });
 
-        // Obtener referencia al FrameLayout que actuará como botón
+        // Inicializar el FrameLayout y agregarlo una vez
+        assignedSitesLayout = findViewById(R.id.assignedSitesLayout);
         FrameLayout btnAddSiteUserProfile = findViewById(R.id.btnAddSiteUserProfile);
+        assignedSitesLayout.addView(btnAddSiteUserProfile, 0); // Agregarlo al principio del layout
 
         // Agregar un OnClickListener al FrameLayout
         btnAddSiteUserProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity_2_Sites_AddSite.class);
-            addSiteLauncher.launch(intent);
+            Intent intent7 = new Intent(this, MainActivity_2_Sites_AddSite.class);
+            intent7.putExtra("idDNI", element.getDni());
+            startActivity(intent7);
         });
 
         textoHabilitar = findViewById(R.id.deleteUserPerfil);
@@ -125,6 +114,9 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
             textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
             textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0); // Icono a la izquierda
         } else {
+            textViewDevider2.setVisibility(View.GONE);
+            deviderSitiosAsignados.setVisibility(View.GONE);
+            btnAddSiteUserProfile.setVisibility(View.GONE);
             // Cambiar el texto, color y ícono para "Habilitar Usuario"
             textoHabilitar.setText("Habilitar Usuario");
             textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme())); // Suponiendo que tienes un color para habilitar
@@ -133,19 +125,9 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
 
         findViewById(R.id.deleteUserPerfil).setOnClickListener(v -> showConfirmationDialog(v, estado));
 
+        // Obtener los sitios asignados y mostrarlos
+        showAssignedSites(element);
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_ADD_SITE && resultCode == RESULT_OK) {
-            if (data != null) {
-                ArrayList<String> selectedSites = data.getStringArrayListExtra("selectedSites");
-                // Procesa la lista de sitios seleccionados
-            }
-        }
-    }
-
     public void showConfirmationDialog(View view, String currentState) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Confirmación");
@@ -176,7 +158,7 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
                     .addOnSuccessListener(aVoid -> {
                         // Mostrar el Toast indicando el nuevo estado del usuario
                         String toastMessage = newState.equals("Inactivo") ? "El usuario ha sido inhabilitado" : "El usuario ha sido habilitado";
-                        Toast.makeText(MainActivity_1_Users_UserDetais.this, toastMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity_1_Users_UserDetails.this, toastMessage, Toast.LENGTH_SHORT).show();
                         // Actualizar la interfaz de usuario
                         updateUIBasedOnState(newState);
                         // Terminar la actividad actual y regresar a la actividad anterior
@@ -184,7 +166,7 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
                     })
                     .addOnFailureListener(e -> {
                         // Manejo de error en caso de fallo
-                        Toast.makeText(MainActivity_1_Users_UserDetais.this, "Error al actualizar el estado del usuario", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity_1_Users_UserDetails.this, "Error al actualizar el estado del usuario", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     });
         });
@@ -193,8 +175,64 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
         builder.show();
     }
 
+    private void showAssignedSites(ListElementUser element) {
+        String assignedSitesJson = element.getSitiosAsignados();
+        ArrayList<String> assignedSites;
+
+        if (assignedSitesJson == null || assignedSitesJson.isEmpty()) {
+            assignedSites = new ArrayList<>(); // Inicializar como lista vacía si el JSON es nulo o vacío
+        } else {
+            assignedSites = new Gson().fromJson(assignedSitesJson, new TypeToken<ArrayList<String>>(){}.getType());
+        }
+
+        // Limpiar el layout antes de agregar los sitios asignados, excepto el primer hijo (btnAddSiteUserProfile)
+        assignedSitesLayout.removeViews(1, assignedSitesLayout.getChildCount() - 1);
+
+        // Crear dinámicamente los CardView para cada sitio asignado
+        for (String site : assignedSites) {
+            View siteCard = getLayoutInflater().inflate(R.layout.admin_sitio_asignado_card, assignedSitesLayout, false);
+            TextView siteTextView = siteCard.findViewById(R.id.siteAsignedTextView);
+            siteTextView.setText(site);
+
+            ImageView removeButton = siteCard.findViewById(R.id.botonEliminarSitioAsignado);
+            removeButton.setOnClickListener(v -> showRemoveSiteConfirmationDialog(element, site));
+
+            assignedSitesLayout.addView(siteCard);
+        }
+    }
+
+    private void removeSite(ListElementUser element, String site) {
+        String assignedSitesJson = element.getSitiosAsignados();
+        ArrayList<String> assignedSites = new Gson().fromJson(assignedSitesJson, new TypeToken<ArrayList<String>>(){}.getType());
+        assignedSites.remove(site);
+
+        element.setSitiosAsignados(new Gson().toJson(assignedSites));
+        // Actualizar en Firestore
+        db.collection("usuarios")
+                .document(element.getDni())
+                .update("sitiosAsignados", new Gson().toJson(assignedSites))
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Sitio removido", Toast.LENGTH_SHORT).show();
+                    showAssignedSites(element);  // Actualizar la UI
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error al remover el sitio", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                });
+    }
+
+    private void showRemoveSiteConfirmationDialog(ListElementUser element, String site) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle("Confirmación");
+        builder.setMessage("¿Está seguro de que desea remover este sitio?");
+        builder.setPositiveButton("Aceptar", (dialog, which) -> removeSite(element, site));
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
+    }
+
     private void updateUIBasedOnState(String state) {
         TextView textoHabilitar = findViewById(R.id.deleteUserPerfil);
+
 
         if (state.equals("Activo")) {
             textoHabilitar.setText("Inhabilitar Usuario");
@@ -212,7 +250,7 @@ public class MainActivity_1_Users_UserDetais extends AppCompatActivity {
         builder.setMessage("¿Está seguro de que desea remover este sitio?")
                 .setPositiveButton("Aceptar", (dialog, id) -> {
                     // Eliminar el supervisor y mostrar el toast
-                    Toast.makeText(MainActivity_1_Users_UserDetais.this, "Sitio removido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity_1_Users_UserDetails.this, "Sitio removido", Toast.LENGTH_SHORT).show();
                     // Aquí debes agregar el código para eliminar el supervisor
                 })
                 .setNegativeButton("Cancelar", (dialog, id) -> {

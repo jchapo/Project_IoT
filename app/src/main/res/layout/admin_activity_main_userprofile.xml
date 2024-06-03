@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin.MainActivity_1_Users_NewUser">
+    tools:context=".Admin.MainActivity_1_Users_UserDetails">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:background="@color/md_theme_inverseOnSurface"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -31,8 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -131,7 +129,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray"
-                app:layout_constraintTop_toBottomOf="@id/encabezadoLinearLayout"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"/>
 
@@ -141,9 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="Datos personales"
-                tools:layout_editor_absoluteX="176dp"
-                tools:layout_editor_absoluteY="234dp" />
+                android:text="Datos personales" />
 
 
             <LinearLayout
@@ -225,6 +220,7 @@
 
 
             <View
+                android:id="@+id/deviderSitiosAsignados"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"
@@ -236,24 +232,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="Sitios asignados"
-                tools:layout_editor_absoluteX="176dp"
-                tools:layout_editor_absoluteY="234dp" />
+                android:text="Sitios asignados" />
 
             <LinearLayout
+                android:id="@+id/assignedSitesLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical" />
 
-                <!-- Primer CardView -->
-                <androidx.cardview.widget.CardView
+            <androidx.cardview.widget.CardView
+                android:id="@+id/agregarSitio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="8dp">
+
+                <FrameLayout
+                    android:id="@+id/btnAddSiteUserProfile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardElevation="0dp"
-                    android:layout_marginBottom="8dp"
-                    app:cardBackgroundColor="@color/md_theme_inverseOnSurface_mediumContrast"
-                    app:cardCornerRadius="8dp"
-                    android:visibility="gone">
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -267,18 +268,18 @@
                             android:padding="8dp"
                             android:layout_gravity="center"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/ic_person_outline" />
+                            android:src="@drawable/ic_locationadd_outline" />
 
                         <!-- Texto en el centro -->
                         <TextView
-                            android:id="@+id/siteAsignedTextView"
+                            android:id="@+id/textViewLocation"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:padding="8dp"
-                            android:text="ARQ-01" />
+                            android:text="Asignar nuevo sitio" />
 
                         <!-- Icono a la derecha -->
                         <ImageView
@@ -286,68 +287,12 @@
                             android:layout_height="48dp"
                             android:padding="8dp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/ic_remove_outline"
-                            android:onClick="showRemoveSiteConfirmationDialog" />
+                            android:src="@drawable/ic_mas_anadir" />
+
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardElevation="0dp"
 
-                    android:layout_marginBottom="8dp"
-                    app:cardCornerRadius="8dp">
-
-                    <FrameLayout
-                        android:id="@+id/btnAddSiteUserProfile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <!-- Imagen a la izquierda -->
-                            <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:padding="8dp"
-                                android:layout_gravity="center"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/ic_locationadd_outline" />
-
-                            <!-- Texto en el centro -->
-                            <TextView
-                                android:id="@+id/textViewLocation"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical"
-                                android:padding="8dp"
-                                android:text="Asignar nuevo sitio" />
-
-                            <!-- Icono a la derecha -->
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:padding="8dp"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/ic_mas_anadir" />
-
-                        </LinearLayout>
-
-                    </FrameLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Resto de CardViews similares -->
-
-            </LinearLayout>
-
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
