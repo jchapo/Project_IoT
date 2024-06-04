@@ -97,7 +97,6 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         // Obtener el indicador de si se está editando desde el Intent
-        isEditing = getIntent().getBooleanExtra("isEditing", false);
 
         editFirstName = findViewById(R.id.editFirstName);
         editLastName = findViewById(R.id.editLastttName);

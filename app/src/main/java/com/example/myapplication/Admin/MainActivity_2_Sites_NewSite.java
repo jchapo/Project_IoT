@@ -196,7 +196,8 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
 
         });
 
-        // Primero, registra un ActivityResultLauncher en tu actividad
+        // Primero, registra un Activity
+        // ResultLauncher en tu actividad
         ActivityResultLauncher<Intent> launcher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
