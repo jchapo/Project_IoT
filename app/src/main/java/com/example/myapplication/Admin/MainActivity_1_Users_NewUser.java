@@ -17,21 +17,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.bumptech.glide.Glide;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -40,12 +39,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -63,6 +58,8 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
     private Uri imageUri;
     FirebaseStorage storage;
     StorageReference storageReference;
+    ListElementUser element;
+
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
@@ -73,6 +70,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         // Initialize Firebase Storage
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        LinearLayout layoutDNI = findViewById(R.id.layoutDNI);
 
         imageView = findViewById(R.id.imageViewProfile);
         imageView.setOnClickListener(v -> openFileChooser());
@@ -93,6 +91,8 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         selectTypeUser = findViewById(R.id.selectTypeUser);
         typeUserAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, typeOptions);
         selectTypeUser.setAdapter(typeUserAdapter);
+        // Establecer la opción preseleccionada en "Supervisor"
+        selectTypeUser.setText("Supervisor", false);
 
         db = FirebaseFirestore.getInstance();
 
@@ -112,6 +112,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         if (isEditing) {
             // Si se está editando, inflar el menú de editar usuario
             topAppBar.inflateMenu(R.menu.top_app_bar_edit);
+            layoutDNI.setVisibility(View.GONE);
         } else {
             // Si se está creando, inflar el menú de crear usuario
             topAppBar.inflateMenu(R.menu.top_app_bar_new);
@@ -120,7 +121,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         // Verificar si se está editando un usuario existente o creando uno nuevo
         Intent intent = getIntent();
         if (intent.hasExtra("ListElement")) {
-            ListElementUser element = (ListElementUser) intent.getSerializableExtra("ListElement");
+            element = (ListElementUser) intent.getSerializableExtra("ListElement");
             isEditing = true; // Indicar que se está editando un usuario existente
             fillFields(element); // Llenar campos con los datos del usuario existente
             topAppBar.setTitle("Editar Usuario"); // Cambiar título de la actividad
@@ -179,7 +180,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                     Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
-        Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetais.class);
+        Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetails.class);
         intent3.putExtra("ListElement", listElement);
         startActivity(intent3);
     }
@@ -201,8 +202,9 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String fechaCreacion = fechaActual.format(formatter);
             Integer primerInicio = 0;
             String imagen = "";
+            String sitiosAsignados = "";
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagen);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagen,sitiosAsignados);
             uploadImageAndSaveUser(listElement, false);
         }
     }
@@ -214,7 +216,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String typeUser = selectTypeUser.getText().toString();
             String firstName = editFirstName.getText().toString();
             String lastName = editLastName.getText().toString();
-            String dni = editDNI.getText().toString();
+            String dni = element.getDni();
             String mail = editMail.getText().toString();
             String address = editAddress.getText().toString();
             String phone = editPhone.getText().toString();
@@ -222,8 +224,9 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String fechaCreacion = editFechaCreacion.getText().toString();
             Integer primerInicio = Integer.parseInt(editPrimerInicio.getText().toString());
             String imagen = "";
+            String sitiosAsignados = element.getSitiosAsignados();
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagen);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagen, sitiosAsignados);
             uploadImageAndSaveUser(listElement, true);
         }
     }

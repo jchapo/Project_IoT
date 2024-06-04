@@ -55,6 +55,10 @@ public class ListAdapterAddSite extends RecyclerView.Adapter<ListAdapterAddSite.
         });
     }
 
+    public List<ListElementSite> getSelectedItems() {
+        return mSelectedItems;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iconImage;
         TextView name, location, status;
@@ -67,9 +71,7 @@ public class ListAdapterAddSite extends RecyclerView.Adapter<ListAdapterAddSite.
             location = itemView.findViewById(R.id.locationTextView);
             status = itemView.findViewById(R.id.statusTextView);
             checkBox = itemView.findViewById(R.id.checkBoxSiteSelect); // Inicializa CheckBox
-
         }
     }
-
-
 }
+

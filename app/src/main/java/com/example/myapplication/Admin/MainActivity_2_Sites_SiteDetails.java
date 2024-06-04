@@ -2,7 +2,9 @@ package com.example.myapplication.Admin;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -29,6 +31,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
     TextView textoHabilitar;
     FirebaseFirestore db;
     String estado;
+    String coordenadas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +49,14 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         provinceDescriptionTextView.setText(element.getProvince());
         districtDescriptionTextView.setText(element.getDistrict());
         estado = element.getStatus();
+        coordenadas = element.getCoordenadas();
 
         Toolbar toolbar = findViewById(R.id.topAppBarSitePerfilAdmin);
+        toolbar.setTitle("Detalles "+element.getName().toUpperCase());
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        toolbar.setNavigationOnClickListener(v -> {
+            finish();
         });
 
         // Agregar Listener al botón flotante de editar
@@ -71,6 +73,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
 
         // Obtener referencia al botón de imágenes
         ImageButton buttonImagesSiteAdmin = findViewById(R.id.buttonImagesSiteAdmin);
+        ImageButton buttonMapSite = findViewById(R.id.buttonMapSite);
 
         // Agregar un OnClickListener al botón de imágenes
         buttonImagesSiteAdmin.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +82,8 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
                 finish();
             }
         });
-
+        // Inicializar el botón y configurar el Intent para Google Maps
+        buttonMapSite.setOnClickListener(v -> openMapActivity(element));
         // Obtener referencia al FrameLayout que actuará como botón
         FrameLayout btnAddSupervisor = findViewById(R.id.btnAddSupervisor);
 
@@ -203,6 +207,25 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
                     }
                 });
         builder.show();
+    }
+
+    private void openMapActivity(ListElementSite element) {
+        String[] parts = element.getCoordenadas().split(";");
+        if (parts.length == 2) {
+            try {
+                double latitude = Double.parseDouble(parts[0].trim());
+                double longitude = Double.parseDouble(parts[1].trim());
+                Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_2_SiteLocation.class);
+                intent.putExtra("siteName", element.getName());
+                intent.putExtra("latitude", latitude);
+                intent.putExtra("longitude", longitude);
+                startActivity(intent);
+            } catch (NumberFormatException e) {
+                Log.e("MainActivity_2_Sites_SiteDetails", "Error al parsear coordenadas", e);
+            }
+        } else {
+            Log.e("MainActivity_2_Sites_SiteDetails", "Formato de coordenadas incorrecto");
+        }
     }
 
 }

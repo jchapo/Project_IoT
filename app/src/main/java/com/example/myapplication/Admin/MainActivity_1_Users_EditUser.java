@@ -30,7 +30,7 @@ public class MainActivity_1_Users_EditUser extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.saveOldTopAppBar) {
-            startActivity(new Intent(this, MainActivity_1_Users_UserDetais.class));
+            startActivity(new Intent(this, MainActivity_1_Users_UserDetails.class));
             return true;
         } else {
             return super.onOptionsItemSelected(item);

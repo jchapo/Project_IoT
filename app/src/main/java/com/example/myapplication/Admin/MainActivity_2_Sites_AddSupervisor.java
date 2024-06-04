@@ -31,7 +31,7 @@ public class MainActivity_2_Sites_AddSupervisor extends AppCompatActivity {
         init(view);
 
         topAppBar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.chooseSuper) {
+            if (item.getItemId() == R.id.chooseElement) {
                 Toast.makeText(MainActivity_2_Sites_AddSupervisor.this, "Supervisor asignado", Toast.LENGTH_SHORT).show();
                 finish();
             } else {
@@ -78,7 +78,7 @@ public class MainActivity_2_Sites_AddSupervisor extends AppCompatActivity {
     }
 
     public void moveToDescription(ListElementUser item){
-        Intent intent = new Intent(this, MainActivity_1_Users_UserDetais.class);
+        Intent intent = new Intent(this, MainActivity_1_Users_UserDetails.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);
     }
