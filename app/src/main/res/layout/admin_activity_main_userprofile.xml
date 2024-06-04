@@ -234,11 +234,6 @@
                 android:layout_marginBottom="16dp"
                 android:text="Sitios asignados" />
 
-            <LinearLayout
-                android:id="@+id/assignedSitesLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/agregarSitio"
@@ -292,7 +287,14 @@
                     </LinearLayout>
 
                 </FrameLayout>
+
             </androidx.cardview.widget.CardView>
+            <LinearLayout
+                android:id="@+id/assignedSitesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
