@@ -191,12 +191,10 @@ public class CrearEquipo_2 extends AppCompatActivity {
                 .document(listElement.getSku())
                 .set(listElement, SetOptions.merge())
                 .addOnSuccessListener(unused -> {
-                    Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
+                    Log.d("msg-subio", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
+                    finish(); // Regresar a la actividad anterior después de guardar los datos
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
-        Intent intent3 = new Intent(CrearEquipo_2.this, MasDetallesEquipos_2.class);
-        intent3.putExtra("ListElement", listElement);
-        startActivity(intent3);
     }
 
     private void createNewEquipment() {
@@ -300,7 +298,7 @@ public class CrearEquipo_2 extends AppCompatActivity {
 
         //Crear notificación
         //Agregar información a la notificación que luego sea enviada a la actividad que se abre
-        Intent intent = new Intent(this, MainActivity_0_NavigationAdmin.class);
+        Intent intent = new Intent(this, CrearEquipo_2.class);
         intent.putExtra("pid", 4616);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         //

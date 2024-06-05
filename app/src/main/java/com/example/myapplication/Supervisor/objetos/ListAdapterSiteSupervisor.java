@@ -53,7 +53,7 @@ public class ListAdapterSiteSupervisor extends RecyclerView.Adapter<ListAdapterS
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView iconImage;
-        TextView name, direction,tipositio;
+        TextView name, direction,tipositio,status;
 
         ViewHolder(View itemView){
             super(itemView);
@@ -61,6 +61,8 @@ public class ListAdapterSiteSupervisor extends RecyclerView.Adapter<ListAdapterS
             name = itemView.findViewById(R.id.nameTextViewSite);
             direction = itemView.findViewById(R.id.directionTextViewSite);
             tipositio = itemView.findViewById(R.id.tipoSitioTextViewSite);
+            status = itemView.findViewById(R.id.statusTextViewSite);
+
         }
 
         void bindDataSite(final ListElementSite item){
@@ -68,6 +70,7 @@ public class ListAdapterSiteSupervisor extends RecyclerView.Adapter<ListAdapterS
             direction.setText(fullDirection);
             name.setText(item.getName());
             tipositio.setText(item.getSitetype());
+            status.setText(item.getStatus());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

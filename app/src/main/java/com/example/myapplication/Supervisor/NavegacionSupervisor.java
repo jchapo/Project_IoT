@@ -2,6 +2,56 @@ package com.example.myapplication.Supervisor;
 
 import android.os.Bundle;
 
+import static android.Manifest.permission.POST_NOTIFICATIONS;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.NotificationManager;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Handler;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+import android.app.NotificationChannel;
+
+
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.myapplication.Admin.Fragment_1_Users;
+import com.example.myapplication.Admin.Fragment_2_Sites;
+import com.example.myapplication.Admin.Fragment_4_Notifications;
+import com.example.myapplication.Admin.MainActivity_0_NavigationAdmin;
+import com.example.myapplication.Admin.items.ListElementSite;
+import com.example.myapplication.Admin.items.ListElementUser;
+import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
+import com.example.myapplication.Supervisor.objetos.ListElementEquiposNuevo;
+import com.example.myapplication.databinding.AdminActivityMainNavigationBinding;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -13,15 +63,39 @@ import com.example.myapplication.databinding.SupervisorActivityNavegacionBinding
 
 public class NavegacionSupervisor extends AppCompatActivity {
 
+    String canal1 = "importanteDefault";
     SupervisorActivityNavegacionBinding binding;
+
+    private DrawerLayout drawerLayout;
+    private BottomNavigationView bottomNavigationView;
+    FirebaseFirestore db;
+    NavigationActivityViewModel navigationActivityViewModel;
+    private ArrayList<ListElementSite> activeSites, inactiveSites;
+
+    private ArrayList<ListElementEquiposNuevo> activeEquipments, inactiveEquipments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = SupervisorActivityNavegacionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        // Reemplazar el fragmento con SitiosFragment al iniciar la actividad
-        replaceFragment(new SitiosFragment());
+        crearCanalesNotificacion();
+        bottomNavigationView = binding.bottomNavigation;
+        navigationActivityViewModel = new ViewModelProvider(this).get(NavigationActivityViewModel.class);
+
+        // Recuperar el valor de inicio desde el Intent
+        String inicio = getIntent().getStringExtra("inicio");
+        if (inicio != null) {
+            navigationActivityViewModel.getInicio().setValue(inicio);
+        }
+
+
+        activeSites = new ArrayList<>();
+        inactiveSites = new ArrayList<>();
+
+        activeEquipments = new ArrayList<>();
+        inactiveEquipments = new ArrayList<>();
+
 
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.sitios_asignados_menu) {
@@ -39,7 +113,6 @@ public class NavegacionSupervisor extends AppCompatActivity {
             }
             return true;
         });
-
     }
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -47,4 +120,84 @@ public class NavegacionSupervisor extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout,fragment);
         fragmentTransaction.commit();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadData();
+    }
+    private void loadData() {
+        // Limpiar las listas antes de cargar los datos
+
+        activeSites.clear();
+        inactiveSites.clear();
+        db = FirebaseFirestore.getInstance();
+        loadSitesFromFirestore();
+    }
+    private void loadSitesFromFirestore() {
+        db.collection("sitios")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document2 : task.getResult()) {
+                            ListElementSite listElementSite = document2.toObject(ListElementSite.class);
+                            Log.d("msg-test", "Active sites: " + listElementSite.getName());
+                            if ("Activo".equals(listElementSite.getStatus())) {
+                                activeSites.add(listElementSite);
+                            } else if ("Inactivo".equals(listElementSite.getStatus())) {
+                                inactiveSites.add(listElementSite);
+                            }
+                        }
+                        // Una vez que se cargan los sitios, actualizar el ViewModel con los datos
+
+                        navigationActivityViewModel.getActiveSites().setValue(activeSites);
+                        navigationActivityViewModel.getInactiveSites().setValue(inactiveSites);
+                    } else {
+                        Log.d("msg-test", "Error getting site documents: ", task.getException());
+                    }
+                });
+    }
+
+    public void crearCanalesNotificacion() {
+
+        NotificationChannel channel = new NotificationChannel(canal1,
+                "Canal notificaciones default",
+                NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription("Canal para notificaciones con prioridad default");
+        channel.enableVibration(true);
+
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+
+        pedirPermisos();
+    }
+
+    public void pedirPermisos() {
+        // TIRAMISU = 33
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
+
+            ActivityCompat.requestPermissions(NavegacionSupervisor.this, new String[]{POST_NOTIFICATIONS}, 101);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
