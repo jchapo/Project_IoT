@@ -4,9 +4,11 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -14,20 +16,38 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
+
+
 
 public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
 
@@ -44,6 +64,8 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
     LinearLayout assignedSitesLayout;
     View deviderSitiosAsignados;
     FrameLayout FrameLayout;
+    FirebaseStorage storage;
+    StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +74,9 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
 
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
+        // Initialize Firebase Storage
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         // Retrieve the passed ListElementUser object
         ListElementUser element = (ListElementUser) getIntent().getSerializableExtra("ListElement");
@@ -78,12 +103,31 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
         addressDescriptionTextView.setText(element.getAddress());
         estado = element.getStatus();
 
-        // Load profile image
+
+// Dentro del método onCreate o donde se necesite cargar la imagen
+        // Dentro del método onCreate o donde se necesite cargar la imagen
         if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
-            byte[] decodedString = Base64.decode(element.getImageUrl(), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            profileImageView.setImageBitmap(decodedByte);
+            Log.d("UserDetails", "Image URL is not null or empty. URL: " + element.getImageUrl());
+
+            // Usar FirebaseImageLoader para cargar la imagen desde Firebase Storage
+            StorageReference imageRef = storageReference.child(element.getImageUrl());
+
+            Log.d("UserDetails", "StorageReference path: " + imageRef.getPath());
+
+            Glide.with(this /* context */)
+                    .load(imageRef)
+                    .skipMemoryCache(true) // Desactivar la caché de memoria
+                    .diskCacheStrategy(DiskCacheStrategy.NONE) // Desactivar la caché en disco
+                    .into(profileImageView);
+
+            Log.d("UserDetails", "Image loading initiated with Glide.");
+        } else {
+            Log.d("UserDetails", "Image URL is null or empty.");
         }
+
+
+
+
 
         // Set up the toolbar
         Toolbar toolbar = findViewById(R.id.topAppBarUserPerfil);
@@ -154,12 +198,24 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
         addressDescriptionTextView.setText(updatedUser.getAddress());
         estado = updatedUser.getStatus();
 
-        // Actualizar la imagen de perfil
+        // Rellenar el campo del tipo de usuario
+
         if (updatedUser.getImageUrl() != null && !updatedUser.getImageUrl().isEmpty()) {
+            // Usar Glide para cargar la imagen desde Firebase Storage utilizando la ruta de acceso
+            StorageReference imageRef = storageReference.child(updatedUser.getImageUrl());
+            Glide.with(this)
+                    .load(imageRef)
+                    .skipMemoryCache(true) // Desactivar la caché de memoria
+                    .diskCacheStrategy(DiskCacheStrategy.NONE) // Desactivar la caché en disco
+                    .into(profileImageView);
+        }
+
+        // Actualizar la imagen de perfil
+        /*if (updatedUser.getImageUrl() != null && !updatedUser.getImageUrl().isEmpty()) {
             byte[] decodedString = Base64.decode(updatedUser.getImageUrl(), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             profileImageView.setImageBitmap(decodedByte);
-        }
+        }*/
 
         // Actualizar los sitios asignados
         showAssignedSites(updatedUser);
