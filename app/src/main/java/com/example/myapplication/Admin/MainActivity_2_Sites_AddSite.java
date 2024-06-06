@@ -3,6 +3,7 @@ package com.example.myapplication.Admin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -31,6 +33,7 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
     private RecyclerView recyclerView;
     private String idDNI;
     private List<ListElementSite> elements;
+    private CircularProgressIndicator progressIndicator;
 
     private FirebaseFirestore db;
 
@@ -44,6 +47,8 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
         topAppBar.inflateMenu(R.menu.top_app_bar_select);
 
         db = FirebaseFirestore.getInstance();
+        progressIndicator = findViewById(R.id.progressIndicator);
+
 
         init();
 
@@ -68,7 +73,9 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
         return selectedNames;
     }
 
+
     private void saveSitesToFirebase(ArrayList<String> selectedSitesNames) {
+        progressIndicator.setVisibility(View.VISIBLE);
         DocumentReference userRef = db.collection("usuarios").document(idDNI);
 
         userRef.get().addOnSuccessListener(documentSnapshot -> {
@@ -92,18 +99,40 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
                 String updatedSitesJson = new JSONArray(updatedSites).toString();
 
                 userRef.update("sitiosAsignados", updatedSitesJson)
-                        .addOnSuccessListener(aVoid -> sendUserToNextActivity())
+                        .addOnSuccessListener(aVoid -> sendUserBackToUserDetails())
                         .addOnFailureListener(e -> {
                             Toast.makeText(MainActivity_2_Sites_AddSite.this, "Error guardando sitios", Toast.LENGTH_SHORT).show();
                             Log.w("MainActivity_2_Sites_AddSite", "Error updating document", e);
+                            progressIndicator.setVisibility(View.GONE);
                         });
             }
         }).addOnFailureListener(e -> {
             Toast.makeText(MainActivity_2_Sites_AddSite.this, "Error obteniendo usuario", Toast.LENGTH_SHORT).show();
             Log.w("MainActivity_2_Sites_AddSite", "Error getting document", e);
+            progressIndicator.setVisibility(View.GONE);
         });
     }
 
+    private void sendUserBackToUserDetails() {
+        db.collection("usuarios").document(idDNI).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        ListElementUser user = documentSnapshot.toObject(ListElementUser.class);
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("updatedUser", user);
+                        setResult(RESULT_OK, resultIntent);
+                        finish();
+                    } else {
+                        Toast.makeText(MainActivity_2_Sites_AddSite.this, "Usuario no encontrado", Toast.LENGTH_SHORT).show();
+                    }
+                    progressIndicator.setVisibility(View.GONE);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(MainActivity_2_Sites_AddSite.this, "Error obteniendo usuario", Toast.LENGTH_SHORT).show();
+                    Log.w("MainActivity_2_Sites_AddSite", "Error getting document", e);
+                    progressIndicator.setVisibility(View.GONE);
+                });
+    }
     private void sendUserToNextActivity() {
         db.collection("usuarios").document(idDNI).get()
                 .addOnSuccessListener(documentSnapshot -> {
