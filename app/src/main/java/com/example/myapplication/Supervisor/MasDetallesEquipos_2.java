@@ -23,14 +23,16 @@ import com.example.myapplication.Admin.MainActivity_1_Users_NewUser;
 import com.example.myapplication.Admin.MainActivity_2_Sites_AddSite;
 import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.objetos.ListElementDevices;
+import com.example.myapplication.Supervisor.objetos.ListElementEquiposNuevo;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MasDetallesEquipos_2 extends AppCompatActivity {
 
 
-    TextView nombreEquipogrande, nombreEquipo, marca, serie, descripcion, SKU, fechaingreso, datosequipo;
+    TextView nameEquipo,nameEquipo2, marca,modelo,tipoEquipo,descripcionEquipo, status, idSitio, sku, fecha_ingreso,datos_juntos;
 
+    //POR CORREGIR
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,26 +44,26 @@ public class MasDetallesEquipos_2 extends AppCompatActivity {
             return insets;
         });
 
-        ListElementDevices element = (ListElementDevices) getIntent().getSerializableExtra("ListElementDevices");
-        nombreEquipo = findViewById(R.id.textViewNombreEquipo);
+        ListElementEquiposNuevo element = (ListElementEquiposNuevo) getIntent().getSerializableExtra("ListElementDevices");
+        nameEquipo = findViewById(R.id.textViewNombreEquipo);
         marca = findViewById(R.id.textViewMarca);
-        serie = findViewById(R.id.textViewSerie);
-        descripcion = findViewById(R.id.textViewDescripcion);
-        SKU = findViewById(R.id.textViewSku);
-        fechaingreso = findViewById(R.id.textViewFechaIngreso);
-        nombreEquipogrande = findViewById(R.id.nameTextViewDevice);
-        datosequipo = findViewById(R.id.Datosdevice);
+        modelo = findViewById(R.id.textViewModelo);
+        descripcionEquipo = findViewById(R.id.textViewDescripcion);
+        sku = findViewById(R.id.textViewSku);
+        fecha_ingreso = findViewById(R.id.textViewFechaIngreso);
+        nameEquipo2 = findViewById(R.id.nameTextViewDevice);
+        datos_juntos = findViewById(R.id.Datosdevice);
 
 
-        String datosequipo1 = element.getMarca() + " / " + element.getModelo() + " / " + element.getSku();
-        datosequipo.setText(datosequipo1);
-        nombreEquipogrande.setText(element.getName());
-        nombreEquipo.setText(element.getName());
+        String datosequipo1 = element.getMarca() + " / " + element.getModelo();
+        datos_juntos.setText(datosequipo1);
+        nameEquipo.setText(element.getNameEquipo());
+        nameEquipo2.setText(element.getNameEquipo());
         marca.setText(element.getMarca());
-        serie.setText(element.getSerie());
-        descripcion.setText(element.getDescripcion());
-        SKU.setText(element.getSku());
-        fechaingreso.setText(element.getFechaIngreso());
+        modelo.setText(element.getModelo());
+        descripcionEquipo.setText(element.getDescripcionEquipo());
+        sku.setText(element.getSku());
+        fecha_ingreso.setText(element.getFecha_ingreso());
 
         Toolbar toolbar = findViewById(R.id.topAppBarSitePerfilSuper);
         setSupportActionBar(toolbar);
