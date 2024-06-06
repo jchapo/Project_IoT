@@ -1,5 +1,6 @@
 package com.example.myapplication.SuperAdmin;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,23 +12,31 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Admin.MainActivity_2_Sites_SiteDetails;
-import com.example.myapplication.Admin.items.ListAdapterSite;
-import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
+import com.example.myapplication.SuperAdmin.list.ListAdapterLog;
+import com.example.myapplication.SuperAdmin.list.ListElementLog;
+
+import com.example.myapplication.SuperAdmin.list.ListElementLog.*;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class LogFragment extends Fragment {
 
-    List<ListElementSite> elements;
+    private List<ListElementLog> activeLog;
+    private List<ListElementLog> inactiveLog;
+    private ListAdapterLog listAdapterLog;
+    private RecyclerView recyclerViewLog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,7 +46,7 @@ public class LogFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.top_app_bar_admin_sites, menu);
+        inflater.inflate(R.menu.top_app_bar_superadmin_log, menu);
     }
 
     @Override
@@ -54,46 +63,61 @@ public class LogFragment extends Fragment {
         setHasOptionsMenu(true);
         init(view);
 
+        FloatingActionButton filtrarLogButton = view.findViewById(R.id.filtrarLogsfloatingActionButton);
+        filtrarLogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFilterDialog();
+            }
+        });
+
         return view;
+    }
+    private void showFilterDialog() {
+        FilterLogsDialogFragment dialogFragment = new FilterLogsDialogFragment(new FilterLogsDialogFragment.FilterLogsListener() {
+            @Override
+            public void onApplyFilters(String fromDate, String toDate, String logType, String userRol) {
+                // Aquí aplicas los filtros y actualizas la lista de logs
+                // Llama a un método para aplicar los filtros y actualizar la vista principal
+                // filterLogs(fromDate, toDate, logType, user); por ejemplo
+            }
+        });
+        dialogFragment.show(getParentFragmentManager(), "FilterLogsDialogFragment");
     }
 
     public void init(View view) {
-        elements = new ArrayList<>();
+        activeLog = new ArrayList<>();
+        inactiveLog = new ArrayList<>();
 
-        elements.add(new ListElementSite("Lima","LIM-01","Activo","Lima","Carabayllo","Av. San Felipe","location","31501","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Lima","LIM-02","Activo","Lima","Carabayllo","Av. San Carlos","location","31502","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Lima","LIM-03","Activo","Lima","Carabayllo","Av. Los Incas","location","31503","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Cajamarca","CAJ-01","Activo","Cajamarca","Asunción","Calle Los Mirlos","location","31504","Rural","Móvil",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Cajamarca","CAJ-02","Activo","Cajamarca","Asunción","Calle Los Piris","location","31505","Rural","Móvil",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Cajamarca","CAJ-03","Activo","Cajamarca","Asunción","Calle Los Mirpus","location","31506","Rural","Móvil",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Arequipa","ARQ-01","Activo","Arequipa","Yanahuara","Av. Unión","location","31507","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Arequipa","ARQ-02","Activo","Caylloma","Caylloma","Av. Bayoneta","location","31508","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Arequipa","ARQ-03","Activo","Arequipa","Cayma","Av. La Paz","location","31509","Urbano","Móvil",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Tumbes","TUM-01","Activo","Tumbes","Tumbes","Av. Lobitos","location","31510","Rural","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Lima","LIM-04","Activo","Lima","Miraflores","Av. Larco","location","31509","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Lima","LIM-05","Activo","Lima","San Borja","Av. Aviación","location","31510","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Lima","LIM-06","Activo","Lima","Surco","Av. Primavera","location","31511","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Cusco","CUS-01","Activo","Cusco","Wanchaq","Av. de la Cultura","location","31512","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Cusco","CUS-02","Activo","Cusco","San Sebastián","Av. Tomasa Tito Condemayta","location","31513","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Cusco","CUS-03","Activo","Cusco","San Jerónimo","Av. Los Incas","location","31514","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Trujillo","TRJ-01","Activo","La Libertad","Trujillo","Av. España","location","31515","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Trujillo","TRJ-02","Activo","La Libertad","Huanchaco","Av. La Ribera","location","31516","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Trujillo","TRJ-03","Activo","La Libertad","Moche","Av. Huaca del Sol","location","31517","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
-        elements.add(new ListElementSite("Piura","PIU-01","Activo","Piura","Piura","Av. Grau","location","31518","Urbano","Fijo",-34.3213,56.3123, "-34.3213 ; 56.3123", "1/1/2022",""));
+        activeLog.add(new ListElementLog(new Date(), "Carlos", "Administrador", LogType.INFO, "Se ha creado un usuario"));
+        activeLog.add(new ListElementLog(new Date(), "Luis", "Supervisor", LogType.WARNING, "Se ha realizado una advertencia"));
+        activeLog.add(new ListElementLog(new Date(), "Ana", "Administrador", LogType.ERROR, "Se ha encontrado un error"));
+        activeLog.add(new ListElementLog(new Date(), "Maria", "Supervisor", LogType.CRITICAL, "Se ha reportado un problema crítico"));
+        activeLog.add(new ListElementLog(new Date(), "Carlos", "Administrador", LogType.INFO, "Se ha creado un usuario"));
+        activeLog.add(new ListElementLog(new Date(), "Luis", "Supervisor", LogType.WARNING, "Se ha realizado una advertencia"));
+        activeLog.add(new ListElementLog(new Date(), "Ana", "Administrador", LogType.ERROR, "Se ha encontrado un error"));
+        activeLog.add(new ListElementLog(new Date(), "Maria", "Supervisor", LogType.CRITICAL, "Se ha reportado un problema crítico"));
 
+        inactiveLog.add(new ListElementLog(new Date(), "Carlos", "Administrador", LogType.ERROR, "El administrador Carlos ha encontrado un error"));
+        inactiveLog.add(new ListElementLog(new Date(), "Luis", "Supervisor", LogType.CRITICAL, "El supervisor Luis ha reportado un problema crítico"));
+        inactiveLog.add(new ListElementLog(new Date(), "Ana", "Administrador", LogType.WARNING, "El administrador Ana ha emitido una advertencia"));
+        inactiveLog.add(new ListElementLog(new Date(), "Maria", "Supervisor", LogType.INFO, "El supervisor Maria ha realizado una acción"));
 
+        inactiveLog.add(new ListElementLog(new Date(), "Carlos", "Administrador", LogType.ERROR, "El administrador Carlos ha encontrado un error"));
+        inactiveLog.add(new ListElementLog(new Date(), "Luis", "Supervisor", LogType.CRITICAL, "El supervisor Luis ha reportado un problema crítico"));
+        inactiveLog.add(new ListElementLog(new Date(), "Ana", "Administrador", LogType.WARNING, "El administrador Ana ha emitido una advertencia"));
+        inactiveLog.add(new ListElementLog(new Date(), "Maria", "Supervisor", LogType.INFO, "El supervisor Maria ha realizado una acción"));
 
-
-        ListAdapterSite listAdapter = new ListAdapterSite(elements, getContext(), item -> moveToDescription(item));
-        RecyclerView recyclerView = view.findViewById(R.id.listElements);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(listAdapter);
+        // Initialize the adapter and RecyclerView
+        listAdapterLog = new ListAdapterLog(activeLog, getContext(), item -> moveToDescription(item));
+        recyclerViewLog = view.findViewById(R.id.listElementsLogs);
+        recyclerViewLog.setHasFixedSize(true);
+        recyclerViewLog.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewLog.setAdapter(listAdapterLog);
     }
-
-    public void moveToDescription(ListElementSite item){
-        Intent intent = new Intent(getContext(), MainActivity_2_Sites_SiteDetails.class);
-        intent.putExtra("ListElementSite", item);
+    public void moveToDescription(ListElementLog item){
+        Intent intent = new Intent(getContext(), Log_Description.class);
+        intent.putExtra("ListElementLog", item);
         startActivity(intent);
     }
 }
