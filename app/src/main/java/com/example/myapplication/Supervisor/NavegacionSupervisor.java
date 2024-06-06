@@ -95,6 +95,8 @@ public class NavegacionSupervisor extends AppCompatActivity {
 
         activeEquipments = new ArrayList<>();
         inactiveEquipments = new ArrayList<>();
+        replaceFragment(new SitiosFragment());
+
 
 
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
