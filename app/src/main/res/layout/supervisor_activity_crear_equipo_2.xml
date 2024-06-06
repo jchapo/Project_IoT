@@ -137,10 +137,10 @@
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editSerialNumber"
+                        android:id="@+id/editModelo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Número de serie" />
+                        android:hint="Modelo" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -207,24 +207,25 @@
                 android:layout_marginTop="16dp">
 
                 <ImageView
-                    android:id="@+id/iconRegistrationDate"
+                    android:id="@+id/SitioAsignado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_calendar_outline"
+                    android:src="@drawable/selector_location"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="8dp" />
+                    android:layout_marginEnd="8dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editSiteSelect"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editRegistrationDate"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_weight="1"
+                    android:hint="Sitio Asignado">
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/selectSite"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Fecha de registro"
-                        android:focusable="false" />
+                        android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

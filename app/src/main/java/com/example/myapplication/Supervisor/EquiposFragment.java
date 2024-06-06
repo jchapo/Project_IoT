@@ -1,6 +1,7 @@
 package com.example.myapplication.Supervisor;
 
 import android.content.Intent;
+import android.media.audiofx.DynamicsProcessing;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +10,21 @@ import android.view.ViewGroup;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Admin.MainActivity_2_Sites_NewSite;
+import com.example.myapplication.Admin.items.ListAdapterSite;
+import com.example.myapplication.Admin.items.ListElementSite;
+import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.objetos.ListAdapterDevices;
+import com.example.myapplication.Supervisor.objetos.ListAdapterEquiposNuevo;
 import com.example.myapplication.Supervisor.objetos.ListElementDevices;
+import com.example.myapplication.Supervisor.objetos.ListElementEquiposNuevo;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 
 import java.util.ArrayList;
@@ -23,71 +32,77 @@ import java.util.List;
 
 public class EquiposFragment extends Fragment {
 
+    private ArrayList<ListElementEquiposNuevo> activeEquipments = new ArrayList<>();
+    private ArrayList<ListElementEquiposNuevo> inactiveEquipments = new ArrayList<>();
+    private ListAdapterEquiposNuevo listAdapterDevices;
 
-
-    List<ListElementDevices> elements;
-    RecyclerView recyclerView;
+    private RecyclerView recyclerViewSites;
+    private NavigationActivityViewModel navigationActivityViewModel;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.supervisor_fragment_equipos, container, false);
-
-        Toolbar toolbar = view.findViewById(R.id.topAppBarDevices);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
+        navigationActivityViewModel = new ViewModelProvider(requireActivity()) .get(NavigationActivityViewModel. class);
+        initializeViews(view);
+        observeViewModel();
+        return view;
+    }
 
-        // Inicializar RecyclerView y cargar datos
-        init(view);
+    private void observeViewModel() {
 
-        FloatingActionButton fab = view.findViewById(R.id.agregarEquipofloatingActionButton);
+        if (navigationActivityViewModel != null) {
+            navigationActivityViewModel.getActiveEquipments().observe(getViewLifecycleOwner(), equiposActivos -> {
+                activeEquipments.clear();
+                listAdapterDevices.notifyDataSetChanged();
+                activeEquipments.addAll(equiposActivos);
+            });
+            navigationActivityViewModel.getInactiveEquipments().observe(getViewLifecycleOwner(), equiposInactivos -> {
+                inactiveEquipments.clear();
+                listAdapterDevices.notifyDataSetChanged();
+                inactiveEquipments.addAll(equiposInactivos);
+            });
+        }
+    }
 
-        // Agregar OnClickListener al botón flotante
-        fab.setOnClickListener(new View.OnClickListener() {
+    public void initializeViews(View view) {
+        listAdapterDevices = new ListAdapterEquiposNuevo(activeEquipments, getContext(), this :: moveToDescriptionDevice);
+        recyclerViewSites = view.findViewById(R.id.listElementsDevice);
+        recyclerViewSites.setHasFixedSize(true);
+        recyclerViewSites.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewSites.setAdapter(listAdapterDevices);
+
+        FloatingActionButton agregarEquipoButton = view.findViewById(R.id.agregarEquipofloatingActionButton);
+        agregarEquipoButton.setOnClickListener( View -> {
+            Intent intent = new Intent(getActivity(), CrearEquipo_2.class);
+            startActivity(intent);
+        });
+        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View view) {
-                // Iniciar la actividad Crear Reporte
-                Intent intent = new Intent(getContext(), CrearEquipo_2.class);
-                startActivity(intent);
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        listAdapterDevices.setItems(activeEquipments);
+                        listAdapterDevices.notifyDataSetChanged();
+                        break;
+                    case 1:
+                        listAdapterDevices.setItems(inactiveEquipments);
+                        listAdapterDevices.notifyDataSetChanged();
+                        break;
+                }
             }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
 
-        return view;
-
     }
 
-    public void init(View view) {
-        elements = new ArrayList<>();
-        elements.add(new ListElementDevices("SW145XS", "SWI103", "GILLAT", "T-GAP", "2024-04-18", "Switch con capacidad para soportar varios equipos.", "Switch Gillat FP-435", "Activo"));
-        elements.add(new ListElementDevices("RO82DAS", "SWI102", "CISCO", "C-SWS", "2024-04-19", "Router preparado para WIFI7", "Router CISCO WIFIMAX", "Activo"));
-        elements.add(new ListElementDevices("RE123FD", "RTI209", "HUAWEI", "HGW-004", "2024-04-20", "Gateway de Huawei para redes de fibra óptica.", "Huawei Fiber Gateway HGW-004", "Activo"));
-        elements.add(new ListElementDevices("SW301SK", "SWI405", "ZYXEL", "Z-SWT", "2024-04-21", "Switch avanzado para redes empresariales.", "ZYXEL Enterprise Switch Z-SWT", "Activo"));
-        elements.add(new ListElementDevices("RT456QA", "RTI502", "JUNIPER", "JN-RTR", "2024-04-22", "Router de alta capacidad para redes de gran tamaño.", "Juniper High-Performance Router JN-RTR", "Activo"));
-        elements.add(new ListElementDevices("RW907LS", "RTI109", "NETGEAR", "N-RTR", "2024-04-23", "Router inalámbrico de alto rendimiento.", "NETGEAR Wireless Router N-RTR", "Activo"));
-        elements.add(new ListElementDevices("GW234DE", "GW501", "CISCO", "C-GW", "2024-04-24", "Gateway Cisco para redes empresariales.", "Cisco Enterprise Gateway C-GW", "Activo"));
-        elements.add(new ListElementDevices("SW509YH", "SWI806", "HPE", "H-SWT", "2024-04-25", "Switch de alto rendimiento para centros de datos.", "HPE Datacenter Switch H-SWT", "Activo"));
-        elements.add(new ListElementDevices("SW509YH", "SWI806", "HPE", "H-SWT", "2024-04-25", "Switch de alto rendimiento para centros de datos.", "HPE Datacenter Switch H-SWT", "Activo"));
-        elements.add(new ListElementDevices("SW509YH", "SWI806", "HPE", "H-SWT", "2024-04-25", "Switch de alto rendimiento para centros de datos.", "HPE Datacenter Switch H-SWT", "Activo"));
-        elements.add(new ListElementDevices("SW509YH", "SWI806", "HPE", "H-SWT", "2024-04-25", "Switch de alto rendimiento para centros de datos.", "HPE Datacenter Switch H-SWT", "Activo"));
-        elements.add(new ListElementDevices("SW509YH", "SWI806", "HPE", "H-SWT", "2024-04-25", "Switch de alto rendimiento para centros de datos.", "HPE Datacenter Switch H-SWT", "Activo"));
-        elements.add(new ListElementDevices("SW509YH", "SWI806", "HPE", "H-SWT", "2024-04-25", "Switch de alto rendimiento para centros de datos.", "HPE Datacenter Switch H-SWT", "Activo"));
-        elements.add(new ListElementDevices("SW509YH", "SWI806", "HPE", "H-SWT", "2024-04-25", "Switch de alto rendimiento para centros de datos.", "HPE Datacenter Switch H-SWT", "Activo"));
-        elements.add(new ListElementDevices("SW509YH", "SWI806", "HPE", "H-SWT", "2024-04-25", "Switch de alto rendimiento para centros de datos.", "HPE Datacenter Switch H-SWT", "Activo"));
-
-
-        // Añadir más elementos según sea necesario
-
-        // Obtener referencia al RecyclerView
-        recyclerView = view.findViewById(R.id.listElementsDevice);
-
-        // Crear y configurar el adaptador y el LayoutManager
-        ListAdapterDevices listAdapter = new ListAdapterDevices(elements, getContext(), item -> moveToDescriptionDevice(item));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(listAdapter);
-    }
-
-    public void moveToDescriptionDevice(ListElementDevices item){
+    public void moveToDescriptionDevice(ListElementEquiposNuevo item){
         Intent intent = new Intent(getContext(), MasDetallesEquipos_2.class);
         intent.putExtra("ListElementDevices", item);
         startActivity(intent);

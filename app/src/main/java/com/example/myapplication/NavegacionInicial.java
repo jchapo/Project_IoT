@@ -43,8 +43,11 @@ public class NavegacionInicial extends AppCompatActivity {
         supervButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // Código para iniciar la actividad Admin
+                String inicio = "2";
+                navigationActivityViewModel.getInicio().setValue(inicio);
                 Intent intent = new Intent(NavegacionInicial.this, NavegacionSupervisor.class);
+                intent.putExtra("inicio", inicio);
                 startActivity(intent);
             }
         });
