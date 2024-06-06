@@ -108,7 +108,7 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
         btnAddSiteUserProfile.setOnClickListener(v -> {
             Intent intent7 = new Intent(this, MainActivity_2_Sites_AddSite.class);
             intent7.putExtra("idDNI", element.getDni());
-            startActivity(intent7);
+            startActivityForResult(intent7, 1); // UPDATED
         });
 
         // Set up enable/disable user button
@@ -130,6 +130,39 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
 
         // Display assigned sites
         showAssignedSites(element);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            // Recuperar el usuario actualizado
+            ListElementUser updatedUser = (ListElementUser) data.getSerializableExtra("updatedUser");
+            // Actualizar la interfaz de usuario con los nuevos datos
+            updateUserDetails(updatedUser);
+        }
+    }
+
+
+    private void updateUserDetails(ListElementUser updatedUser) {
+        // Actualizar los campos de texto con la información actualizada del usuario
+        nameDescriptionTextView.setText(updatedUser.getName());
+        mailDescriptionTextView.setText(updatedUser.getMail());
+        userDescriptionTextView.setText(updatedUser.getUser());
+        dniDescriptionTextView.setText(updatedUser.getDni());
+        phoneDescriptionTextView.setText(updatedUser.getPhone());
+        addressDescriptionTextView.setText(updatedUser.getAddress());
+        estado = updatedUser.getStatus();
+
+        // Actualizar la imagen de perfil
+        if (updatedUser.getImageUrl() != null && !updatedUser.getImageUrl().isEmpty()) {
+            byte[] decodedString = Base64.decode(updatedUser.getImageUrl(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            profileImageView.setImageBitmap(decodedByte);
+        }
+
+        // Actualizar los sitios asignados
+        showAssignedSites(updatedUser);
     }
     public void showConfirmationDialog(View view, String currentState) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
@@ -219,7 +252,8 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
                 .update("sitiosAsignados", new Gson().toJson(assignedSites))
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Sitio removido", Toast.LENGTH_SHORT).show();
-                    showAssignedSites(element);  // Actualizar la UI
+                    // Actualizar la UI con los sitios asignados actualizados
+                    showAssignedSites(element); // ADD
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Error al remover el sitio", Toast.LENGTH_SHORT).show();
