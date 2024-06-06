@@ -197,11 +197,11 @@
                     android:text="Serie" />
 
                 <TextView
-                    android:id="@+id/textViewSerie"
+                    android:id="@+id/textViewModelo"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="Serie"/>
+                    android:text="Modelo"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

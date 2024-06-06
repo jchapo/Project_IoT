@@ -134,6 +134,7 @@ public class NavegacionSupervisor extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         loadSitesFromFirestore();
     }
+
     private void loadSitesFromFirestore() {
         db.collection("sitios")
                 .get()
@@ -152,6 +153,33 @@ public class NavegacionSupervisor extends AppCompatActivity {
 
                         navigationActivityViewModel.getActiveSites().setValue(activeSites);
                         navigationActivityViewModel.getInactiveSites().setValue(inactiveSites);
+                        // Una vez que se cargan los usuarios, cargar sitios desde Firestore
+                        db = FirebaseFirestore.getInstance();
+                        loadEquipmentsFromFirestore();
+                    } else {
+                        Log.d("msg-test", "Error getting site documents: ", task.getException());
+                    }
+                });
+    }
+
+    private void loadEquipmentsFromFirestore() {
+        db.collection("equipos")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document2 : task.getResult()) {
+                            ListElementEquiposNuevo listElementEquiposNuevo = document2.toObject(ListElementEquiposNuevo.class);
+                            Log.d("msg-test", "Active equipments: " + listElementEquiposNuevo.getNameEquipo());
+                            if ("Activo".equals(listElementEquiposNuevo.getStatus())) {
+                                activeEquipments.add(listElementEquiposNuevo);
+                            } else if ("Inactivo".equals(listElementEquiposNuevo.getStatus())) {
+                                inactiveEquipments.add(listElementEquiposNuevo);
+                            }
+                        }
+                        // Una vez que se cargan los sitios, actualizar el ViewModel con los datos
+
+                        navigationActivityViewModel.getActiveEquipments().setValue(activeEquipments);
+                        navigationActivityViewModel.getInactiveEquipments().setValue(inactiveEquipments);
                     } else {
                         Log.d("msg-test", "Error getting site documents: ", task.getException());
                     }

@@ -17,6 +17,8 @@ public class ListElementEquiposNuevo implements Serializable {
 
     private String imagenEquipo;
 
+    public ListElementEquiposNuevo() {
+    }
     public ListElementEquiposNuevo(String nameEquipo, String marca, String modelo, String tipoEquipo,
                                    String descripcionEquipo, String status, String idSitio, String sku, String fecha_ingreso,
                                    String imagenEquipo) {
