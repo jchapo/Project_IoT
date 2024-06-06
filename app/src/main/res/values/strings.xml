@@ -40,5 +40,27 @@
         <item>Patch Pannel</item>
     </string-array>
 
+    <string-array name="log_types">
+        <item>INFO</item>
+        <item>WARNING</item>
+        <item>ERROR</item>
+        <item>CRITICAL</item>
+    </string-array>
+
+    <string-array name="user_rol">
+        <item>Admin</item>
+        <item>Supervisor</item>
+        <item>Superadmin</item>
+    </string-array>
+
+    <string name="filter_by_date_range">Rango de Fechas</string>
+    <string name="from">Desde:</string>
+    <string name="to">Hasta:</string>
+    <string name="select_date">- - -</string>
+    <string name="filter_by_log_type">Tipo de Log</string>
+    <string name="filter_by_user">Rol de Usuario</string>
+    <string name="enter_user">Ingrese Usuario</string>
+    <string name="cancel">Cancelar</string>
+    <string name="apply">Aplicar</string>
 
 </resources>
