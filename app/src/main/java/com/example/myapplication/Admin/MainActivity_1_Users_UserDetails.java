@@ -39,8 +39,8 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
+//import com.firebase.ui.storage.images.FirebaseImageLoader;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.bumptech.glide.Glide;
