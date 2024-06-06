@@ -15,23 +15,23 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -40,12 +40,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -63,6 +59,8 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
     private Uri imageUri;
     FirebaseStorage storage;
     StorageReference storageReference;
+    ListElementUser element;
+
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
@@ -70,22 +68,34 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_new_user);
 
+        isEditing = getIntent().getBooleanExtra("isEditing", false);
+
         // Initialize Firebase Storage
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        LinearLayout layoutDNI = findViewById(R.id.layoutDNI);
 
         imageView = findViewById(R.id.imageViewProfile);
         imageView.setOnClickListener(v -> openFileChooser());
 
+        // ActivityResultLauncher for opening file chooser
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         imageUri = result.getData().getData();
-                        imageView.setImageURI(imageUri);
-                        isImageAdded = true; // Actualizar la variable cuando se selecciona una imagen
+                        try {
+                            // Usar Glide para mostrar la imagen seleccionada en el ImageView
+                            Glide.with(this)
+                                    .load(imageUri)
+                                    .into(imageView);
+                            isImageAdded = true; // Actualizar la variable cuando se selecciona una imagen
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                });
+                }
+        );
 
         pedirPermisos();
 
@@ -93,12 +103,12 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         selectTypeUser = findViewById(R.id.selectTypeUser);
         typeUserAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, typeOptions);
         selectTypeUser.setAdapter(typeUserAdapter);
+        // Establecer la opción preseleccionada en "Supervisor"
+        selectTypeUser.setText("Supervisor", false);
 
         db = FirebaseFirestore.getInstance();
 
         // Obtener el indicador de si se está editando desde el Intent
-        isEditing = getIntent().getBooleanExtra("isEditing", false);
-
         editFirstName = findViewById(R.id.editFirstName);
         editLastName = findViewById(R.id.editLastttName);
         editDNI = findViewById(R.id.editDNI);
@@ -112,6 +122,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         if (isEditing) {
             // Si se está editando, inflar el menú de editar usuario
             topAppBar.inflateMenu(R.menu.top_app_bar_edit);
+            layoutDNI.setVisibility(View.GONE);
         } else {
             // Si se está creando, inflar el menú de crear usuario
             topAppBar.inflateMenu(R.menu.top_app_bar_new);
@@ -120,7 +131,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         // Verificar si se está editando un usuario existente o creando uno nuevo
         Intent intent = getIntent();
         if (intent.hasExtra("ListElement")) {
-            ListElementUser element = (ListElementUser) intent.getSerializableExtra("ListElement");
+            element = (ListElementUser) intent.getSerializableExtra("ListElement");
             isEditing = true; // Indicar que se está editando un usuario existente
             fillFields(element); // Llenar campos con los datos del usuario existente
             topAppBar.setTitle("Editar Usuario"); // Cambiar título de la actividad
@@ -145,6 +156,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         });
     }
 
+
     private void openFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -152,23 +164,47 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         activityResultLauncher.launch(Intent.createChooser(intent, "Select Picture"));
     }
 
-    private void uploadImageAndSaveUser(ListElementUser listElement, boolean isEditing) {
-        // Obtener el bitmap desde el ImageView
-        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-
-        // Convertir el bitmap a byte array
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-
-        // Convertir byte array a base64
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        listElement.setImageUrl(encodedImage);
-
-        saveUserToFirestore(listElement, isEditing);
+    private Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
+    private void uploadImageAndSaveUser(ListElementUser listElement, boolean isEditing) {
+        if (imageUri != null) {
+            try {
+                Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                Bitmap resizedBitmap = getResizedBitmap(bitmap, 300); // Redimensionar a 300x300 píxeles
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos); // Comprimir con calidad del 80%
+                byte[] imageBytes = baos.toByteArray();
 
+                String storagePath = "supervisorimages/" + listElement.getDni() + ".jpg";
+                StorageReference ref = storageReference.child(storagePath);
+                ref.putBytes(imageBytes)
+                        .addOnSuccessListener(taskSnapshot -> {
+                            listElement.setImageUrl(storagePath); // Guardar la ruta de acceso en lugar de la URL
+                            saveUserToFirestore(listElement, isEditing);
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(MainActivity_1_Users_NewUser.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            saveUserToFirestore(listElement, isEditing);
+        }
+    }
 
     private void saveUserToFirestore(ListElementUser listElement, boolean isEditing) {
         Log.d("msg-test", "entro a saveUserToFirestore");
@@ -177,11 +213,12 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                 .set(listElement, SetOptions.merge())
                 .addOnSuccessListener(unused -> {
                     Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
+                    notificarImportanceDefault(listElement.getName() + " " + listElement.getLastname(), listElement.getFechaCreacion());
+                    Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetails.class);
+                    intent3.putExtra("ListElement", listElement);
+                    startActivity(intent3);
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
-        Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetais.class);
-        intent3.putExtra("ListElement", listElement);
-        startActivity(intent3);
     }
 
     private void createNewUser() {
@@ -200,9 +237,9 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String fechaCreacion = fechaActual.format(formatter);
             Integer primerInicio = 0;
-            String imagen = "";
+            String sitiosAsignados = "";
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagen);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
             uploadImageAndSaveUser(listElement, false);
         }
     }
@@ -214,16 +251,16 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String typeUser = selectTypeUser.getText().toString();
             String firstName = editFirstName.getText().toString();
             String lastName = editLastName.getText().toString();
-            String dni = editDNI.getText().toString();
+            String dni = element.getDni();
             String mail = editMail.getText().toString();
             String address = editAddress.getText().toString();
             String phone = editPhone.getText().toString();
             String status = "Activo";
             String fechaCreacion = editFechaCreacion.getText().toString();
             Integer primerInicio = Integer.parseInt(editPrimerInicio.getText().toString());
-            String imagen = "";
+            String sitiosAsignados = element.getSitiosAsignados();
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagen);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
             uploadImageAndSaveUser(listElement, true);
         }
     }
@@ -251,14 +288,16 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         selectTypeUser.setText(element.getUser(), false);
 
         if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
-            byte[] decodedString = Base64.decode(element.getImageUrl(), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            imageView.setImageBitmap(decodedByte);
+            // Usar Glide para cargar la imagen desde Firebase Storage utilizando la ruta de acceso
+            StorageReference imageRef = storageReference.child(element.getImageUrl());
+            Glide.with(this)
+                    .load(imageRef)
+                    .skipMemoryCache(true) // Desactivar la caché de memoria
+                    .diskCacheStrategy(DiskCacheStrategy.NONE) // Desactivar la caché en disco
+                    .into(imageView);
             isImageAdded = true; // Actualizar la variable cuando se rellena una imagen existente
         }
     }
-
-
 
     public void crearCanalesNotificacion() {
         NotificationChannel channel = new NotificationChannel(canal1,

@@ -17,13 +17,14 @@ public class ListElementSite implements Serializable {
     private Double longitud;
     public String coordenadas;
     private String fechaCreacion;
+    private String imageUrl;
 
     public ListElementSite() {
     }
     public ListElementSite(String department, String name, String status, String province,
                            String district, String address,String location, String ubigeo,
                            String zonetype, String sitetype, Double latitud, Double longitud,
-                           String coordenadas,String fechaCreacion) {
+                           String coordenadas,String fechaCreacion, String imageUrl) {
 
         this.department = department;
         this.province = province;
@@ -39,6 +40,15 @@ public class ListElementSite implements Serializable {
         this.status = status;
         this.coordenadas = coordenadas;
         this.fechaCreacion = fechaCreacion;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getFechaCreacion() {

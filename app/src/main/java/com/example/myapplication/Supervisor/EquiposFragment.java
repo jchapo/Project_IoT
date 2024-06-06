@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Admin.MainActivity_2_Sites_NewSite;
 import com.example.myapplication.Admin.items.ListAdapterSite;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
@@ -70,6 +71,12 @@ public class EquiposFragment extends Fragment {
         recyclerViewSites.setHasFixedSize(true);
         recyclerViewSites.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewSites.setAdapter(listAdapterDevices);
+
+        FloatingActionButton agregarEquipoButton = view.findViewById(R.id.agregarEquipofloatingActionButton);
+        agregarEquipoButton.setOnClickListener( View -> {
+            Intent intent = new Intent(getActivity(), CrearEquipo_2.class);
+            startActivity(intent);
+        });
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

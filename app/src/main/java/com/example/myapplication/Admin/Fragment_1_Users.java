@@ -2,21 +2,11 @@ package com.example.myapplication.Admin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.SearchView;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,15 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.Admin.items.ListAdapterUser;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
-import com.example.myapplication.Dto.UsuarioDto;
 import com.example.myapplication.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Fragment_1_Users extends Fragment {
 
@@ -106,7 +92,7 @@ public class Fragment_1_Users extends Fragment {
     }
 
     public void moveToDescription(ListElementUser item) {
-        Intent intent = new Intent(getContext(), MainActivity_1_Users_UserDetais.class);
+        Intent intent = new Intent(getContext(), MainActivity_1_Users_UserDetails.class);
         intent.putExtra("ListElement", item);
         startActivity(intent);
     }

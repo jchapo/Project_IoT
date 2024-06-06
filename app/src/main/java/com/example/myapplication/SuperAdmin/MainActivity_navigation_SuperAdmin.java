@@ -31,7 +31,7 @@ public class MainActivity_navigation_SuperAdmin extends AppCompatActivity {
         binding = SuperadminActivityMainNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         bottomNavigationView = binding.bottomNavigation;
-        binding.topAppBarUserFragment.setTitle("Lista de usuarios");
+        binding.topAppBarUserFragment.setTitle("Usuarios");
         replaceFragmentSuperAdmin(new UsersFragmentSuperAdmin());
 
         Toolbar toolbar = binding.topAppBarUserFragment;

@@ -60,13 +60,14 @@
 
             <!-- Campos del formulario -->
             <LinearLayout
+                android:id="@+id/layoutDepartmento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp">
 
                 <ImageView
-                    android:id="@+id/iconDepartment"
+                    android:id="@+id/iconDepartament"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_flag_outline"
@@ -90,6 +91,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/layoutProvincia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -122,6 +124,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/layoutDistrito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -135,20 +138,18 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="8dp"
                     android:visibility="invisible"/>
-
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/editDistrict"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_weight="1"
-                    android:hint="Distrito">
+                    android:layout_weight="1">
 
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/selectDistrict"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editDistrict"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none" />
+                        android:inputType="text"
+                        android:hint="Distrito" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

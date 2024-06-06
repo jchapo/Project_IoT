@@ -31,11 +31,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.bumptech.glide.Glide;
-import com.example.myapplication.Admin.MainActivity_0_NavigationAdmin;
-import com.example.myapplication.Admin.MainActivity_1_Users_NewUser;
-import com.example.myapplication.Admin.MainActivity_1_Users_UserDetais;
-import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.objetos.ListElementDevices;
 import com.example.myapplication.Supervisor.objetos.ListElementEquiposNuevo;
