@@ -49,18 +49,18 @@
 
     <string-array name="user_rol">
         <item>Admin</item>
-        <item>Editor</item>
-        <item>Viewer</item>
+        <item>Supervisor</item>
+        <item>Superadmin</item>
     </string-array>
 
-    <string name="filter_by_date_range">Filter by Date Range</string>
-    <string name="from">From:</string>
-    <string name="to">To:</string>
-    <string name="select_date">Select Date</string>
-    <string name="filter_by_log_type">Filter by Log Type</string>
-    <string name="filter_by_user">Filter by User</string>
-    <string name="enter_user">Enter User</string>
-    <string name="cancel">Cancel</string>
-    <string name="apply">Apply</string>
+    <string name="filter_by_date_range">Rango de Fechas</string>
+    <string name="from">Desde:</string>
+    <string name="to">Hasta:</string>
+    <string name="select_date">- - -</string>
+    <string name="filter_by_log_type">Tipo de Log</string>
+    <string name="filter_by_user">Rol de Usuario</string>
+    <string name="enter_user">Ingrese Usuario</string>
+    <string name="cancel">Cancelar</string>
+    <string name="apply">Aplicar</string>
 
 </resources>
