@@ -65,7 +65,7 @@ public class EquiposFragment extends Fragment {
 
         FloatingActionButton agregarEquipoButton = view.findViewById(R.id.agregarEquipofloatingActionButton);
         agregarEquipoButton.setOnClickListener(View -> {
-            Intent intent = new Intent(getActivity(), EquiposFragment.class);
+            Intent intent = new Intent(getActivity(), CrearEquipo_2.class);
             startActivity(intent);
         });
 
