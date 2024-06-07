@@ -17,6 +17,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.content.Intent;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
@@ -41,6 +43,8 @@ import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
@@ -62,6 +66,9 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
     private Uri imageUri;
     private MaterialAutoCompleteTextView selectDepartment, selectProvince, selectZoneType, selectSiteType;
     ArrayAdapter<String> departmentAdapter, provinceAdapter, zoneTypeAdapter, siteTypeAdapter;
+    FirebaseStorage storage;
+    StorageReference storageReference;
+
 
     String[] departmentOptions = {
             "Amazonas", "Áncash","Apurímac","Arequipa","Ayacucho","Cajamarca","Callao","Cusco","Huancavelica","Huánuco","Ica","Junín","La Libertad","Lambayeque","Lima","Loreto","Madre de Dios","Moquegua","Pasco","Piura",
@@ -78,6 +85,10 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_new_site);
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
         // Inicializar los Maps
         initializeLocationData();
 
@@ -231,20 +242,48 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
     }
 
     private void uploadImageAndSaveSite(ListElementSite listElement, boolean isEditing) {
-        // Obtener el bitmap desde el ImageView
-        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        if (imageUri != null) {
+            try {
+                Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                Bitmap resizedBitmap = getResizedBitmap(bitmap, 600); // Redimensionar a 300x300 píxeles
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos); // Comprimir con calidad del 80%
+                byte[] imageBytes = baos.toByteArray();
 
-        // Convertir el bitmap a byte array
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-
-        // Convertir byte array a base64
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        listElement.setImageUrl(encodedImage);
-
-        saveSiteToFirestore(listElement, isEditing);
+                String storagePath = "siteimages/" + listElement.getName() + ".jpg";
+                StorageReference ref = storageReference.child(storagePath);
+                ref.putBytes(imageBytes)
+                        .addOnSuccessListener(taskSnapshot -> {
+                            ref.getDownloadUrl().addOnSuccessListener(uri -> {
+                                listElement.setImageUrl(storagePath);
+                                saveSiteToFirestore(listElement, isEditing);
+                            });
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(MainActivity_2_Sites_NewSite.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            saveSiteToFirestore(listElement, isEditing);
+        }
     }
+    private Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
 
     private void saveSiteToFirestore(ListElementSite listElement, boolean isEditing) {
         Log.d("msg-test", "entro a saveSiteToFirestore");
@@ -379,9 +418,13 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
 
         // Si hay una imagen existente, decodificarla y mostrarla
         if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
-            byte[] decodedString = Base64.decode(element.getImageUrl(), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            imageView.setImageBitmap(decodedByte);
+            // Usar Glide para cargar la imagen desde Firebase Storage utilizando la ruta de acceso
+            StorageReference imageRef = storageReference.child(element.getImageUrl());
+            Glide.with(this)
+                    .load(imageRef)
+                    .skipMemoryCache(true) // Desactivar la caché de memoria
+                    .diskCacheStrategy(DiskCacheStrategy.NONE) // Desactivar la caché en disco
+                    .into(imageView);
             isImageAdded = true; // Actualizar la variable cuando se rellena una imagen existente
         }
     }

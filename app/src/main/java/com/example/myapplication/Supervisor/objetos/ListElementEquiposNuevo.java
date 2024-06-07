@@ -16,12 +16,20 @@ public class ListElementEquiposNuevo implements Serializable {
     private String fecha_ingreso;
 
     private String imagenEquipo;
+    private String imagenQr;
 
     public ListElementEquiposNuevo() {
     }
-    public ListElementEquiposNuevo(String nameEquipo, String marca, String modelo, String tipoEquipo,
-                                   String descripcionEquipo, String status, String idSitio, String sku, String fecha_ingreso,
-                                   String imagenEquipo) {
+
+    public String getImagenQr() {
+        return imagenQr;
+    }
+
+    public void setImagenQr(String imagenQr) {
+        this.imagenQr = imagenQr;
+    }
+
+    public ListElementEquiposNuevo(String nameEquipo, String marca, String modelo, String tipoEquipo, String descripcionEquipo, String status, String idSitio, String sku, String fecha_ingreso, String imagenEquipo, String imagenQr) {
         this.nameEquipo = nameEquipo;
         this.marca = marca;
         this.modelo = modelo;
@@ -32,7 +40,7 @@ public class ListElementEquiposNuevo implements Serializable {
         this.sku = sku;
         this.fecha_ingreso = fecha_ingreso;
         this.imagenEquipo = imagenEquipo;
-
+        this.imagenQr = imagenQr;
     }
 
     public String getNameEquipo() {

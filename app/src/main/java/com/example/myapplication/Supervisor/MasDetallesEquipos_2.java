@@ -84,7 +84,7 @@ public class MasDetallesEquipos_2 extends AppCompatActivity {
             // Código para abrir MainActivity_new_user_admin desde la actividad del perfil de dispositivo
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MasDetallesEquipos_2.this, CrearEquipo_2.class);
+                Intent intent = new Intent(MasDetallesEquipos_2.this,CrearEquipo_2.class);
                 intent.putExtra("isEditing", true);
                 intent.putExtra("ListElement", element);
                 startActivity(intent);
