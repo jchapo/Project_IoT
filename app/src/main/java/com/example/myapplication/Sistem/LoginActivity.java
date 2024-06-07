@@ -1,84 +1,77 @@
 package com.example.myapplication.Sistem;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.NavegacionInicial;
 import com.example.myapplication.R;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sistema_activity_main_login_users);
 
-        Button buttonLogin = findViewById(R.id.buttonLogin); // Reemplaza "buttonLogin" con el ID correcto de tu botón
+        mAuth = FirebaseAuth.getInstance();
 
+        Button buttonLogin = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(LoginActivity.this, NavegacionInicial.class);
-                startActivity(intent);
-            }
-        });
-
-        TextView textForgotPassword = findViewById(R.id.textForgotPassword); // Reemplaza "textForgotPassword" con el ID correcto de tu TextView
-        textForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                showForgotPasswordPopup();
+                signIn();
             }
         });
     }
 
-    private void showForgotPasswordPopup() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-        builder.setTitle("Correo de recuperación:");
+    private void signIn() {
+        TextInputLayout textInputLayoutEmail = findViewById(R.id.textInputEmail);
+        TextInputLayout textInputLayoutPassword = findViewById(R.id.textInputPassword);
 
-        final TextInputLayout textInputLayout = new TextInputLayout(this);
-        textInputLayout.setHint("Correo electrónico");
-        int padding = (int) getResources().getDimension(R.dimen.padding_16dp);
-        textInputLayout.setPadding(padding, padding, padding, padding);
+        TextInputEditText editTextEmail = (TextInputEditText) textInputLayoutEmail.getEditText();
+        TextInputEditText editTextPassword = (TextInputEditText) textInputLayoutPassword.getEditText();
 
-        final TextInputEditText textInputEditText = new TextInputEditText(this);
-        textInputLayout.addView(textInputEditText);
 
-        builder.setView(textInputLayout);
+        if (editTextEmail != null && editTextPassword != null) {
+            String email = editTextEmail.getText().toString();
+            String password = editTextPassword.getText().toString();
 
-        builder.setPositiveButton("Enviar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String userEmail = textInputEditText.getText().toString();
-                Toast.makeText(getBaseContext(), "Correo electrónico enviado", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        builder.show();
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                startActivity(new Intent(LoginActivity.this, NavegacionInicial.class));
+                                finish();
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        } else {
+            // Handle the case where editTextEmail or editTextPassword is null
+            Toast.makeText(LoginActivity.this, "EditText is null.",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
-
-
 
 }

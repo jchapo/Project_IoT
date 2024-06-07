@@ -43,6 +43,7 @@ dependencies {
     implementation libs.recyclerview
     implementation libs.cardview
     implementation libs.play.services.maps
+    implementation libs.firebase.auth
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
@@ -60,6 +61,4 @@ dependencies {
     implementation 'com.google.zxing:core:3.3.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
 
-    implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
 }
