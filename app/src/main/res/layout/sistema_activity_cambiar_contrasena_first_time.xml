@@ -7,7 +7,6 @@
     android:background="@color/white"
     tools:context="Sistem.MainActivityCambiarPrimeraContra">
 
-    <!-- Encabezado con fondo de color del botón -->
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
@@ -17,7 +16,6 @@
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Texto de bienvenida -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBarNewSite"
             android:layout_width="match_parent"
@@ -29,7 +27,6 @@
             app:titleTextColor="@color/gris" />
     </LinearLayout>
 
-    <!-- Texto de seguridad -->
     <TextView
         android:id="@+id/textSecurity"
         android:layout_width="0dp"
@@ -47,9 +44,6 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp"/>
 
-    <!-- Subtítulo: Nueva contraseña -->
-
-    <!-- Campo para la nueva contraseña -->
     <TextView
         android:id="@+id/textSubNewPassword"
         android:layout_width="0dp"
@@ -77,6 +71,7 @@
         android:layout_marginTop="8dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextNewPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
@@ -85,7 +80,6 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Subtítulo: Confirmar nueva contraseña -->
     <TextView
         android:id="@+id/textSubConfirmPassword"
         android:layout_width="0dp"
@@ -98,7 +92,6 @@
         android:paddingStart="24dp"
         android:paddingTop="16dp"/>
 
-    <!-- Campo para confirmar la nueva contraseña -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputConfirmPassword"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -112,6 +105,7 @@
         android:layout_marginTop="8dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextConfirmPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
@@ -120,7 +114,6 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Botón de aceptar -->
     <Button
         android:id="@+id/buttonAccept"
         android:layout_width="0dp"
@@ -136,8 +129,4 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="32dp"/>
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
