@@ -57,13 +57,12 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
     TextView mailDescriptionTextView;
     TextView phoneDescriptionTextView;
     TextView addressDescriptionTextView;
-    TextView textoHabilitar,textViewDevider2;
+    TextView textoHabilitar,textViewDevider2User;
     FirebaseFirestore db;
     String estado;
     ImageView profileImageView;
     LinearLayout assignedSitesLayout;
     View deviderSitiosAsignados;
-    FrameLayout FrameLayout;
     FirebaseStorage storage;
     StorageReference storageReference;
 
@@ -89,7 +88,7 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
         phoneDescriptionTextView = findViewById(R.id.textViewPhone);
         addressDescriptionTextView = findViewById(R.id.textViewAddress);
         profileImageView = findViewById(R.id.imageViewProfileAdmin);
-        textViewDevider2 = findViewById(R.id.textViewDevider2);
+        textViewDevider2User = findViewById(R.id.textViewDevider2User);
         deviderSitiosAsignados = findViewById(R.id.deviderSitiosAsignados);
         assignedSitesLayout = findViewById(R.id.assignedSitesLayout);
         FrameLayout btnAddSiteUserProfile = findViewById(R.id.btnAddSiteUserProfile);
@@ -156,7 +155,7 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
             textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
             textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0);
         } else {
-            textViewDevider2.setVisibility(View.GONE);
+            textViewDevider2User.setVisibility(View.GONE);
             deviderSitiosAsignados.setVisibility(View.GONE);
             btnAddSiteUserProfile.setVisibility(View.GONE);
             textoHabilitar.setText("Habilitar Usuario");
