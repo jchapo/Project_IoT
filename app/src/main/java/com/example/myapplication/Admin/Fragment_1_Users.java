@@ -15,6 +15,7 @@ import com.example.myapplication.Admin.items.ListAdapterUser;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.R;
+import com.example.myapplication.databinding.AdminFragmentUsersBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -24,15 +25,16 @@ public class Fragment_1_Users extends Fragment {
 
     private ArrayList<ListElementUser> activeUsers = new ArrayList<>();
     private ArrayList<ListElementUser> inactiveUsers = new ArrayList<>();
-
     private ListAdapterUser listAdapterUsers;
     private RecyclerView recyclerViewUsers;
+    AdminFragmentUsersBinding binding;
     private NavigationActivityViewModel navigationActivityViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.admin_fragment_users, container, false);
-        setHasOptionsMenu(true);
+        binding = AdminFragmentUsersBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        binding.topAppBarUserFragment.setTitle("Usuarios");
         navigationActivityViewModel = new ViewModelProvider(requireActivity()).get(NavigationActivityViewModel.class);
         initializeViews(view);
         observeViewModel();
@@ -45,29 +47,27 @@ public class Fragment_1_Users extends Fragment {
                 activeUsers.clear();
                 listAdapterUsers.notifyDataSetChanged();
                 activeUsers.addAll(usuarioActivos);
-
             });
             navigationActivityViewModel.getInactiveUsers().observe(getViewLifecycleOwner(), usuarioInactivos -> {
                 inactiveUsers.clear();
                 listAdapterUsers.notifyDataSetChanged();
                 inactiveUsers.addAll(usuarioInactivos);
-
             });
         }
     }
 
     private void initializeViews(View view) {
-        listAdapterUsers = new ListAdapterUser(activeUsers, getContext(), this::moveToDescription);
-        recyclerViewUsers = view.findViewById(R.id.listElementsUsers);
-        recyclerViewUsers.setHasFixedSize(true);
-        recyclerViewUsers.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewUsers.setAdapter(listAdapterUsers);
         FloatingActionButton agregarUsuarioButton = view.findViewById(R.id.agregarUsuariofloatingActionButton);
         agregarUsuarioButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), MainActivity_1_Users_NewUser.class);
             startActivity(intent);
         });
-        TabLayout tabLayout = view.findViewById(R.id.tabLayoutUsers);
+        listAdapterUsers = new ListAdapterUser(activeUsers, getContext(), this::moveToDescription);
+        recyclerViewUsers = binding.listElementsUsers;
+        recyclerViewUsers.setHasFixedSize(true);
+        recyclerViewUsers.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewUsers.setAdapter(listAdapterUsers);
+        TabLayout tabLayout = binding.tabLayoutUsers;
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
