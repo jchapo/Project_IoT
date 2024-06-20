@@ -12,9 +12,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,8 +30,8 @@ import java.util.List;
 
 public class UsersFragmentSuperAdmin extends Fragment {
     private List<ListElementSuperAdminUser> elements;
-    private List<ListElementSuperAdminUser> activeUsers;
-    private List<ListElementSuperAdminUser> inactiveUsers;
+    private List<ListElementSuperAdminUser> adminUser;
+    private List<ListElementSuperAdminUser> supervisorUser;
     private ListAdapterSuperAdminUser ListAdapterSuperAdminUser;
     private RecyclerView recyclerViewUsers;
     FirebaseFirestore db;
@@ -59,6 +57,8 @@ public class UsersFragmentSuperAdmin extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                Log.d("SearchView", "Query text changed to: " + newText); // Añadir este log para depuración
+                System.out.println("hola: " + newText);
                 ListAdapterSuperAdminUser.filter(newText);
                 return true;
             }
@@ -83,7 +83,6 @@ public class UsersFragmentSuperAdmin extends Fragment {
         agregarUsuarioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Aquí cambia "NuevaActividad" por la clase de la actividad a la que deseas cambiar
                 Intent intent = new Intent(getActivity(), NewAdmin.class);
                 startActivity(intent);
             }
@@ -95,11 +94,11 @@ public class UsersFragmentSuperAdmin extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        ListAdapterSuperAdminUser.setItems(activeUsers);
+                        ListAdapterSuperAdminUser.setItems(adminUser);
                         ListAdapterSuperAdminUser.notifyDataSetChanged();
                         break;
                     case 1:
-                        ListAdapterSuperAdminUser.setItems(inactiveUsers);
+                        ListAdapterSuperAdminUser.setItems(supervisorUser);
                         ListAdapterSuperAdminUser.notifyDataSetChanged();
                         break;
                 }
@@ -116,10 +115,10 @@ public class UsersFragmentSuperAdmin extends Fragment {
 
     public void init(View view) {
         elements = new ArrayList<>();
-        activeUsers = new ArrayList<>();
-        inactiveUsers = new ArrayList<>();
+        adminUser = new ArrayList<>();
+        supervisorUser = new ArrayList<>();
 
-        db = FirebaseFirestore. getInstance();
+        db = FirebaseFirestore.getInstance();
         db.collection("usuarios")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -127,28 +126,59 @@ public class UsersFragmentSuperAdmin extends Fragment {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             ListElementSuperAdminUser listElementSuperAdminUser = document.toObject(ListElementSuperAdminUser.class);
                             Log.d("msg-test", "Active users: " + listElementSuperAdminUser.getName());
-                            if ("Activo".equals(listElementSuperAdminUser.getStatus())) {
-                                activeUsers.add(listElementSuperAdminUser);
-                            } else if ("Inactivo".equals(listElementSuperAdminUser.getStatus())) {
-                                inactiveUsers.add(listElementSuperAdminUser);
+                            if ("Administrador".equals(listElementSuperAdminUser.getUser())) {
+                                adminUser.add(listElementSuperAdminUser);
+                            } else if ("Supervisor".equals(listElementSuperAdminUser.getUser())) {
+                                supervisorUser.add(listElementSuperAdminUser);
                             }
                         }
-                        // Aquí puedes hacer algo con las listas activeUsers y inactiveUsers
-                        // Por ejemplo, imprimir los tamaños de las listas
-                        Log.d("msg-test", "Active users: " + activeUsers.size());
-                        Log.d("msg-test", "Inactive users: " + inactiveUsers.size());
+                        Log.d("msg-test", "Administrador users: " + adminUser.size());
+                        Log.d("msg-test", "Supervisor users: " + supervisorUser.size());
+
+                        // Set initial data to active users
+                        ListAdapterSuperAdminUser.setItems(adminUser);
+                        ListAdapterSuperAdminUser.notifyDataSetChanged();
                     } else {
                         Log.d("msg-test", "Error getting documents: ", task.getException());
                     }
                 });
 
-
-
-        ListAdapterSuperAdminUser = new ListAdapterSuperAdminUser(activeUsers, getContext(), item -> moveToDescription(item));
+        ListAdapterSuperAdminUser = new ListAdapterSuperAdminUser(adminUser, getContext(), item -> moveToDescription(item));
         recyclerViewUsers = view.findViewById(R.id.listElementsSuperAdmin);
         recyclerViewUsers.setHasFixedSize(true);
         recyclerViewUsers.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewUsers.setAdapter(ListAdapterSuperAdminUser);
+
+        // Select the active users tab initially
+        TabLayout tabLayout = view.findViewById(R.id.tabLayoutSuperAdmin);
+        tabLayout.post(() -> {
+            TabLayout.Tab tab = tabLayout.getTabAt(0); // Assuming the first tab is for active users
+            if (tab != null) {
+                tab.select();
+            }
+        });
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        ListAdapterSuperAdminUser.setItems(adminUser);
+                        ListAdapterSuperAdminUser.notifyDataSetChanged();
+                        break;
+                    case 1:
+                        ListAdapterSuperAdminUser.setItems(supervisorUser);
+                        ListAdapterSuperAdminUser.notifyDataSetChanged();
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
     }
 
     public void moveToDescription(ListElementSuperAdminUser item){
