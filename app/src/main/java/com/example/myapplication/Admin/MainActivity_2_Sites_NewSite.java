@@ -136,7 +136,7 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == RESULT_OK && result.getData() != null){
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         imageUri = result.getData().getData();
                         try {
                             // Usar Glide para mostrar la imagen seleccionada en el ImageView
@@ -148,7 +148,8 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                });
+                }
+        );
 
         db = FirebaseFirestore.getInstance();
 

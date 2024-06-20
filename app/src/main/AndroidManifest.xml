@@ -125,19 +125,16 @@
             android:name=".Supervisor.ImagenesSitio"
             android:exported="false" />
         <activity
+            android:name=".Supervisor.ImagenesEquipo"
+            android:exported="false" />
+        <activity
             android:name=".Supervisor.MasDetallesSitioSupervisor"
             android:exported="false" />
         <activity
             android:name=".Supervisor.NavegacionSupervisor"
             android:exported="true" />
         <activity
-            android:name=".Supervisor.CrearEquipo"
-            android:exported="false" />
-        <activity
             android:name=".Supervisor.CrearEquipo_2"
-            android:exported="false" />
-        <activity
-            android:name=".Supervisor.MasDetallesEquipos"
             android:exported="false" />
         <activity
             android:name=".Supervisor.MasDetallesEquipos_2"

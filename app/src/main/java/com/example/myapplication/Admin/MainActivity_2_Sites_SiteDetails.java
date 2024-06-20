@@ -123,6 +123,13 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
+        findViewById(R.id.fabEditSiteAdmin).setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_2_Sites_NewSite.class);
+            intent.putExtra("isEditing", true);
+            intent.putExtra("ListElement", element);
+            startActivity(intent);
+        });
+
         if (btnAddSuperSiteProfile.getParent() == null) {
             assignedSuperLayout.addView(btnAddSuperSiteProfile, 0);
         }
@@ -151,8 +158,6 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         textoHabilitar.setOnClickListener(v -> showConfirmationDialog(v, estado));
 
         ImageButton buttonImagesSiteAdmin = findViewById(R.id.buttonImagesSiteAdmin);
-        ImageButton buttonMapSite = findViewById(R.id.buttonMapSite);
-
         buttonImagesSiteAdmin.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_2_Sites_SiteImages.class);
             intent.putExtra("imagenesSitio", element.getImageUrl());
@@ -160,7 +165,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
             startActivityForResult(intent, REQUEST_CODE_UPDATE_IMAGES);
         });
 
-
+        ImageButton buttonMapSite = findViewById(R.id.buttonMapSite);
         buttonMapSite.setOnClickListener(v -> openMapActivity(element));
         showAssignedSuper(element);
 
