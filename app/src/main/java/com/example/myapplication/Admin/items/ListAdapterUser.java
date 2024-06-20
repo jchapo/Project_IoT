@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListAdapterUser extends RecyclerView.Adapter<ListAdapterUser.ViewHolder> {
@@ -51,10 +53,12 @@ public class ListAdapterUser extends RecyclerView.Adapter<ListAdapterUser.ViewHo
     }
 
     public void setItems(List<ListElementUser> items) {
+        Collections.sort(items, Comparator.comparing(ListElementUser::getName)); // Ordenar alfabéticamente
         nData = items;
         nDataFull = new ArrayList<>(items); // Actualizar la lista completa al cambiar los datos
         notifyDataSetChanged();
     }
+
 
     public void filter(String text) {
         nData.clear();

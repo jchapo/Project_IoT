@@ -3,7 +3,6 @@ package com.example.myapplication.SuperAdmin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import com.google.android.material.appbar.MaterialToolbar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +11,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.myapplication.Admin.MainActivity_1_Users_UserDetais;
 import com.example.myapplication.R;
 
 public class EditAdmin extends AppCompatActivity {

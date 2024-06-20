@@ -21,6 +21,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAExTORfkCED6S7JMtHAnYKhJVJ5J9inaw" />
+        <activity
+            android:name=".Supervisor.EquiposDeSitios"
+            android:exported="false" />
 
         <activity
             android:name=".Admin.MainActivity_2_Sites_MappChooser"
@@ -28,9 +31,8 @@
         <activity
             android:name=".Supervisor.EditarEquipo"
             android:exported="false" />
-
         <activity
-            android:name=".NavegacionInicial"
+            android:name=".Sistem.LoginActivityFirstTime"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +50,10 @@
             android:name=".Admin.MainActivity_3_Chat_ChatAdmin"
             android:exported="false" />
         <activity
-            android:name=".Sistem.LoginActivityFirstTime"
+            android:name=".Admin.MainActivity_2_SiteLocation"
+            android:exported="false" />
+        <activity
+            android:name=".NavegacionInicial"
             android:exported="true" />
         <activity
             android:name=".Sistem.MainActivity_notificacion_user"
@@ -90,7 +95,7 @@
             android:name=".Admin.MainActivity_0_NavigationSearch"
             android:exported="false" />
         <activity
-            android:name=".Admin.MainActivity_1_Users_UserDetais"
+            android:name=".Admin.MainActivity_1_Users_UserDetails"
             android:exported="false" />
         <activity
             android:name=".Admin.MainActivity_1_Users_EditUser"

@@ -2,7 +2,9 @@ package com.example.myapplication.Admin;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -16,12 +18,20 @@ import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.ImagenesSitio;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
 
 
     TextView nameTextViewSite;
-    TextView departmentDescriptionTextView,provinceDescriptionTextView,districtDescriptionTextView;
+    TextView departmentDescriptionTextView, provinceDescriptionTextView, districtDescriptionTextView;
+    TextView textoHabilitar;
+    FirebaseFirestore db;
+    String estado;
+    String coordenadas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,23 +48,20 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         departmentDescriptionTextView.setText(element.getDepartment());
         provinceDescriptionTextView.setText(element.getProvince());
         districtDescriptionTextView.setText(element.getDistrict());
-
+        estado = element.getStatus();
+        coordenadas = element.getCoordenadas();
 
         Toolbar toolbar = findViewById(R.id.topAppBarSitePerfilAdmin);
+        toolbar.setTitle("Detalles "+element.getName().toUpperCase());
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_0_NavigationAdmin.class);
-                intent.putExtra("comeFrom", "siteProfile");
-                startActivity(intent);
-            }
+        toolbar.setNavigationOnClickListener(v -> {
+            finish();
         });
 
         // Agregar Listener al botón flotante de editar
         findViewById(R.id.fabEditSiteAdmin).setOnClickListener(new View.OnClickListener() {
-            // Código para abrir MainActivity_new_user_admin desde la actividad del perfil de usuario
+            // Código para abrir MainActivity_new_user_admin desde la actividad del perfil de Sitio
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_2_Sites_NewSite.class);
@@ -66,6 +73,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
 
         // Obtener referencia al botón de imágenes
         ImageButton buttonImagesSiteAdmin = findViewById(R.id.buttonImagesSiteAdmin);
+        ImageButton buttonMapSite = findViewById(R.id.buttonMapSite);
 
         // Agregar un OnClickListener al botón de imágenes
         buttonImagesSiteAdmin.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +82,8 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
                 finish();
             }
         });
-
+        // Inicializar el botón y configurar el Intent para Google Maps
+        buttonMapSite.setOnClickListener(v -> openMapActivity(element));
         // Obtener referencia al FrameLayout que actuará como botón
         FrameLayout btnAddSupervisor = findViewById(R.id.btnAddSupervisor);
 
@@ -82,35 +91,103 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         btnAddSupervisor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Crear Intent para iniciar la actividad MainActivity_addSupervisor_admin
-                Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_2_Sites_AddSupervisor.class);
-                // Iniciar la actividad MainActivity_addSupervisor_admin con el Intent
-                startActivity(intent);
+               finish();
+            }
+        });
+        textoHabilitar = findViewById(R.id.deleteSitePerfil);
+        if (estado.equals("Activo")) {
+            // Cambiar el texto, color y ícono para "Inhabilitar Sitio"
+            textoHabilitar.setText("Inhabilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0); // Icono a la izquierda
+        } else {
+            // Cambiar el texto, color y ícono para "Habilitar Sitio"
+            textoHabilitar.setText("Habilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme())); // Suponiendo que tienes un color para habilitar
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0); // Icono a la izquierda
+        }
+
+        findViewById(R.id.deleteSitePerfil).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmationDialog(v, estado);
+            }
+        });
+
+        textoHabilitar = findViewById(R.id.deleteSitePerfil);
+        if (estado.equals("Activo")) {
+            // Cambiar el texto, color y ícono para "Inhabilitar Sitio"
+            textoHabilitar.setText("Inhabilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0); // Icono a la izquierda
+        } else {
+            // Cambiar el texto, color y ícono para "Habilitar Sitio"
+            textoHabilitar.setText("Habilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme())); // Suponiendo que tienes un color para habilitar
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0); // Icono a la izquierda
+        }
+
+        findViewById(R.id.deleteSitePerfil).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmationDialog(v, estado);
             }
         });
     }
 
-    public void showConfirmationDialog(View view) {
+    public void showConfirmationDialog(View view, String currentState) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Confirmación");
-        builder.setMessage("¿Está seguro de inhabilitar este sitio?");
+
+        final String newState;
+        final String message;
+        if (currentState.equals("Activo")) {
+            message = "¿Está seguro de inhabilitar este sitio?";
+            newState = "Inactivo";
+        } else {
+            message = "¿Está seguro de habilitar este sitio?";
+            newState = "Activo";
+        }
+
+        builder.setMessage(message);
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                // Aquí puedes realizar la acción de inhabilitar el sitio
-                // Muestra un toast después de inhabilitar el sitio
-                Toast.makeText(MainActivity_2_Sites_SiteDetails.this, "El sitio ha sido inhabilitado", Toast.LENGTH_LONG).show();
-                // Termina la actividad actual y regresa a la actividad anterior
-                finish();
+                db = FirebaseFirestore.getInstance();
+                Map<String, Object> update = new HashMap<>();
+                update.put("status", newState);
+
+                db.collection("sitios")
+                        .document(nameTextViewSite.getText().toString())
+                        .update(update)
+                        .addOnSuccessListener(aVoid -> {
+                            String toastMessage = newState.equals("Inactivo") ? "El sitio ha sido inhabilitado" : "El sitio ha sido habilitado";
+                            Toast.makeText(MainActivity_2_Sites_SiteDetails.this, toastMessage, Toast.LENGTH_SHORT).show();
+                            updateUIBasedOnState(newState);
+                            finish();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(MainActivity_2_Sites_SiteDetails.this, "Error al actualizar el estado del sitio", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        });
             }
         });
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss(); // Cierra el diálogo sin hacer nada
-            }
-        });
+
+        builder.setNegativeButton("Cancelar", null);
         builder.show();
+    }
+    private void updateUIBasedOnState(String state) {
+        TextView textoHabilitar = findViewById(R.id.deleteSitePerfil);
+
+        if (state.equals("Activo")) {
+            textoHabilitar.setText("Inhabilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0);
+        } else {
+            textoHabilitar.setText("Habilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme()));
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0);
+        }
     }
 
     public void showRemoveSupervisorConfirmationDialog(View view) {
@@ -130,6 +207,25 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
                     }
                 });
         builder.show();
+    }
+
+    private void openMapActivity(ListElementSite element) {
+        String[] parts = element.getCoordenadas().split(";");
+        if (parts.length == 2) {
+            try {
+                double latitude = Double.parseDouble(parts[0].trim());
+                double longitude = Double.parseDouble(parts[1].trim());
+                Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_2_SiteLocation.class);
+                intent.putExtra("siteName", element.getName());
+                intent.putExtra("latitude", latitude);
+                intent.putExtra("longitude", longitude);
+                startActivity(intent);
+            } catch (NumberFormatException e) {
+                Log.e("MainActivity_2_Sites_SiteDetails", "Error al parsear coordenadas", e);
+            }
+        } else {
+            Log.e("MainActivity_2_Sites_SiteDetails", "Formato de coordenadas incorrecto");
+        }
     }
 
 }

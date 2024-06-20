@@ -9,22 +9,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.Admin.MainActivity_0_NavigationAdmin;
+import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.SuperAdmin.MainActivity_navigation_SuperAdmin;
 import com.example.myapplication.Supervisor.NavegacionSupervisor;
 
 public class NavegacionInicial extends AppCompatActivity {
+    NavigationActivityViewModel navigationActivityViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sistema_activity_navegacion_inicial);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        navigationActivityViewModel = new ViewModelProvider(NavegacionInicial.this) .get(NavigationActivityViewModel. class);
 
         Button supervButton = findViewById(R.id.Supervisor);
         Button adminButton = findViewById(R.id.Admin);
@@ -33,7 +32,10 @@ public class NavegacionInicial extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Código para iniciar la actividad Admin
+                String inicio = "1";
+                navigationActivityViewModel.getInicio().setValue(inicio);
                 Intent intent = new Intent(NavegacionInicial.this, MainActivity_0_NavigationAdmin.class);
+                intent.putExtra("inicio", inicio);
                 startActivity(intent);
             }
         });
@@ -41,8 +43,11 @@ public class NavegacionInicial extends AppCompatActivity {
         supervButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // Código para iniciar la actividad Admin
+                String inicio = "2";
+                navigationActivityViewModel.getInicio().setValue(inicio);
                 Intent intent = new Intent(NavegacionInicial.this, NavegacionSupervisor.class);
+                intent.putExtra("inicio", inicio);
                 startActivity(intent);
             }
         });

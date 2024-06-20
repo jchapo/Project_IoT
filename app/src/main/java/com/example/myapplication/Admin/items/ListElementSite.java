@@ -11,22 +11,20 @@ public class ListElementSite implements Serializable {
     public String ubigeo;
     public String zonetype;
     public String sitetype;
-
     public String name;
     public String status;
-
-    private String latitud;
-
-    private String longitud;
-
+    private Double latitud;
+    private Double longitud;
     public String coordenadas;
+    private String fechaCreacion;
+    private String imageUrl;
 
-
-
+    public ListElementSite() {
+    }
     public ListElementSite(String department, String name, String status, String province,
-
                            String district, String address,String location, String ubigeo,
-                           String zonetype, String sitetype, String latitud, String longitud) {
+                           String zonetype, String sitetype, Double latitud, Double longitud,
+                           String coordenadas,String fechaCreacion, String imageUrl) {
 
         this.department = department;
         this.province = province;
@@ -41,8 +39,25 @@ public class ListElementSite implements Serializable {
         this.longitud = longitud;
         this.status = status;
         this.coordenadas = coordenadas;
+        this.fechaCreacion = fechaCreacion;
+        this.imageUrl = imageUrl;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(String fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
     public String getStatus() {
         return status;
@@ -124,19 +139,19 @@ public class ListElementSite implements Serializable {
         this.sitetype = sitetype;
     }
 
-    public String getLatitud() {
+    public Double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(String latitud) {
+    public void setLatitud(Double latitud) {
         this.latitud = latitud;
     }
 
-    public String getLongitud() {
+    public Double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(String longitud) {
+    public void setLongitud(Double longitud) {
         this.longitud = longitud;
     }
 

@@ -73,7 +73,6 @@ public class LogFragment extends Fragment {
 
         return view;
     }
-
     private void showFilterDialog() {
         FilterLogsDialogFragment dialogFragment = new FilterLogsDialogFragment(new FilterLogsDialogFragment.FilterLogsListener() {
             @Override

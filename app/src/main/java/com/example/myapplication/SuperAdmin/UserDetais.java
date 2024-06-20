@@ -6,17 +6,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.myapplication.Admin.MainActivity_0_NavigationAdmin;
-import com.example.myapplication.Admin.MainActivity_1_Users_NewUser;
-import com.example.myapplication.Admin.MainActivity_1_Users_UserDetais;
-import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.example.myapplication.SuperAdmin.list.ListElementSuperAdminUser;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;

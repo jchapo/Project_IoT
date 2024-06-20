@@ -51,13 +51,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="16dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
 
                 <LinearLayout
                     android:id="@+id/imageView"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="80dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_height="80dp"
                     android:background="@color/md_theme_tertiaryFixedDim"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -85,41 +86,31 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         android:text="Nombre del sitio" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/departmentTextViewSite"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="12dp"
+                            android:textSize="14dp"
                             android:text="Departamento" />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="12dp"
-                            android:text=" / " />
                         <TextView
                             android:id="@+id/provinceTextViewSite"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="12dp"
+                            android:textSize="14dp"
                             android:text="Provincia" />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="12dp"
-                            android:text=" / " />
                         <TextView
                             android:id="@+id/districtTextViewSite"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="12dp"
+                            android:textSize="14dp"
                             android:text="Distrito" />
                     </LinearLayout>
 
@@ -291,27 +282,23 @@
                     app:layout_constraintStart_toStartOf="parent">
 
                     <ImageView
-                        android:id="@+id/iconDNI"
+                        android:id="@+id/iconDeleteSite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_delete_outline"
                         android:layout_gravity="center_vertical"
                         android:clickable="true"
                         android:focusable="true"
                         android:onClick="showConfirmationDialog" />
 
                     <TextView
-                        android:id="@+id/deleteUser"
+                        android:id="@+id/deleteSitePerfil"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/md_theme_error"
-                        android:text="Inhabilitar sitio"
                         android:padding="8dp"
                         android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
                         android:layout_gravity="center_vertical"
                         android:focusable="true"
-                        android:onClick="showConfirmationDialog"
                         android:gravity="start" />
 
                 </LinearLayout>

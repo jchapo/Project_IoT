@@ -49,7 +49,7 @@
                 app:cardCornerRadius="75dp">
 
                 <ImageView
-                    android:id="@+id/imageViewProfile"
+                    android:id="@+id/imageViewNewEquipment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -125,24 +125,21 @@
                 android:layout_marginTop="16dp">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editTipoEquipo"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_weight="1"
+                    android:hint="Tipo de Equipo">
 
-                    <Spinner
-                        android:id="@+id/spinner2"
-                        android:layout_width="345dp"
-                        android:layout_height="49dp"
-                        android:layout_weight="1"
-                        android:entries="@array/TipodeEquipo"
-                        android:prompt="@string/selecciona_sitio"
-                        android:spinnerMode="dropdown"
-                        android:tooltipText="Selecciona el equipo"
-                        android:dropDownHeight="50dp"
-                        />
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/selectTipoDeEquipo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
-
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

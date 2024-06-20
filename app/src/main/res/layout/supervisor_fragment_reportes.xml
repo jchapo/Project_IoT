@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
+
                 app:menu="@menu/top_app_bar_supervisor_reportes"
                 app:title="Reportes"
                 />
