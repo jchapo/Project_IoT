@@ -14,12 +14,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Admin.MainActivity_1_Users_NewUser;
+import com.example.myapplication.SuperAdmin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.R;
 import com.example.myapplication.SuperAdmin.list.ListAdapterSuperAdminUser;
 import com.example.myapplication.SuperAdmin.list.ListElementSuperAdminUser;
+import com.example.myapplication.databinding.AdminFragmentUsersBinding;
+import com.example.myapplication.databinding.SuperadminFragmentUsersBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,17 +34,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsersFragmentSuperAdmin extends Fragment {
-    private List<ListElementSuperAdminUser> elements;
-    private List<ListElementSuperAdminUser> adminUser;
-    private List<ListElementSuperAdminUser> supervisorUser;
-    private ListAdapterSuperAdminUser ListAdapterSuperAdminUser;
+    private ArrayList<ListElementSuperAdminUser> adminUser = new ArrayList<>();
+    private ArrayList<ListElementSuperAdminUser> supervisorUser = new ArrayList<>();
+    private ListAdapterSuperAdminUser listAdapterSuperAdminUser;
     private RecyclerView recyclerViewUsers;
     FirebaseFirestore db;
+    SuperadminFragmentUsersBinding binding;
+    private NavigationActivityViewModel navigationActivityViewModel;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = SuperadminFragmentUsersBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        binding.topAppBarUserFragment.setTitle("Usuarios");
+        navigationActivityViewModel = new ViewModelProvider(requireActivity()).get(NavigationActivityViewModel.class);
+        initializeViews(view);
+        observeViewModel();
+
+
+
+        TabLayout tabLayout = view.findViewById(R.id.tabLayoutSuperAdmin);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        listAdapterSuperAdminUser.setItems(adminUser);
+                        listAdapterSuperAdminUser.notifyDataSetChanged();
+                        break;
+                    case 1:
+                        listAdapterSuperAdminUser.setItems(supervisorUser);
+                        listAdapterSuperAdminUser.notifyDataSetChanged();
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
+        return view;
     }
 
     @Override
@@ -59,7 +96,7 @@ public class UsersFragmentSuperAdmin extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 Log.d("SearchView", "Query text changed to: " + newText); // Añadir este log para depuración
                 System.out.println("hola: " + newText);
-                ListAdapterSuperAdminUser.filter(newText);
+                listAdapterSuperAdminUser.filter(newText);
                 return true;
             }
         });
@@ -71,83 +108,32 @@ public class UsersFragmentSuperAdmin extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.superadmin_fragment_users, container, false);
-        setHasOptionsMenu(true);
-        init(view);
-
-        FloatingActionButton agregarUsuarioButton = view.findViewById(R.id.agregarAdminfloatingActionButton);
-        agregarUsuarioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), NewAdmin.class);
-                startActivity(intent);
-            }
-        });
-
-        TabLayout tabLayout = view.findViewById(R.id.tabLayoutSuperAdmin);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 0:
-                        ListAdapterSuperAdminUser.setItems(adminUser);
-                        ListAdapterSuperAdminUser.notifyDataSetChanged();
-                        break;
-                    case 1:
-                        ListAdapterSuperAdminUser.setItems(supervisorUser);
-                        ListAdapterSuperAdminUser.notifyDataSetChanged();
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
-        });
-        return view;
+    private void observeViewModel() {
+        if (navigationActivityViewModel != null) {
+            navigationActivityViewModel.getAdminUser().observe(getViewLifecycleOwner(), adminUserList -> {
+                adminUser.clear();
+                listAdapterSuperAdminUser.notifyDataSetChanged();
+                adminUser.addAll(adminUserList);
+            });
+            navigationActivityViewModel.getSupervisorUser().observe(getViewLifecycleOwner(), supervisorUserList -> {
+                supervisorUser.clear();
+                listAdapterSuperAdminUser.notifyDataSetChanged();
+                supervisorUser.addAll(supervisorUserList);
+            });
+        }
     }
 
-    public void init(View view) {
-        elements = new ArrayList<>();
-        adminUser = new ArrayList<>();
-        supervisorUser = new ArrayList<>();
-
-        db = FirebaseFirestore.getInstance();
-        db.collection("usuarios")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            ListElementSuperAdminUser listElementSuperAdminUser = document.toObject(ListElementSuperAdminUser.class);
-                            Log.d("msg-test", "Active users: " + listElementSuperAdminUser.getName());
-                            if ("Administrador".equals(listElementSuperAdminUser.getUser())) {
-                                adminUser.add(listElementSuperAdminUser);
-                            } else if ("Supervisor".equals(listElementSuperAdminUser.getUser())) {
-                                supervisorUser.add(listElementSuperAdminUser);
-                            }
-                        }
-                        Log.d("msg-test", "Administrador users: " + adminUser.size());
-                        Log.d("msg-test", "Supervisor users: " + supervisorUser.size());
-
-                        // Set initial data to active users
-                        ListAdapterSuperAdminUser.setItems(adminUser);
-                        ListAdapterSuperAdminUser.notifyDataSetChanged();
-                    } else {
-                        Log.d("msg-test", "Error getting documents: ", task.getException());
-                    }
-                });
-
-        ListAdapterSuperAdminUser = new ListAdapterSuperAdminUser(adminUser, getContext(), item -> moveToDescription(item));
+    public void initializeViews(View view) {
+        FloatingActionButton agregarUsuarioButton = binding.agregarAdminfloatingActionButton;
+        agregarUsuarioButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), NewAdmin.class);
+            startActivity(intent);
+        });
+        listAdapterSuperAdminUser = new ListAdapterSuperAdminUser(adminUser, getContext(), item -> moveToDescription(item));
         recyclerViewUsers = view.findViewById(R.id.listElementsSuperAdmin);
         recyclerViewUsers.setHasFixedSize(true);
         recyclerViewUsers.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewUsers.setAdapter(ListAdapterSuperAdminUser);
+        recyclerViewUsers.setAdapter(listAdapterSuperAdminUser);
 
         // Select the active users tab initially
         TabLayout tabLayout = view.findViewById(R.id.tabLayoutSuperAdmin);
@@ -157,18 +143,17 @@ public class UsersFragmentSuperAdmin extends Fragment {
                 tab.select();
             }
         });
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        ListAdapterSuperAdminUser.setItems(adminUser);
-                        ListAdapterSuperAdminUser.notifyDataSetChanged();
+                        listAdapterSuperAdminUser.setItems(adminUser);
+                        listAdapterSuperAdminUser.notifyDataSetChanged();
                         break;
                     case 1:
-                        ListAdapterSuperAdminUser.setItems(supervisorUser);
-                        ListAdapterSuperAdminUser.notifyDataSetChanged();
+                        listAdapterSuperAdminUser.setItems(supervisorUser);
+                        listAdapterSuperAdminUser.notifyDataSetChanged();
                         break;
                 }
             }
@@ -179,6 +164,7 @@ public class UsersFragmentSuperAdmin extends Fragment {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+
     }
 
     public void moveToDescription(ListElementSuperAdminUser item){

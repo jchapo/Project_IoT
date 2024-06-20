@@ -24,6 +24,8 @@ import com.example.myapplication.SuperAdmin.list.ListAdapterLog;
 import com.example.myapplication.SuperAdmin.list.ListElementLog;
 
 import com.example.myapplication.SuperAdmin.list.ListElementLog.*;
+import com.example.myapplication.databinding.SuperadminFragmentLogBinding;
+import com.example.myapplication.databinding.SuperadminFragmentUsersBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -36,6 +38,7 @@ public class LogFragment extends Fragment {
     private List<ListElementLog> activeLog;
     private List<ListElementLog> inactiveLog;
     private ListAdapterLog listAdapterLog;
+    SuperadminFragmentLogBinding binding;
     private RecyclerView recyclerViewLog;
 
     @Override
@@ -58,11 +61,10 @@ public class LogFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.superadmin_fragment_log, container, false);
-        setHasOptionsMenu(true);
+        binding = SuperadminFragmentLogBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        binding.topAppBarUserFragment.setTitle("Registro de eventos");
         init(view);
-
         FloatingActionButton filtrarLogButton = view.findViewById(R.id.filtrarLogsfloatingActionButton);
         filtrarLogButton.setOnClickListener(new View.OnClickListener() {
             @Override

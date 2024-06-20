@@ -217,8 +217,6 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
     public void showConfirmationDialog(View view, String currentState) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Confirmación");
-
-        // Configurar el mensaje y el estado objetivo basado en el estado actual
         final String newState;
         final String message;
         if (currentState.equals("Activo")) {
