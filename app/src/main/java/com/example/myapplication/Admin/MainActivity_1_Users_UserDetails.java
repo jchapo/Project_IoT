@@ -1,5 +1,7 @@
 package com.example.myapplication.Admin;
 
+import static android.view.View.GONE;
+
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,6 +32,7 @@ import com.bumptech.glide.request.target.Target;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -71,16 +74,12 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_userprofile);
 
-        // Initialize Firestore
         db = FirebaseFirestore.getInstance();
-        // Initialize Firebase Storage
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        // Retrieve the passed ListElementUser object
         ListElementUser element = (ListElementUser) getIntent().getSerializableExtra("ListElement");
 
-        // Find views by their IDs
         nameDescriptionTextView = findViewById(R.id.fullNameTextView);
         userDescriptionTextView = findViewById(R.id.cargoTextView);
         dniDescriptionTextView = findViewById(R.id.textViewDNI);
@@ -93,7 +92,6 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
         assignedSitesLayout = findViewById(R.id.assignedSitesLayout);
         FrameLayout btnAddSiteUserProfile = findViewById(R.id.btnAddSiteUserProfile);
 
-        // Set text views with data from the element
         nameDescriptionTextView.setText(element.getName());
         mailDescriptionTextView.setText(element.getMail());
         userDescriptionTextView.setText(element.getUser());
@@ -102,11 +100,9 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
         addressDescriptionTextView.setText(element.getAddress());
         estado = element.getStatus();
 
-        // Dentro del método onCreate o donde se necesite cargar la imagen
         if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
             Log.d("UserDetails", "Image URL is not null or empty. URL: " + element.getImageUrl());
 
-            // Usar FirebaseImageLoader para cargar la imagen desde Firebase Storage
             StorageReference imageRef = storageReference.child(element.getImageUrl());
 
             Log.d("UserDetails", "StorageReference path: " + imageRef.getPath());
@@ -128,7 +124,6 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        // Set up the edit button
         findViewById(R.id.fabEditUserAdmin).setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity_1_Users_UserDetails.this, MainActivity_1_Users_NewUser.class);
             intent.putExtra("isEditing", true);
@@ -136,19 +131,16 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Add the FrameLayout to assignedSitesLayout if not already added
         if (btnAddSiteUserProfile.getParent() == null) {
             assignedSitesLayout.addView(btnAddSiteUserProfile, 0);
         }
 
-        // Set up the add site button
         btnAddSiteUserProfile.setOnClickListener(v -> {
             Intent intent7 = new Intent(this, MainActivity_2_Sites_AddSite.class);
             intent7.putExtra("idDNI", element.getDni());
             startActivityForResult(intent7, 1); // UPDATED
         });
 
-        // Set up enable/disable user button
         textoHabilitar = findViewById(R.id.deleteUserPerfil);
         if (estado.equals("Activo")) {
             textoHabilitar.setText("Inhabilitar Usuario");
@@ -161,11 +153,11 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
             textoHabilitar.setText("Habilitar Usuario");
             textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme()));
             textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0);
+            FloatingActionButton fabEditSiteAdmin = findViewById(R.id.fabEditUserAdmin);
+            fabEditSiteAdmin.setVisibility(GONE);
         }
 
         textoHabilitar.setOnClickListener(v -> showConfirmationDialog(v, estado));
-
-        // Display assigned sites
         showAssignedSites(element);
     }
 
@@ -219,7 +211,7 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
         final String newState;
         final String message;
         if (currentState.equals("Activo")) {
-            message = "¿Está seguro de inhabilitar este usuario?";
+            message = "¿Está seguro de inhabilitar este usuario?\nSe eliminaran sus sitios asignados.";
             newState = "Inactivo";
         } else {
             message = "¿Está seguro de habilitar este usuario?";
@@ -233,6 +225,7 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
             // Crear un mapa con el nuevo estado
             Map<String, Object> update = new HashMap<>();
             update.put("status", newState);
+            update.put("sitiosAsignados", "[]");
 
             // Obtener el documento del usuario y actualizar el campo 'status'
             db.collection("usuarios")
@@ -268,13 +261,9 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
             assignedSites = new Gson().fromJson(assignedSitesJson, new TypeToken<ArrayList<String>>() {}.getType());
         }
 
-        // Remove all views except the first one (btnAddSiteUserProfile)
         int childCount = assignedSitesLayout.getChildCount();
-        if (childCount > 1) {
-            assignedSitesLayout.removeViews(1, childCount - 1);
-        }
+        assignedSitesLayout.removeAllViews();
 
-        // Dynamically create CardView for each assigned site
         for (String site : assignedSites) {
             View siteCard = getLayoutInflater().inflate(R.layout.admin_sitio_asignado_card, assignedSitesLayout, false);
             TextView siteTextView = siteCard.findViewById(R.id.siteAsignedTextView);

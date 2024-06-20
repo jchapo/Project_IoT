@@ -46,12 +46,17 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.json.JSONArray;
+
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
     String canal1 = "importanteDefault3";
@@ -258,11 +263,20 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
                 byte[] imageBytes = baos.toByteArray();
 
                 String storagePath = "siteimages/" + listElement.getName() + ".jpg";
+                ArrayList<String> selectedImages = new ArrayList<>();
+                if (selectedImages.isEmpty()) {
+                    selectedImages.add(storagePath);
+                } else {
+                    selectedImages.add(0, storagePath);
+                }
+                Set<String> updatedImages = new HashSet<>(selectedImages);
+                String updatedSitesJson = new JSONArray(updatedImages).toString();
+
                 StorageReference ref = storageReference.child(storagePath);
                 ref.putBytes(imageBytes)
                         .addOnSuccessListener(taskSnapshot -> {
                             ref.getDownloadUrl().addOnSuccessListener(uri -> {
-                                listElement.setImageUrl(storagePath);
+                                listElement.setImageUrl(updatedSitesJson);
                                 saveSiteToFirestore(listElement, isEditing);
                             });
                         })
@@ -349,8 +363,9 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String fechaCreacion = fechaActual.format(formatter);
             String imagen = "";
+            String supervisoresAsignados = "";
 
-            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion, imagen);
+            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion, imagen, supervisoresAsignados);
             uploadImageAndSaveSite(listElement, false);
         }
     }
@@ -371,14 +386,16 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
             String coordenadas = (latitude != 0.0 && longitude != 0.0) ? coordenadas_edit : element.getCoordenadas();
             String name = element.getName();
             String address = editAddress.getText().toString();
-            String status = "Activo";
+            String status = element.getStatus();
             String ubigeo = editUbigeo.getText().toString();
             LocalDate fechaActual = LocalDate.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String fechaCreacion = fechaActual.format(formatter);
             String imagen = "";
+            String supervisoresAsignados = element.getSuperAsignados();
 
-            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion, imagen);
+
+            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion, imagen, supervisoresAsignados);
             uploadImageAndSaveSite(listElement, true);
         }
     }

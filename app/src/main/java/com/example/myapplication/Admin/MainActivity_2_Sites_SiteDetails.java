@@ -1,11 +1,14 @@
 package com.example.myapplication.Admin;
 
+import static android.view.View.GONE;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,8 +25,11 @@ import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.ImagenesSitio;
+import com.example.myapplication.Supervisor.MasDetallesSitioSupervisor;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,7 +39,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
-
+    private static final int REQUEST_CODE_UPDATE_SITE = 1;
+    private static final int REQUEST_CODE_UPDATE_IMAGES = 2;
 
     TextView nameTextViewSite;
     TextView departmentDescriptionTextView, provinceDescriptionTextView, districtDescriptionTextView;
@@ -43,8 +50,10 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
     ImageView profileImageView;
     View deviderSuperAsignados;
     LinearLayout assignedSuperLayout;
+    FirebaseStorage storage;
     StorageReference storageReference;
     String coordenadas;
+    ListElementSite element;
 
 
     @Override
@@ -52,7 +61,12 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_siteprofile);
 
-        ListElementSite element = (ListElementSite) getIntent().getSerializableExtra("ListElementSite");
+        db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
+        element = (ListElementSite) getIntent().getSerializableExtra("ListElementSite");
+
         nameTextViewSite = findViewById(R.id.nameTextViewSiteSiteProfile);
         departmentDescriptionTextView = findViewById(R.id.departmentTextViewSite);
         provinceDescriptionTextView = findViewById(R.id.provinceTextViewSite);
@@ -63,7 +77,6 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         assignedSuperLayout = findViewById(R.id.assignedSuperLayout);
         FrameLayout btnAddSuperSiteProfile = findViewById(R.id.btnAddSuperSiteProfile);
 
-
         nameTextViewSite.setText(element.getName());
         departmentDescriptionTextView.setText(element.getDepartment());
         provinceDescriptionTextView.setText(element.getProvince());
@@ -71,122 +84,110 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         estado = element.getStatus();
         coordenadas = element.getCoordenadas();
 
-        // Dentro del método onCreate o donde se necesite cargar la imagen
-        if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
-            Log.d("SiteDetails", "Image URL is not null or empty. URL: " + element.getImageUrl());
+        String assignedImageJson = element.getImageUrl();
+        ArrayList<String> assignedImage = new ArrayList<>();
+        String imagenUrl = "";
 
-            // Usar FirebaseImageLoader para cargar la imagen desde Firebase Storage
-            StorageReference imageRef = storageReference.child(element.getImageUrl());
+        if (assignedImageJson != null && !assignedImageJson.isEmpty()) {
+            assignedImage = new Gson().fromJson(assignedImageJson, new TypeToken<ArrayList<String>>() {}.getType());
+            if (assignedImage != null && !assignedImage.isEmpty()) {
+                imagenUrl = assignedImage.get(0);
+                Log.d("msg2", imagenUrl);
+            }
+        }
+
+        if (imagenUrl != null && !imagenUrl.isEmpty()) {
+            StorageReference imageRef = storageReference.child(imagenUrl);
 
             Log.d("UserDetails", "StorageReference path: " + imageRef.getPath());
+            ImageView imageView = findViewById(R.id.imageViewProfileSite);
+            ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            imageView.setLayoutParams(layoutParams);
 
             Glide.with(this /* context */)
                     .load(imageRef)
                     .skipMemoryCache(true) // Desactivar la caché de memoria
                     .diskCacheStrategy(DiskCacheStrategy.NONE) // Desactivar la caché en disco
-                    .into(profileImageView);
+                    .into(imageView);
 
             Log.d("UserDetails", "Image loading initiated with Glide.");
         } else {
             Log.d("UserDetails", "Image URL is null or empty.");
         }
 
+
         Toolbar toolbar = findViewById(R.id.topAppBarSitePerfilAdmin);
         toolbar.setTitle("Detalles "+element.getName().toUpperCase());
         setSupportActionBar(toolbar);
-
-        toolbar.setNavigationOnClickListener(v -> {
-            finish();
-        });
-
-        // Agregar Listener al botón flotante de editar
-        findViewById(R.id.fabEditSiteAdmin).setOnClickListener(new View.OnClickListener() {
-            // Código para abrir MainActivity_new_user_admin desde la actividad del perfil de Sitio
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_2_Sites_NewSite.class);
-                intent.putExtra("isEditing", true);
-                intent.putExtra("ListElementSite", element);
-                startActivity(intent);
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         if (btnAddSuperSiteProfile.getParent() == null) {
             assignedSuperLayout.addView(btnAddSuperSiteProfile, 0);
         }
-        // Set up the add site button
+
         btnAddSuperSiteProfile.setOnClickListener(v -> {
             Intent intent7 = new Intent(this, MainActivity_2_Sites_AddSupervisor.class);
             intent7.putExtra("siteName", element.getName());
-            startActivityForResult(intent7, 1); // UPDATED
+            startActivityForResult(intent7, REQUEST_CODE_UPDATE_SITE); // UPDATED
         });
 
-        // Obtener referencia al botón de imágenes
+        textoHabilitar = findViewById(R.id.deleteSitePerfil);
+        if (estado.equals("Activo")) {
+            // Cambiar el texto, color y ícono para "Inhabilitar Sitio"
+            textoHabilitar.setText("Inhabilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0); // Icono a la izquierda
+        } else {
+            textViewDevider2Site.setVisibility(GONE);
+            deviderSuperAsignados.setVisibility(GONE);
+            btnAddSuperSiteProfile.setVisibility(GONE);            textoHabilitar.setText("Habilitar Sitio");
+            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme())); // Suponiendo que tienes un color para habilitar
+            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0); // Icono a la izquierda
+            FloatingActionButton fabEditSiteAdmin = findViewById(R.id.fabEditSiteAdmin);
+            fabEditSiteAdmin.setVisibility(GONE);        }
+
+        textoHabilitar.setOnClickListener(v -> showConfirmationDialog(v, estado));
+
         ImageButton buttonImagesSiteAdmin = findViewById(R.id.buttonImagesSiteAdmin);
         ImageButton buttonMapSite = findViewById(R.id.buttonMapSite);
 
-        // Agregar un OnClickListener al botón de imágenes
-        buttonImagesSiteAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        buttonImagesSiteAdmin.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_2_Sites_SiteImages.class);
+            intent.putExtra("imagenesSitio", element.getImageUrl());
+            intent.putExtra("siteName", element.getName());  // Pasar el nombre del sitio
+            startActivityForResult(intent, REQUEST_CODE_UPDATE_IMAGES);
         });
-        // Inicializar el botón y configurar el Intent para Google Maps
+
+
         buttonMapSite.setOnClickListener(v -> openMapActivity(element));
-        
-        textoHabilitar = findViewById(R.id.deleteSitePerfil);
-        if (estado.equals("Activo")) {
-            // Cambiar el texto, color y ícono para "Inhabilitar Sitio"
-            textoHabilitar.setText("Inhabilitar Sitio");
-            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
-            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0); // Icono a la izquierda
-        } else {
-            textViewDevider2Site.setVisibility(View.GONE);
-            deviderSuperAsignados.setVisibility(View.GONE);
-            btnAddSuperSiteProfile.setVisibility(View.GONE);            textoHabilitar.setText("Habilitar Sitio");
-            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme())); // Suponiendo que tienes un color para habilitar
-            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0); // Icono a la izquierda
-        }
+        showAssignedSuper(element);
 
-        findViewById(R.id.deleteSitePerfil).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showConfirmationDialog(v, estado);
-            }
-        });
-
-        textoHabilitar = findViewById(R.id.deleteSitePerfil);
-        if (estado.equals("Activo")) {
-            // Cambiar el texto, color y ícono para "Inhabilitar Sitio"
-            textoHabilitar.setText("Inhabilitar Sitio");
-            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));
-            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_outline, 0, 0, 0); // Icono a la izquierda
-        } else {
-            // Cambiar el texto, color y ícono para "Habilitar Sitio"
-            textoHabilitar.setText("Habilitar Sitio");
-            textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme())); // Suponiendo que tienes un color para habilitar
-            textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0); // Icono a la izquierda
-        }
-
-        findViewById(R.id.deleteSitePerfil).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showConfirmationDialog(v, estado);
-            }
-        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            // Recuperar el usuario actualizado
-            ListElementSite updatedSite = (ListElementSite) data.getSerializableExtra("updatedSite");
-            // Actualizar la interfaz de usuario con los nuevos datos
-            updateSiteDetails(updatedSite);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_UPDATE_SITE:
+                    ListElementSite updatedSite = (ListElementSite) data.getSerializableExtra("updatedSite");
+                    updateSiteDetails(updatedSite);
+                    break;
+
+                case REQUEST_CODE_UPDATE_IMAGES:
+                    String updatedImagesJson = data.getStringExtra("updatedImages");
+                    element.setImageUrl(updatedImagesJson);
+                    break;
+
+                default:
+                    super.onActivityResult(requestCode, resultCode, data);
+                    break;
+            }
         }
     }
+
 
     private void updateSiteDetails(ListElementSite updatedSite) {
         nameTextViewSite.setText(updatedSite.getName());
@@ -208,17 +209,8 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
                     .into(profileImageView);
         }
 
-        // Actualizar la imagen de perfil
-        /*if (updatedUser.getImageUrl() != null && !updatedUser.getImageUrl().isEmpty()) {
-            byte[] decodedString = Base64.decode(updatedUser.getImageUrl(), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            profileImageView.setImageBitmap(decodedByte);
-        }*/
-
-        // Actualizar los sitios asignados
         showAssignedSuper(updatedSite);
     }
-
     private void showAssignedSuper(ListElementSite element) {
         String assignedSuperJson = element.getSuperAsignados();
         ArrayList<String> assignedSuper;
@@ -229,13 +221,9 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
             assignedSuper = new Gson().fromJson(assignedSuperJson, new TypeToken<ArrayList<String>>() {}.getType());
         }
 
-        // Remove all views except the first one (btnAddSiteUserProfile)
         int childCount = assignedSuperLayout.getChildCount();
-        if (childCount > 1) {
-            assignedSuperLayout.removeViews(1, childCount - 1);
-        }
+        assignedSuperLayout.removeAllViews();
 
-        // Dynamically create CardView for each assigned site
         for (String supervisor : assignedSuper) {
             View siteCard = getLayoutInflater().inflate(R.layout.admin_super_asignado_card, assignedSuperLayout, false);
             TextView siteTextView = siteCard.findViewById(R.id.superAsignedTextView);
@@ -268,7 +256,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Supervisor removido", Toast.LENGTH_SHORT).show();
                     // Actualizar la UI con los sitios asignados actualizados
-                    showAssignedSuper(element); // ADD
+                    showAssignedSuper(element); // Asegurarse de ejecutar en el hilo de UI
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Error al remover el supervisor", Toast.LENGTH_SHORT).show();
@@ -296,6 +284,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
                 db = FirebaseFirestore.getInstance();
                 Map<String, Object> update = new HashMap<>();
                 update.put("status", newState);
+                update.put("superAsignados", "[]");
 
                 db.collection("sitios")
                         .document(nameTextViewSite.getText().toString())
@@ -328,16 +317,6 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
             textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0);
         }
     }
-
-    private void showRemoveSiteConfirmationDialog(ListElementSite element, String supervisor) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-        builder.setTitle("Confirmación");
-        builder.setMessage("¿Está seguro de que desea remover este supervisor?");
-        builder.setPositiveButton("Aceptar", (dialog, which) -> removeSuper(element, supervisor));
-        builder.setNegativeButton("Cancelar", null);
-        builder.show();
-    }
-
     private void openMapActivity(ListElementSite element) {
         String[] parts = element.getCoordenadas().split(";");
         if (parts.length == 2) {

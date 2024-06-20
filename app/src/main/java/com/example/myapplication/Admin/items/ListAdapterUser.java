@@ -59,7 +59,6 @@ public class ListAdapterUser extends RecyclerView.Adapter<ListAdapterUser.ViewHo
         notifyDataSetChanged();
     }
 
-
     public void filter(String text) {
         nData.clear();
         if (text.isEmpty()) {
@@ -90,12 +89,7 @@ public class ListAdapterUser extends RecyclerView.Adapter<ListAdapterUser.ViewHo
             name.setText(fullName);
             user.setText(item.getUser());
             status.setText(item.getStatus());
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listener.onItemClick(item);
-                }
-            });
+            itemView.setOnClickListener(view -> listener.onItemClick(item));
         }
     }
 }

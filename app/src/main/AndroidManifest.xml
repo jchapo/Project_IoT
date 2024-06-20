@@ -53,6 +53,9 @@
             android:name=".Admin.MainActivity_2_SiteLocation"
             android:exported="false" />
         <activity
+            android:name=".Admin.MainActivity_2_Sites_SiteImages"
+            android:exported="false" />
+        <activity
             android:name=".NavegacionInicial"
             android:exported="true" />
         <activity

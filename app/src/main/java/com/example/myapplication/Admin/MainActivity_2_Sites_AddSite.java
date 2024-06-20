@@ -154,7 +154,7 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
     private void init() {
         elements = new ArrayList<>();
 
-        recyclerView = findViewById(R.id.listElementsSites);
+        recyclerView = findViewById(R.id.listElementsAddSites);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

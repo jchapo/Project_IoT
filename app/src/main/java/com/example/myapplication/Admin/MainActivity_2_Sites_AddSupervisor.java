@@ -68,7 +68,7 @@ public class MainActivity_2_Sites_AddSupervisor extends AppCompatActivity {
     private ArrayList<String> getSelectedSuperNames() {
         ArrayList<String> selectedNames = new ArrayList<>();
         for (ListElementUser supervisor : listAdapter.getSelectedItems()) {
-            selectedNames.add(supervisor.getDni());
+            selectedNames.add(supervisor.getName() + " " + supervisor.getLastname());
         }
         return selectedNames;
     }
@@ -135,7 +135,7 @@ public class MainActivity_2_Sites_AddSupervisor extends AppCompatActivity {
     private void init() {
         elements = new ArrayList<>();
 
-        recyclerView = findViewById(R.id.listElementsUsers);
+        recyclerView = findViewById(R.id.listElementsUsersAddSuper);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
