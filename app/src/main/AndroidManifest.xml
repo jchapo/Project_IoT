@@ -30,7 +30,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".Sistem.LoginActivityFirstTime"
+            android:name=".NavegacionInicial"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +48,7 @@
             android:name=".Admin.MainActivity_3_Chat_ChatAdmin"
             android:exported="false" />
         <activity
-            android:name=".NavegacionInicial"
+            android:name=".Sistem.LoginActivityFirstTime"
             android:exported="true" />
         <activity
             android:name=".Sistem.MainActivity_notificacion_user"

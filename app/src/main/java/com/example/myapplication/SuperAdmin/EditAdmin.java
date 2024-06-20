@@ -20,34 +20,24 @@ public class EditAdmin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.superadmin_activity_main_edit_user);
         EdgeToEdge.enable(this);
+        setContentView(R.layout.superadmin_activity_main_edit_user);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        Toolbar toolbar = findViewById(R.id.topAppBarEditUser);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.saveOldTopAppBar) {
-            // Inicia la actividad UserDetais
+        if (item.getItemId() == R.id.saveOldTopAppBar) {
             startActivity(new Intent(this, UserDetais.class));
             return true;
-        } else if (itemId == android.R.id.home) {
-            // Finaliza la actividad actual para volver al fragmento anterior
-            finish();
-            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
 
