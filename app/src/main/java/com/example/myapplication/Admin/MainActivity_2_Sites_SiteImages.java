@@ -1,5 +1,6 @@
-package com.example.myapplication.Supervisor;
+package com.example.myapplication.Admin;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -22,7 +23,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.myapplication.Admin.MainActivity_2_Sites_SiteImages;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ImagenesSitio extends AppCompatActivity {
+public class MainActivity_2_Sites_SiteImages extends AppCompatActivity {
 
     private LinearLayout contenedorImagenes;
     private ActivityResultLauncher<String> imagePickerLauncher;
@@ -149,7 +149,7 @@ public class ImagenesSitio extends AppCompatActivity {
                             // Si necesitas actualizar algo más después de subir la imagen, puedes hacerlo aquí.
                         }))
                         .addOnFailureListener(e -> {
-                            Toast.makeText(ImagenesSitio.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity_2_Sites_SiteImages.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         });
             } catch (IOException e) {
@@ -207,9 +207,9 @@ public class ImagenesSitio extends AppCompatActivity {
             updateImageUrlsInFirestore();
             // Eliminar la imagen de la vista
             contenedorImagenes.removeViewAt(index);
-            Toast.makeText(ImagenesSitio.this, "Imagen eliminada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity_2_Sites_SiteImages.this, "Imagen eliminada", Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(e -> {
-            Toast.makeText(ImagenesSitio.this, "Error al eliminar la imagen", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity_2_Sites_SiteImages.this, "Error al eliminar la imagen", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         });
     }
