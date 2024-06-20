@@ -31,7 +31,7 @@ public class MainActivity_navigation_SuperAdmin extends AppCompatActivity {
         binding = SuperadminActivityMainNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         bottomNavigationView = binding.bottomNavigation;
-        binding.topAppBarUserFragment.setTitle("Usuarios");
+        binding.topAppBarUserFragment.setTitle("Lista de usuarios");
         replaceFragmentSuperAdmin(new UsersFragmentSuperAdmin());
 
         Toolbar toolbar = binding.topAppBarUserFragment;
@@ -50,7 +50,7 @@ public class MainActivity_navigation_SuperAdmin extends AppCompatActivity {
                 replaceFragmentSuperAdmin(new UsersFragmentSuperAdmin());
                 return true;
             } else if (item.getItemId() == R.id.log_menu_superadmin) {
-                binding.topAppBarUserFragment.setTitle("Registro de incidencias");
+                binding.topAppBarUserFragment.setTitle("Registro de eventos");
                 replaceFragmentSuperAdmin(new LogFragment());
                 return true;
             } else if (item.getItemId() == R.id.chat_menu) {
