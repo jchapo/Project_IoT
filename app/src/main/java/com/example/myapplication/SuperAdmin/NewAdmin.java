@@ -271,6 +271,7 @@ public class NewAdmin extends AppCompatActivity {
                 editPhone.getText().toString().isEmpty();
     }
     private void fillFields(ListElementSuperAdminUser element) {
+        System.out.println("vista de elementos: "+element);
         editFirstName.setText(element.getName());
         editLastName.setText(element.getLastname());
         editDNI.setText(element.getDni());
