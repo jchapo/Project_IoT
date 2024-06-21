@@ -24,6 +24,8 @@ import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.R;
+import com.example.myapplication.databinding.AdminFragmentSitesBinding;
+import com.example.myapplication.databinding.AdminFragmentUsersBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -36,13 +38,15 @@ public class Fragment_2_Sites extends Fragment {
     private List<ListElementSite> inactiveSites = new ArrayList<>();
     private ListAdapterSite listAdapterSites;
     private RecyclerView recyclerViewSites;
+    AdminFragmentSitesBinding binding;
     NavigationActivityViewModel navigationActivityViewModel;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.admin_fragment_sites, container, false);
-        setHasOptionsMenu(true);
+        binding = AdminFragmentSitesBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        binding.topAppBarUserFragment.setTitle("Sitios");
         navigationActivityViewModel = new ViewModelProvider(requireActivity()) .get(NavigationActivityViewModel. class);
         initializeViews(view);
         observeViewModel();
@@ -50,7 +54,6 @@ public class Fragment_2_Sites extends Fragment {
     }
 
     private void observeViewModel() {
-
         if (navigationActivityViewModel != null) {
             navigationActivityViewModel.getActiveSites().observe(getViewLifecycleOwner(), sitiosActivos -> {
                 activeSites.clear();
@@ -66,17 +69,18 @@ public class Fragment_2_Sites extends Fragment {
     }
 
     public void initializeViews(View view) {
-        listAdapterSites = new ListAdapterSite(activeSites, getContext(), this :: moveToDescription);
-        recyclerViewSites = view.findViewById(R.id.listElementsSites);
-        recyclerViewSites.setHasFixedSize(true);
-        recyclerViewSites.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewSites.setAdapter(listAdapterSites);
         FloatingActionButton agregarSitioButton = view.findViewById(R.id.agregarSitiofloatingActionButton);
         agregarSitioButton.setOnClickListener( View -> {
             Intent intent = new Intent(getActivity(), MainActivity_2_Sites_NewSite.class);
             startActivity(intent);
         });
-        TabLayout tabLayout = view.findViewById(R.id.tabLayoutSites);
+        listAdapterSites = new ListAdapterSite(activeSites, getContext(), this :: moveToDescription);
+        recyclerViewSites = view.findViewById(R.id.listElementsSites);
+        recyclerViewSites.setHasFixedSize(true);
+        recyclerViewSites.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewSites.setAdapter(listAdapterSites);
+
+        TabLayout tabLayout = binding.tabLayoutSites;
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

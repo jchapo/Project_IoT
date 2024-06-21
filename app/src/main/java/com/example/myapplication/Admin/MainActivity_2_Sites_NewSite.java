@@ -86,15 +86,16 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_new_site);
 
+        isEditing = getIntent().getBooleanExtra("isEditing", false);
+
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-
-        // Inicializar los Maps
-        initializeLocationData();
-
         LinearLayout layoutDepartamento = findViewById(R.id.layoutDepartmento);
         LinearLayout layoutProvincia = findViewById(R.id.layoutProvincia);
         LinearLayout layoutDistrito = findViewById(R.id.layoutDistrito);
+        initializeLocationData();
+
+
 
 
         // Encuentra las referencias a los campos de autocompletado
@@ -132,8 +133,15 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
                 result -> {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null){
                         imageUri = result.getData().getData();
-                        imageView.setImageURI(imageUri);
-                        isImageAdded = true; // Actualizar la variable cuando se selecciona una imagen
+                        try {
+                            // Usar Glide para mostrar la imagen seleccionada en el ImageView
+                            Glide.with(this)
+                                    .load(imageUri)
+                                    .into(imageView);
+                            isImageAdded = true; // Actualizar la variable cuando se selecciona una imagen
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 
@@ -142,7 +150,6 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         TextInputLayout textInputLayout = findViewById(R.id.textInputLayoutLongitud);
 
         // Obtener el indicador de si se está editando desde el Intent
-        isEditing = getIntent().getBooleanExtra("isEditing", false);
 
         imageView = findViewById(R.id.imageViewNewSite);
         imageView.setOnClickListener(v -> openFileChooser());

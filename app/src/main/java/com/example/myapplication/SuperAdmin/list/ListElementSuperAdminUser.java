@@ -14,9 +14,11 @@ public class ListElementSuperAdminUser implements Serializable {
     private Integer primerInicio;
     private String fechaCreacion;
 
+    private String imageUrl;
+
     public ListElementSuperAdminUser() {
     }
-    public ListElementSuperAdminUser(String dni, String name, String lastname, String user, String status, String mail, String phone, String address, Integer primerInicio, String fechaCreacion) {
+    public ListElementSuperAdminUser(String dni, String name, String lastname, String user, String status, String mail, String phone, String address, Integer primerInicio, String fechaCreacion, String imageUrl) {
         this.dni = dni;
         this.name = name;
         this.lastname = lastname;
@@ -27,6 +29,8 @@ public class ListElementSuperAdminUser implements Serializable {
         this.address = address;
         this.primerInicio = primerInicio;
         this.fechaCreacion = fechaCreacion;
+        this.imageUrl = imageUrl;
+
     }
 
     public Integer getPrimerInicio() {
@@ -35,6 +39,13 @@ public class ListElementSuperAdminUser implements Serializable {
 
     public void setPrimerInicio(Integer primerInicio) {
         this.primerInicio = primerInicio;
+    }
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getFechaCreacion() {

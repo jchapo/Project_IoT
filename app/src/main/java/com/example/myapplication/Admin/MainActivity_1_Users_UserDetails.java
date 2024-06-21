@@ -103,8 +103,6 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
         addressDescriptionTextView.setText(element.getAddress());
         estado = element.getStatus();
 
-
-// Dentro del método onCreate o donde se necesite cargar la imagen
         // Dentro del método onCreate o donde se necesite cargar la imagen
         if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
             Log.d("UserDetails", "Image URL is not null or empty. URL: " + element.getImageUrl());
@@ -124,10 +122,6 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
         } else {
             Log.d("UserDetails", "Image URL is null or empty.");
         }
-
-
-
-
 
         // Set up the toolbar
         Toolbar toolbar = findViewById(R.id.topAppBarUserPerfil);
@@ -223,8 +217,6 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
     public void showConfirmationDialog(View view, String currentState) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Confirmación");
-
-        // Configurar el mensaje y el estado objetivo basado en el estado actual
         final String newState;
         final String message;
         if (currentState.equals("Activo")) {
@@ -328,8 +320,6 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
 
     private void updateUIBasedOnState(String state) {
         TextView textoHabilitar = findViewById(R.id.deleteUserPerfil);
-
-
         if (state.equals("Activo")) {
             textoHabilitar.setText("Inhabilitar Usuario");
             textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_error, getTheme()));

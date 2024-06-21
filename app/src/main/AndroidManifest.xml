@@ -32,7 +32,7 @@
             android:name=".Supervisor.EditarEquipo"
             android:exported="false" />
         <activity
-            android:name=".Sistem.LoginActivityFirstTime"
+            android:name=".Sistem.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,9 +40,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Sistem.LoginActivity"
-            android:exported="true" />
         <activity
             android:name=".Sistem.MainActivityCambiarPrimeraContra"
             android:exported="false" />

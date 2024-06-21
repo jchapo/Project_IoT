@@ -70,7 +70,6 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
 
         isEditing = getIntent().getBooleanExtra("isEditing", false);
 
-        // Initialize Firebase Storage
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         LinearLayout layoutDNI = findViewById(R.id.layoutDNI);
