@@ -74,7 +74,7 @@ public class EquiposDeSitios extends AppCompatActivity {
     }
 
     public void moveToDescriptionDevice(ListElementDevices item){
-        Intent intent = new Intent(EquiposDeSitios.this, MasDetallesEquipos.class);
+        Intent intent = new Intent(EquiposDeSitios.this, MasDetallesEquipos_2.class);
         intent.putExtra("ListElementDevices", item);
         startActivity(intent);
     }

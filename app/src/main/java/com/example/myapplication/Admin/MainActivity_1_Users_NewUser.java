@@ -50,7 +50,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
     private MaterialAutoCompleteTextView selectTypeUser;
     ArrayAdapter<String> typeUserAdapter;
     String[] typeOptions = {"Supervisor"};
-    private EditText editFirstName, editLastName, editDNI, editMail, editAddress, editPhone, editFechaCreacion, editPrimerInicio;
+    private EditText editFirstName, editLastName, editDNI, editPass, editMail, editAddress, editPhone, editFechaCreacion, editPrimerInicio;
     private ImageView imageView;
     private boolean isEditing = false; // Indicador para editar o crear nuevo usuario
     private boolean isImageAdded = false; // Variable para indicar si se ha agregado una imagen
@@ -114,6 +114,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         editMail = findViewById(R.id.editMail);
         editAddress = findViewById(R.id.editAddress);
         editPhone = findViewById(R.id.editPhone);
+        editPass = findViewById(R.id.editPass);
         editFechaCreacion = findViewById(R.id.editFechaCreacion);
         editPrimerInicio = findViewById(R.id.editPrimerInicio);
 
@@ -230,6 +231,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String dni = editDNI.getText().toString();
             String mail = editMail.getText().toString();
             String address = editAddress.getText().toString();
+            String password = editPass.getText().toString();
             String phone = editPhone.getText().toString();
             String status = "Activo";
             LocalDate fechaActual = LocalDate.now();
@@ -238,7 +240,8 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             Integer primerInicio = 0;
             String sitiosAsignados = "";
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados,password);
+
             uploadImageAndSaveUser(listElement, false);
         }
     }
@@ -255,11 +258,12 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String address = editAddress.getText().toString();
             String phone = editPhone.getText().toString();
             String status = "Activo";
+            String password = element.getFirstpass();
             String fechaCreacion = editFechaCreacion.getText().toString();
             Integer primerInicio = Integer.parseInt(editPrimerInicio.getText().toString());
             String sitiosAsignados = element.getSitiosAsignados();
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados,password);
             uploadImageAndSaveUser(listElement, true);
         }
     }

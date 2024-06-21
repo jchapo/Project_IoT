@@ -34,7 +34,6 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
     private String idDNI;
     private List<ListElementSite> elements;
     private CircularProgressIndicator progressIndicator;
-
     private FirebaseFirestore db;
 
     @Override
@@ -48,7 +47,6 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         progressIndicator = findViewById(R.id.progressIndicator);
-
 
         init();
 
@@ -156,7 +154,7 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
     private void init() {
         elements = new ArrayList<>();
 
-        recyclerView = findViewById(R.id.listElementsSites);
+        recyclerView = findViewById(R.id.listElementsAddSites);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

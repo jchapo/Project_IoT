@@ -1,6 +1,7 @@
 package com.example.myapplication.Admin.items;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class ListAdapterUser extends RecyclerView.Adapter<ListAdapterUser.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Verifica que el layout admin_list_usuarios existe en res/layout
         View view = nInflater.inflate(R.layout.admin_list_usuarios, parent, false);
         return new ViewHolder(view);
     }
@@ -53,14 +55,16 @@ public class ListAdapterUser extends RecyclerView.Adapter<ListAdapterUser.ViewHo
     }
 
     public void setItems(List<ListElementUser> items) {
-        Collections.sort(items, Comparator.comparing(ListElementUser::getName)); // Ordenar alfabéticamente
+        Log.d("ListAdapterUser", "setItems called with items: " + items.size());
+        // Ordenar la lista antes de establecer los ítems
+        Collections.sort(items, Comparator.comparing(ListElementUser::getName));
         nData = items;
         nDataFull = new ArrayList<>(items); // Actualizar la lista completa al cambiar los datos
         notifyDataSetChanged();
     }
 
-
     public void filter(String text) {
+        Log.d("ListAdapterUser", "filter called with text: " + text);
         nData.clear();
         if (text.isEmpty()) {
             nData.addAll(nDataFull);
@@ -72,6 +76,7 @@ public class ListAdapterUser extends RecyclerView.Adapter<ListAdapterUser.ViewHo
                 }
             }
         }
+        Log.d("ListAdapterUser", "filter result size: " + nData.size());
         notifyDataSetChanged();
     }
 
@@ -90,12 +95,7 @@ public class ListAdapterUser extends RecyclerView.Adapter<ListAdapterUser.ViewHo
             name.setText(fullName);
             user.setText(item.getUser());
             status.setText(item.getStatus());
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listener.onItemClick(item);
-                }
-            });
+            itemView.setOnClickListener(view -> listener.onItemClick(item));
         }
     }
 }

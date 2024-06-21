@@ -57,7 +57,6 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
     AdminActivityMainNavigationBinding binding;
     private DrawerLayout drawerLayout;
     NavigationActivityViewModel navigationActivityViewModel;
-    public static final int REQUEST_CODE = 1;
 
 
     @Override
@@ -65,6 +64,7 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_navigation);
         binding = AdminActivityMainNavigationBinding.inflate(getLayoutInflater());
+        //setSupportActionBar(binding.);
         loadUsersFromFirestore();
         loadSitesFromFirestore();
         crearCanalesNotificacion();

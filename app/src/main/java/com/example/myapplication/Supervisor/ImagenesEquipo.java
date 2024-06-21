@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
@@ -22,7 +21,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.myapplication.Admin.MainActivity_2_Sites_SiteImages;
 import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,20 +37,20 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ImagenesSitio extends AppCompatActivity {
+public class ImagenesEquipo extends AppCompatActivity {
 
     private LinearLayout contenedorImagenes;
     private ActivityResultLauncher<String> imagePickerLauncher;
-    private ArrayList<String> imageUrls;
+    private ArrayList<String> imagenEquipo;
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private FirebaseFirestore db;
-    private String siteName;
+    private String sku;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.admin_activity_imagenes_sitio);
+        setContentView(R.layout.admin_activity_imagenes_equipo);
 
         // Configuración de EdgeToEdge y Layout
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -73,14 +71,14 @@ public class ImagenesSitio extends AppCompatActivity {
 
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), this::onImagePicked);
 
-        // Obtener las URLs de las imágenes y el nombre del sitio desde el Intent
-        String assignedImageJson = getIntent().getStringExtra("imagenesSitio");
-        siteName = getIntent().getStringExtra("siteName");
+        // Obtener las URLs de las imágenes y el nombre del equipo desde el Intent
+        String assignedImageJson = getIntent().getStringExtra("imagenesEquipo");
+        sku = getIntent().getStringExtra("sku");
 
         if (assignedImageJson != null && !assignedImageJson.isEmpty()) {
-            imageUrls = new Gson().fromJson(assignedImageJson, new TypeToken<ArrayList<String>>() {}.getType());
+            imagenEquipo = new Gson().fromJson(assignedImageJson, new TypeToken<ArrayList<String>>() {}.getType());
         } else {
-            imageUrls = new ArrayList<>();
+            imagenEquipo = new ArrayList<>();
         }
 
         // Cargar las imágenes guardadas
@@ -88,8 +86,8 @@ public class ImagenesSitio extends AppCompatActivity {
     }
 
     private void loadSavedImages() {
-        for (int i = 0; i < imageUrls.size(); i++) {
-            String imageUrl = imageUrls.get(i);
+        for (int i = 0; i < imagenEquipo.size(); i++) {
+            String imageUrl = imagenEquipo.get(i);
             StorageReference imageRef = storageReference.child(imageUrl);
             ImageView imageView = new ImageView(this);
             imageView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -136,11 +134,11 @@ public class ImagenesSitio extends AppCompatActivity {
                 resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos); // Comprimir con calidad del 80%
                 byte[] imageBytes = baos.toByteArray();
 
-                String storagePath = "siteimages/" + siteName + "_" + System.currentTimeMillis() + ".jpg";
-                imageUrls.add(storagePath);
+                String storagePath = "equipmentimages/" + sku + "_" + System.currentTimeMillis() + ".jpg";
+                imagenEquipo.add(storagePath);
 
-                Set<String> updatedImages = new HashSet<>(imageUrls);
-                String updatedSitesJson = new JSONArray(updatedImages).toString();
+                Set<String> updatedImages = new HashSet<>(imagenEquipo);
+                String updatedEquiposJson = new JSONArray(updatedImages).toString();
 
                 StorageReference ref = storageReference.child(storagePath);
                 ref.putBytes(imageBytes)
@@ -149,7 +147,7 @@ public class ImagenesSitio extends AppCompatActivity {
                             // Si necesitas actualizar algo más después de subir la imagen, puedes hacerlo aquí.
                         }))
                         .addOnFailureListener(e -> {
-                            Toast.makeText(ImagenesSitio.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ImagenesEquipo.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         });
             } catch (IOException e) {
@@ -183,9 +181,9 @@ public class ImagenesSitio extends AppCompatActivity {
         imageView.setImageBitmap(bitmap);
         contenedorImagenes.addView(imageView);
 
-        final int index = imageUrls.size() - 1; // Index of the newly added image
+        final int index = imagenEquipo.size() - 1; // Index of the newly added image
         imageView.setOnLongClickListener(v -> {
-            showDeleteConfirmationDialog(imageUrls.get(index), index);
+            showDeleteConfirmationDialog(imagenEquipo.get(index), index);
             return true;
         });
     }
@@ -203,27 +201,27 @@ public class ImagenesSitio extends AppCompatActivity {
         StorageReference imageRef = storageReference.child(imageUrl);
         imageRef.delete().addOnSuccessListener(aVoid -> {
             // Eliminar la URL de la lista y actualizar Firestore
-            imageUrls.remove(index);
+            imagenEquipo.remove(index);
             updateImageUrlsInFirestore();
             // Eliminar la imagen de la vista
             contenedorImagenes.removeViewAt(index);
-            Toast.makeText(ImagenesSitio.this, "Imagen eliminada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ImagenesEquipo.this, "Imagen eliminada", Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(e -> {
-            Toast.makeText(ImagenesSitio.this, "Error al eliminar la imagen", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ImagenesEquipo.this, "Error al eliminar la imagen", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         });
     }
 
     private void updateImageUrlsInFirestore() {
-        // Asegurarse de que siteName no sea nulo
-        if (siteName != null) {
-            Set<String> updatedImages = new HashSet<>(imageUrls);
-            String updatedSitesJson = new JSONArray(updatedImages).toString();
-            db.collection("sitios").document(siteName).update("imageUrl", updatedSitesJson)
+        // Asegurarse de que sku no sea nulo
+        if (sku != null) {
+            Set<String> updatedImages = new HashSet<>(imagenEquipo);
+            String updatedEquiposJson = new JSONArray(updatedImages).toString();
+            db.collection("equipos").document(sku).update("imagenEquipo", updatedEquiposJson)
                     .addOnSuccessListener(aVoid -> Log.d("Firestore", "DocumentSnapshot successfully updated!"))
                     .addOnFailureListener(e -> Log.w("Firestore", "Error updating document", e));
         } else {
-            Log.e("Firestore", "siteName is null, cannot update Firestore.");
+            Log.e("Firestore", "sku is null, cannot update Firestore.");
         }
     }
 
@@ -231,7 +229,7 @@ public class ImagenesSitio extends AppCompatActivity {
     public void finish() {
         // Devolver las URLs de las imágenes actualizadas a la actividad anterior
         Intent data = new Intent();
-        String updatedImagesJson = new JSONArray(imageUrls).toString();
+        String updatedImagesJson = new JSONArray(imagenEquipo).toString();
         data.putExtra("updatedImages", updatedImagesJson);
         setResult(RESULT_OK, data);
         super.finish();
