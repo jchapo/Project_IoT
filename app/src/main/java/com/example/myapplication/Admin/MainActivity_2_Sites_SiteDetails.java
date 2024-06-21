@@ -126,7 +126,7 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
         findViewById(R.id.fabEditSiteAdmin).setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity_2_Sites_SiteDetails.this, MainActivity_2_Sites_NewSite.class);
             intent.putExtra("isEditing", true);
-            intent.putExtra("ListElement", element);
+            intent.putExtra("ListElementSite", element);
             startActivity(intent);
         });
 

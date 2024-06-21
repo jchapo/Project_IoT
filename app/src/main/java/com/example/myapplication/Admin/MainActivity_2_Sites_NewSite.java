@@ -100,9 +100,6 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         LinearLayout layoutDistrito = findViewById(R.id.layoutDistrito);
         initializeLocationData();
 
-
-
-
         // Encuentra las referencias a los campos de autocompletado
         selectDepartment = findViewById(R.id.selectDepartment);
         selectProvince = findViewById(R.id.selectProvince);
