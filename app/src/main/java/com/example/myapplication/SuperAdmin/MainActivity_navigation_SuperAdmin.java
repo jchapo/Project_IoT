@@ -30,9 +30,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity_navigation_SuperAdmin extends AppCompatActivity {
-
+    String canal1 = "importanteDefault";
     SuperadminActivityMainNavigationBinding binding;
-    //private DrawerLayout drawerLayout;
     NavigationActivityViewModel navigationActivityViewModel;
 
     @Override
@@ -44,8 +43,8 @@ public class MainActivity_navigation_SuperAdmin extends AppCompatActivity {
         navigationActivityViewModel = new ViewModelProvider(this).get(NavigationActivityViewModel.class);
         replaceFragmentSuperAdmin(new UsersFragmentSuperAdmin());
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        binding.bottomNavigation.setOnItemSelectedListener(item -> {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_SuperAdmin);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
 
             if (item.getItemId() == R.id.usuarios_menu_superadmin) {
                 replaceFragmentSuperAdmin(new UsersFragmentSuperAdmin());
@@ -108,7 +107,7 @@ public class MainActivity_navigation_SuperAdmin extends AppCompatActivity {
     private void replaceFragmentSuperAdmin(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout_superadmin,fragment);
+        fragmentTransaction.replace(R.id.frame_layout_superadmin_Superadmin,fragment);
         fragmentTransaction.commit();
 
     }

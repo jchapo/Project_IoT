@@ -279,7 +279,7 @@ public class NewAdmin extends AppCompatActivity {
         editAddress.setText(element.getAddress());
         editPhone.setText(element.getPhone());
         editFechaCreacion.setText(element.getFechaCreacion());
-        editPrimerInicio.setText(element.getPrimerInicio());
+        //editPrimerInicio.setText(element.getPrimerInicio());
         // Implementa la lógica para mostrar la imagen de perfil
         selectTypeUser.setText(element.getUser(), false);
 

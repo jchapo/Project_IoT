@@ -55,6 +55,11 @@ public class ListAdapterAddSuper extends RecyclerView.Adapter<ListAdapterAddSupe
         });
     }
 
+    public List<ListElementUser> getSelectedItems() {
+        return mSelectedItems;
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iconImage;
         TextView name, user, status;

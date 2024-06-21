@@ -57,7 +57,6 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
     AdminActivityMainNavigationBinding binding;
     private DrawerLayout drawerLayout;
     NavigationActivityViewModel navigationActivityViewModel;
-    public static final int REQUEST_CODE = 1;
 
 
     @Override

@@ -40,6 +40,7 @@ import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.Supervisor.objetos.ListElementEquiposNuevo;
 import com.example.myapplication.databinding.AdminActivityMainNavigationBinding;
+import com.example.myapplication.databinding.SupervisorActivityNavegacionBinding;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -59,47 +60,27 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.myapplication.Admin.Fragment_3_Chat;
 import com.example.myapplication.R;
-import com.example.myapplication.databinding.SupervisorActivityNavegacionBinding;
 
 public class NavegacionSupervisor extends AppCompatActivity {
 
     String canal1 = "importanteDefault";
     SupervisorActivityNavegacionBinding binding;
-
     private DrawerLayout drawerLayout;
-    private BottomNavigationView bottomNavigationView;
-    FirebaseFirestore db;
     NavigationActivityViewModel navigationActivityViewModel;
-    private ArrayList<ListElementSite> activeSites, inactiveSites;
-
-    private ArrayList<ListElementEquiposNuevo> activeEquipments, inactiveEquipments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.supervisor_activity_navegacion);
         binding = SupervisorActivityNavegacionBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        loadSitesFromFirestore();
+        loadEquipmentsFromFirestore();
         crearCanalesNotificacion();
-        bottomNavigationView = binding.bottomNavigation;
         navigationActivityViewModel = new ViewModelProvider(this).get(NavigationActivityViewModel.class);
-
-        // Recuperar el valor de inicio desde el Intent
-        String inicio = getIntent().getStringExtra("inicio");
-        if (inicio != null) {
-            navigationActivityViewModel.getInicio().setValue(inicio);
-        }
-
-
-        activeSites = new ArrayList<>();
-        inactiveSites = new ArrayList<>();
-
-        activeEquipments = new ArrayList<>();
-        inactiveEquipments = new ArrayList<>();
         replaceFragment(new SitiosFragment());
 
-
-
-        binding.bottomNavigation.setOnItemSelectedListener(item -> {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_supervisor);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.sitios_asignados_menu) {
                 replaceFragment(new SitiosFragment());
                 return true;
@@ -126,22 +107,18 @@ public class NavegacionSupervisor extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadData();
-    }
-    private void loadData() {
-        // Limpiar las listas antes de cargar los datos
-
-        activeSites.clear();
-        inactiveSites.clear();
-        db = FirebaseFirestore.getInstance();
         loadSitesFromFirestore();
+        loadEquipmentsFromFirestore();
     }
 
     private void loadSitesFromFirestore() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("sitios")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        ArrayList<ListElementSite> activeSites = new ArrayList<>();
+                        ArrayList<ListElementSite> inactiveSites = new ArrayList<>();
                         for (QueryDocumentSnapshot document2 : task.getResult()) {
                             ListElementSite listElementSite = document2.toObject(ListElementSite.class);
                             Log.d("msg-test", "Active sites: " + listElementSite.getName());
@@ -151,13 +128,9 @@ public class NavegacionSupervisor extends AppCompatActivity {
                                 inactiveSites.add(listElementSite);
                             }
                         }
-                        // Una vez que se cargan los sitios, actualizar el ViewModel con los datos
-
                         navigationActivityViewModel.getActiveSites().setValue(activeSites);
                         navigationActivityViewModel.getInactiveSites().setValue(inactiveSites);
-                        // Una vez que se cargan los usuarios, cargar sitios desde Firestore
-                        db = FirebaseFirestore.getInstance();
-                        loadEquipmentsFromFirestore();
+
                     } else {
                         Log.d("msg-test", "Error getting site documents: ", task.getException());
                     }
@@ -165,10 +138,13 @@ public class NavegacionSupervisor extends AppCompatActivity {
     }
 
     private void loadEquipmentsFromFirestore() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("equipos")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        ArrayList<ListElementEquiposNuevo> activeEquipments = new ArrayList<>();
+                        ArrayList<ListElementEquiposNuevo> inactiveEquipments = new ArrayList<>();
                         for (QueryDocumentSnapshot document2 : task.getResult()) {
                             ListElementEquiposNuevo listElementEquiposNuevo = document2.toObject(ListElementEquiposNuevo.class);
                             Log.d("msg-test", "Active equipments: " + listElementEquiposNuevo.getNameEquipo());
@@ -178,8 +154,6 @@ public class NavegacionSupervisor extends AppCompatActivity {
                                 inactiveEquipments.add(listElementEquiposNuevo);
                             }
                         }
-                        // Una vez que se cargan los sitios, actualizar el ViewModel con los datos
-
                         navigationActivityViewModel.getActiveEquipments().setValue(activeEquipments);
                         navigationActivityViewModel.getInactiveEquipments().setValue(inactiveEquipments);
                     } else {
