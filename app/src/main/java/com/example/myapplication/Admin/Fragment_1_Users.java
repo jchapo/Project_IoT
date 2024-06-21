@@ -61,7 +61,7 @@ public class Fragment_1_Users extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        client = new Client(BuildConfig.ALGOLIA_APPLICATION_ID, BuildConfig.ALGOLIA_API_KEY);
+        client = new Client("3125VRFCOL", "017ff2e5dc660a066578d999fff272fb");
         userIndex = client.getIndex("users_index");
     }
 
@@ -134,11 +134,11 @@ public class Fragment_1_Users extends Fragment {
                     for (int i = 0; i < hits.length(); i++) {
                         JSONObject hit = hits.getJSONObject(i);
                         ListElementUser listElementUser = new ListElementUser();
-                        String fullName = hit.getString("name") + " " + hit.getString("lastname");
-                        listElementUser.setName(fullName);
+                        listElementUser.setName(hit.getString("name"));
+                        listElementUser.setLastname(hit.getString("lastname"));
                         listElementUser.setUser(hit.getString("user"));
                         listElementUser.setStatus(hit.getString("status"));
-                        listElementUser.setMail(hit.getString("email"));
+                        listElementUser.setMail(hit.getString("mail"));
                         searchResults.add(listElementUser);
                     }
                     // Actualiza el adaptador con los resultados de la búsqueda

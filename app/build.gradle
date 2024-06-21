@@ -4,21 +4,16 @@ plugins {
     alias(libs.plugins.androidApplication)
     id 'com.google.gms.google-services'
 }
-def algoliaAppId = project.hasProperty("ALGOLIA_APP_ID") ? project.property("ALGOLIA_APP_ID") : ""
-def algoliaApiKey = project.hasProperty("ALGOLIA_API_KEY") ? project.property("ALGOLIA_API_KEY") : ""
 android {
     namespace 'com.example.myapplication'
     compileSdk 34
 
     defaultConfig {
-        buildConfigField("String", "ALGOLIA_APP_ID", "\"${algoliaAppId}\"")
-        buildConfigField("String", "ALGOLIA_API_KEY", "\"${algoliaApiKey}\"")
         applicationId "com.example.myapplication"
         minSdk 27
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
