@@ -47,6 +47,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
@@ -99,9 +100,6 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         LinearLayout layoutProvincia = findViewById(R.id.layoutProvincia);
         LinearLayout layoutDistrito = findViewById(R.id.layoutDistrito);
         initializeLocationData();
-
-
-
 
         // Encuentra las referencias a los campos de autocompletado
         selectDepartment = findViewById(R.id.selectDepartment);
@@ -442,15 +440,31 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         editSiteCoordenadas.setText(element.getCoordenadas());
 
         // Si hay una imagen existente, decodificarla y mostrarla
-        if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
-            // Usar Glide para cargar la imagen desde Firebase Storage utilizando la ruta de acceso
-            StorageReference imageRef = storageReference.child(element.getImageUrl());
-            Glide.with(this)
-                    .load(imageRef)
-                    .skipMemoryCache(true) // Desactivar la caché de memoria
-                    .diskCacheStrategy(DiskCacheStrategy.NONE) // Desactivar la caché en disco
-                    .into(imageView);
-            isImageAdded = true; // Actualizar la variable cuando se rellena una imagen existente
+        String imageUrlJson = element.getImageUrl();
+
+        try {
+            // Convertir la cadena JSON a un conjunto de cadenas (rutas de imágenes)
+            Set<String> imageUrls = new HashSet<>();
+            JSONArray jsonArray = new JSONArray(imageUrlJson);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                imageUrls.add(jsonArray.getString(i));
+            }
+
+            // Aquí puedes manejar el conjunto de URLs de imágenes como desees,
+            // por ejemplo, mostrarlas en una lista o cargar una de ellas en un ImageView.
+            if (!imageUrls.isEmpty()) {
+                // Supongamos que quieres cargar la primera imagen en un ImageView
+                String firstImageUrl = imageUrls.iterator().next();
+                StorageReference imageRef = storageReference.child(firstImageUrl);
+
+                Glide.with(this)
+                        .load(imageRef)
+                        .into(imageView);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            // Manejar el error al parsear el JSON
         }
     }
 
