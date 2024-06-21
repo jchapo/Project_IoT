@@ -58,23 +58,14 @@ public class MainActivity_navigation_SuperAdmin extends AppCompatActivity {
             }
             return true;
         });
-        /*Toolbar toolbar = binding.topAppBarUserFragment;
-        MaterialToolbar topAppBar = findViewById(R.id.topAppBarUserFragment);
-
-        drawerLayout = binding.drawerLayout;
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                MainActivity_navigation_SuperAdmin.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-*/
-
-
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         loadUsersFromFirestore();
     }
+
     private void loadUsersFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("usuarios")
@@ -107,8 +98,7 @@ public class MainActivity_navigation_SuperAdmin extends AppCompatActivity {
     private void replaceFragmentSuperAdmin(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout_superadmin_Superadmin,fragment);
+        fragmentTransaction.replace(R.id.frame_layout_superadmin_Superadmin, fragment);
         fragmentTransaction.commit();
-
     }
 }

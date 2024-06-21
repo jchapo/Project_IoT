@@ -42,6 +42,11 @@ public class UsersFragmentSuperAdmin extends Fragment {
     SuperadminFragmentUsersBinding binding;
     private NavigationActivityViewModel navigationActivityViewModel;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true); // Agrega esta línea para asegurar que el fragmento tenga un menú de opciones
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,8 +56,6 @@ public class UsersFragmentSuperAdmin extends Fragment {
         navigationActivityViewModel = new ViewModelProvider(requireActivity()).get(NavigationActivityViewModel.class);
         initializeViews(view);
         observeViewModel();
-
-
 
         TabLayout tabLayout = view.findViewById(R.id.tabLayoutSuperAdmin);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -76,16 +79,18 @@ public class UsersFragmentSuperAdmin extends Fragment {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+
         return view;
     }
+
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.top_app_bar_superadmin_users, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.searchUser);
+        MenuItem searchItem = menu.findItem(R.id.searchSuperAdminUser);
         SearchView searchView = (SearchView) searchItem.getActionView();
-
+        searchView.setQueryHint("Buscar usuarios...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -99,6 +104,7 @@ public class UsersFragmentSuperAdmin extends Fragment {
                 return true;
             }
         });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -111,16 +117,17 @@ public class UsersFragmentSuperAdmin extends Fragment {
         if (navigationActivityViewModel != null) {
             navigationActivityViewModel.getAdminUser().observe(getViewLifecycleOwner(), adminUserList -> {
                 adminUser.clear();
-                listAdapterSuperAdminUser.notifyDataSetChanged();
                 adminUser.addAll(adminUserList);
+                listAdapterSuperAdminUser.notifyDataSetChanged(); // Notifica al adaptador después de actualizar la lista
             });
             navigationActivityViewModel.getSupervisorUser().observe(getViewLifecycleOwner(), supervisorUserList -> {
                 supervisorUser.clear();
-                listAdapterSuperAdminUser.notifyDataSetChanged();
                 supervisorUser.addAll(supervisorUserList);
+                listAdapterSuperAdminUser.notifyDataSetChanged(); // Notifica al adaptador después de actualizar la lista
             });
         }
     }
+
 
     public void initializeViews(View view) {
         FloatingActionButton agregarUsuarioButton = binding.agregarAdminfloatingActionButton;
