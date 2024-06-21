@@ -64,6 +64,7 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_navigation);
         binding = AdminActivityMainNavigationBinding.inflate(getLayoutInflater());
+        //setSupportActionBar(binding.);
         loadUsersFromFirestore();
         loadSitesFromFirestore();
         crearCanalesNotificacion();
