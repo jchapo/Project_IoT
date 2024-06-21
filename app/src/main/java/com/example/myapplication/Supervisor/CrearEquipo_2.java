@@ -34,6 +34,9 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.myapplication.Admin.MainActivity_2_Sites_NewSite;
+import com.example.myapplication.Admin.MainActivity_2_Sites_SiteDetails;
+import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.objetos.ListElementEquiposNuevo;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -48,12 +51,17 @@ import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.common.BitMatrix;
 
+import org.json.JSONArray;
+
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CrearEquipo_2 extends AppCompatActivity {
 
@@ -91,10 +99,18 @@ public class CrearEquipo_2 extends AppCompatActivity {
                 result -> {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         imageUri = result.getData().getData();
-                        imageView.setImageURI(imageUri);
-                        isImageAdded = true; // Actualizar la variable cuando se selecciona una imagen
+                        try {
+                            // Usar Glide para mostrar la imagen seleccionada en el ImageView
+                            Glide.with(this)
+                                    .load(imageUri)
+                                    .into(imageView);
+                            isImageAdded = true; // Actualizar la variable cuando se selecciona una imagen
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                });
+                }
+        );
 
         pedirPermisos();
 
@@ -175,7 +191,6 @@ public class CrearEquipo_2 extends AppCompatActivity {
             String imagenEquipo = "";
             String nameEquipo = marca + " " + modelo;
 
-            // Crear el objeto ListElementEquiposNuevo con un campo imagenQr vacío
             ListElementEquiposNuevo listElement = new ListElementEquiposNuevo(nameEquipo, marca, modelo, tipoEquipo, descripcionEquipo, status, idSitio, sku, fecha_ingreso, imagenEquipo, "");
 
             // Subir la imagen y guardar el equipo
@@ -247,11 +262,20 @@ public class CrearEquipo_2 extends AppCompatActivity {
                 byte[] imageBytes = baos.toByteArray();
 
                 String storagePath = "equipmentimages/" + listElement.getSku() + ".jpg";
+                ArrayList<String> selectedImages = new ArrayList<>();
+                if (selectedImages.isEmpty()) {
+                    selectedImages.add(storagePath);
+                } else {
+                    selectedImages.add(0, storagePath);
+                }
+                Set<String> updatedImages = new HashSet<>(selectedImages);
+                String updatedSitesJson = new JSONArray(updatedImages).toString();
+
                 StorageReference ref = storageReference.child(storagePath);
                 ref.putBytes(imageBytes)
                         .addOnSuccessListener(taskSnapshot -> {
                             ref.getDownloadUrl().addOnSuccessListener(uri -> {
-                                listElement.setImagenEquipo(storagePath); // Guardar el path en Firestore
+                                listElement.setImagenEquipo(updatedSitesJson); // Guardar el path en Firestore
                                 generateAndUploadQRCode(listElement, isEditing);
                             });
                         })
@@ -274,12 +298,14 @@ public class CrearEquipo_2 extends AppCompatActivity {
             qrCodeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] data = baos.toByteArray();
 
-            StorageReference qrCodeRef = storageReference.child("qrcodes/" + listElement.getSku() + ".jpg");
+            String qrCodePath = "qrcodes/" + listElement.getSku() + ".jpg";
+            StorageReference qrCodeRef = storageReference.child(qrCodePath);
+
             qrCodeRef.putBytes(data)
-                    .addOnSuccessListener(taskSnapshot -> qrCodeRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        listElement.setImagenQr(uri.toString()); // Guardar la URL del QR code en Firestore
+                    .addOnSuccessListener(taskSnapshot -> {
+                        listElement.setImagenQr(qrCodePath); // Guardar solo el path del QR code en Firestore
                         saveEquipmentToFirestore(listElement, isEditing);
-                    }))
+                    })
                     .addOnFailureListener(e -> {
                         Toast.makeText(CrearEquipo_2.this, "Failed to upload QR code", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
@@ -288,6 +314,7 @@ public class CrearEquipo_2 extends AppCompatActivity {
             saveEquipmentToFirestore(listElement, isEditing);
         }
     }
+
 
     private Bitmap generateQRCode(String sku) {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -309,15 +336,30 @@ public class CrearEquipo_2 extends AppCompatActivity {
     }
 
     private void saveEquipmentToFirestore(ListElementEquiposNuevo listElement, boolean isEditing) {
-        Log.d("msg-test", "entro a saveEquipmentToFirestore");
+        if (listElement == null) {
+            return;
+        }
+        if (listElement.getSku() == null) {
+            return;
+        }
+
         db.collection("equipos")
                 .document(listElement.getSku())
                 .set(listElement, SetOptions.merge())
                 .addOnSuccessListener(unused -> {
-                    Log.d("msg-subio", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
-                    finish(); // Regresar a la actividad anterior después de guardar los datos
+                    Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
+                    // Mover la apertura de la nueva actividad aquí, dentro de onSuccessListener
+                    openEquipoDetailsActivity(listElement);
                 })
-                .addOnFailureListener(e -> e.printStackTrace());
+                .addOnFailureListener(e -> {
+                    Log.e("msg-test", "Error al guardar en Firestore", e);
+                    e.printStackTrace();
+                });
+    }
+    private void openEquipoDetailsActivity(ListElementEquiposNuevo listElement) {
+        Intent intent = new Intent(CrearEquipo_2.this, MasDetallesEquipos_2.class);
+        intent.putExtra("ListElementSite", listElement);
+        startActivity(intent);
     }
 
     private void updateExistingEquipment() {

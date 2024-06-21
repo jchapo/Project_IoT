@@ -15,6 +15,8 @@ import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.objetos.ListAdapterEquiposNuevo;
 import com.example.myapplication.Supervisor.objetos.ListElementEquiposNuevo;
+import com.example.myapplication.databinding.AdminFragmentSitesBinding;
+import com.example.myapplication.databinding.SupervisorFragmentEquiposBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -25,14 +27,15 @@ public class EquiposFragment extends Fragment {
     private ArrayList<ListElementEquiposNuevo> activeEquipments = new ArrayList<>();
     private ArrayList<ListElementEquiposNuevo> inactiveEquipments = new ArrayList<>();
     private ListAdapterEquiposNuevo listAdapterDevices;
-
     private RecyclerView recyclerViewSites;
+    SupervisorFragmentEquiposBinding binding;
     private NavigationActivityViewModel navigationActivityViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.supervisor_fragment_equipos, container, false);
-        setHasOptionsMenu(true);
+        binding = SupervisorFragmentEquiposBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        binding.topAppBarDevices.setTitle("Equipos");
         navigationActivityViewModel = new ViewModelProvider(requireActivity()).get(NavigationActivityViewModel.class);
         initializeViews(view);
         observeViewModel();
@@ -43,31 +46,28 @@ public class EquiposFragment extends Fragment {
         if (navigationActivityViewModel != null) {
             navigationActivityViewModel.getActiveEquipments().observe(getViewLifecycleOwner(), equiposActivos -> {
                 activeEquipments.clear();
-                activeEquipments.addAll(equiposActivos);
-                listAdapterDevices.setItems(activeEquipments);
                 listAdapterDevices.notifyDataSetChanged();
+                activeEquipments.addAll(equiposActivos);
             });
             navigationActivityViewModel.getInactiveEquipments().observe(getViewLifecycleOwner(), equiposInactivos -> {
                 inactiveEquipments.clear();
-                inactiveEquipments.addAll(equiposInactivos);
-                listAdapterDevices.setItems(inactiveEquipments);
                 listAdapterDevices.notifyDataSetChanged();
+                inactiveEquipments.addAll(equiposInactivos);
             });
         }
     }
 
     public void initializeViews(View view) {
-        listAdapterDevices = new ListAdapterEquiposNuevo(activeEquipments, getContext(), this::moveToDescriptionDevice);
-        recyclerViewSites = view.findViewById(R.id.listElementsDevice);
-        recyclerViewSites.setHasFixedSize(true);
-        recyclerViewSites.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewSites.setAdapter(listAdapterDevices);
-
         FloatingActionButton agregarEquipoButton = view.findViewById(R.id.agregarEquipofloatingActionButton);
         agregarEquipoButton.setOnClickListener(View -> {
             Intent intent = new Intent(getActivity(), CrearEquipo_2.class);
             startActivity(intent);
         });
+        listAdapterDevices = new ListAdapterEquiposNuevo(activeEquipments, getContext(), this::moveToDescriptionDevice);
+        recyclerViewSites = view.findViewById(R.id.listElementsDevice);
+        recyclerViewSites.setHasFixedSize(true);
+        recyclerViewSites.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewSites.setAdapter(listAdapterDevices);
 
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

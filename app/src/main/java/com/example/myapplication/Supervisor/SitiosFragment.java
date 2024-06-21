@@ -21,6 +21,9 @@ import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.R;
 import com.example.myapplication.Supervisor.objetos.ListAdapterSiteSupervisor;
+import com.example.myapplication.databinding.AdminFragmentSitesBinding;
+import com.example.myapplication.databinding.SupervisorFragmentSitiosBinding;
+import com.example.myapplication.databinding.SupervisorListSitiosBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -32,14 +35,15 @@ public class SitiosFragment extends Fragment {
     private ArrayList<ListElementSite> activeSites = new ArrayList<>();
     private ArrayList<ListElementSite> inactiveSites = new ArrayList<>();
     private ListAdapterSite listAdapterSiteSupervisor;
-
     private RecyclerView recyclerViewSites;
+    SupervisorFragmentSitiosBinding binding;
     private NavigationActivityViewModel navigationActivityViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.supervisor_fragment_sitios, container, false);
-        setHasOptionsMenu(true);
+        binding = SupervisorFragmentSitiosBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        binding.topAppBarSiteSuper.setTitle("Sitios Asignados");
         navigationActivityViewModel = new ViewModelProvider(requireActivity()) .get(NavigationActivityViewModel. class);
         initializeViews(view);
         observeViewModel();
