@@ -44,15 +44,13 @@ import org.json.JSONObject;
 public class Fragment_1_Users extends Fragment {
     private Client client;
     private Index userIndex;
-
+    Toolbar toolbar;
+    private SearchView searchView;
+    private MenuItem menuItem;
     private ArrayList<ListElementUser> activeUsers = new ArrayList<>();
     private ArrayList<ListElementUser> inactiveUsers = new ArrayList<>();
     private ArrayList<ListElementUser> allUsers = new ArrayList<>();
     private ListAdapterUser listAdapterUsers;
-    Toolbar toolbar;
-    private SearchView searchView;
-    private MenuItem menuItem;
-
     private RecyclerView recyclerViewUsers;
     AdminFragmentUsersBinding binding;
     private NavigationActivityViewModel navigationActivityViewModel;
@@ -74,11 +72,11 @@ public class Fragment_1_Users extends Fragment {
         navigationActivityViewModel = new ViewModelProvider(requireActivity()).get(NavigationActivityViewModel.class);
         initializeViews(view);
         observeViewModel();
+        listAdapterUsers.setItems(activeUsers);
         return view;
     }
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        Log.d("Fragment_1_Users", "onCreateOptionsMenu called"); // Log para verificar la inflación del menú
         inflater.inflate(R.menu.top_app_bar_admin_users, menu);
         menuItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) menuItem.getActionView();
@@ -104,27 +102,6 @@ public class Fragment_1_Users extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    private void mysearch(String query) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("usuarios")
-                .orderBy("nameLowe")
-                .startAt(query)
-                .endAt(query + "\uf8ff")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        ArrayList<ListElementUser> searchResults = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            ListElementUser listElementUser = document.toObject(ListElementUser.class);
-                            searchResults.add(listElementUser);
-                        }
-                        listAdapterUsers.setItems(searchResults); // Actualiza el adaptador con los resultados de la búsqueda
-                    } else {
-                        Log.d("Fragment_1_Users", "Error getting documents: ", task.getException());
-                    }
-                });
-    }
-
     private void searchUsers(String query) {
         userIndex.searchAsync(new com.algolia.search.saas.Query(query), (content, error) -> {
             if (error == null) {
@@ -134,14 +111,21 @@ public class Fragment_1_Users extends Fragment {
                     for (int i = 0; i < hits.length(); i++) {
                         JSONObject hit = hits.getJSONObject(i);
                         ListElementUser listElementUser = new ListElementUser();
-                        listElementUser.setName(hit.getString("name"));
-                        listElementUser.setLastname(hit.getString("lastname"));
-                        listElementUser.setUser(hit.getString("user"));
-                        listElementUser.setStatus(hit.getString("status"));
-                        listElementUser.setMail(hit.getString("mail"));
+                        listElementUser.setUser(hit.optString("user", ""));
+                        listElementUser.setName(hit.optString("name", ""));
+                        listElementUser.setLastname(hit.optString("lastname", ""));
+                        listElementUser.setDni(hit.optString("dni", ""));
+                        listElementUser.setMail(hit.optString("mail", ""));
+                        listElementUser.setAddress(hit.optString("address", ""));
+                        listElementUser.setPhone(hit.optString("phone", ""));
+                        listElementUser.setStatus(hit.optString("status", "Activo")); // Default value as "Activo"
+                        listElementUser.setFechaCreacion(hit.optString("fechaCreacion", ""));
+                        listElementUser.setSitiosAsignados(hit.optString("sitiosAsignados", ""));
+                        listElementUser.setImageUrl(hit.optString("imageUrl", ""));
                         searchResults.add(listElementUser);
                     }
                     // Actualiza el adaptador con los resultados de la búsqueda
+                    Log.e("AlgoliaSearch", "Se actualizo la lista");
                     listAdapterUsers.setItems(searchResults);
                 } catch (JSONException e) {
                     Log.e("AlgoliaSearch", "Error parsing search results", e);
@@ -152,21 +136,21 @@ public class Fragment_1_Users extends Fragment {
         });
     }
 
-
-
     private void observeViewModel() {
         if (navigationActivityViewModel != null) {
             navigationActivityViewModel.getActiveUsers().observe(getViewLifecycleOwner(), usuarioActivos -> {
                 Log.d("Fragment_1_Users", "Active users updated: " + usuarioActivos.size());
                 activeUsers.clear();
                 activeUsers.addAll(usuarioActivos);
-                updateUsersList();
+                listAdapterUsers.notifyDataSetChanged();
+                //updateUsersList();
             });
             navigationActivityViewModel.getInactiveUsers().observe(getViewLifecycleOwner(), usuarioInactivos -> {
                 Log.d("Fragment_1_Users", "Inactive users updated: " + usuarioInactivos.size());
                 inactiveUsers.clear();
                 inactiveUsers.addAll(usuarioInactivos);
-                updateUsersList();
+                listAdapterUsers.notifyDataSetChanged();
+                //updateUsersList();
             });
         }
     }
@@ -176,13 +160,12 @@ public class Fragment_1_Users extends Fragment {
         allUsers.addAll(activeUsers);
         allUsers.addAll(inactiveUsers);
         Log.d("Fragment_1_Users", "Total users: " + allUsers.size());
-        listAdapterUsers.setItems(allUsers); // Actualiza la lista en el adaptador
+        //listAdapterUsers.setItems(allUsers); // Actualiza la lista en el adaptador
     }
     private void initializeViews(View view) {
         toolbar = binding.topAppBarUserFragment;
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
-        activity.getSupportActionBar().setTitle("");
         FloatingActionButton agregarUsuarioButton = view.findViewById(R.id.agregarUsuariofloatingActionButton);
         agregarUsuarioButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), MainActivity_1_Users_NewUser.class);
