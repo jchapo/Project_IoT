@@ -10,9 +10,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListAdapterSuperAdminUser extends RecyclerView.Adapter<ListAdapterSuperAdminUser.ViewHolder> {
@@ -52,23 +55,9 @@ public class ListAdapterSuperAdminUser extends RecyclerView.Adapter<ListAdapterS
     }
 
     public void setItems(List<ListElementSuperAdminUser> items) {
+        Collections.sort(items, Comparator.comparing(ListElementSuperAdminUser::getName));
         nData = items;
-        nDataFull = new ArrayList<>(items); // Update the backup list
-        notifyDataSetChanged();
-    }
-
-    public void filter(String text) {
-        nData.clear();
-        if (text.isEmpty()) {
-            nData.addAll(nDataFull);
-        } else {
-            text = text.toLowerCase();
-            for (ListElementSuperAdminUser item : nDataFull) {
-                if (item.getName().toLowerCase().contains(text) || item.getLastname().toLowerCase().contains(text)) {
-                    nData.add(item);
-                }
-            }
-        }
+        nDataFull = new ArrayList<>(items); // Actualizar la lista completa al cambiar los datos
         notifyDataSetChanged();
     }
 
@@ -89,12 +78,7 @@ public class ListAdapterSuperAdminUser extends RecyclerView.Adapter<ListAdapterS
             name.setText(fullName);
             user.setText(item.getUser());
             status.setText(item.getStatus());
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listener.onItemClick(item);
-                }
-            });
+            itemView.setOnClickListener(view -> listener.onItemClick(item));
         }
     }
 }

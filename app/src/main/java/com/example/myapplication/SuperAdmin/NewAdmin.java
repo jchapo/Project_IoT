@@ -31,10 +31,6 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.myapplication.Admin.MainActivity_0_NavigationAdmin;
-import com.example.myapplication.Admin.MainActivity_1_Users_NewUser;
-import com.example.myapplication.Admin.MainActivity_1_Users_UserDetails;
-import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.example.myapplication.SuperAdmin.list.ListElementSuperAdminUser;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -61,7 +57,7 @@ public class NewAdmin extends AppCompatActivity {
     private Uri imageUri;
     FirebaseStorage storage;
     StorageReference storageReference;
-    ListElementUser element;
+    ListElementSuperAdminUser element;
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
@@ -175,7 +171,7 @@ public class NewAdmin extends AppCompatActivity {
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-    private void uploadImageAndSaveUser(ListElementUser listElement, boolean isEditing) {
+    private void uploadImageAndSaveUser(ListElementSuperAdminUser listElement, boolean isEditing) {
         if (imageUri != null) {
             try {
                 Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
@@ -203,7 +199,7 @@ public class NewAdmin extends AppCompatActivity {
         }
     }
 
-    private void saveUserToFirestore(ListElementUser listElement, boolean isEditing) {
+    private void saveUserToFirestore(ListElementSuperAdminUser listElement, boolean isEditing) {
         Log.d("msg-test", "entro a saveUserToFirestore");
         db.collection("usuarios")
                 .document(listElement.getDni())
@@ -211,7 +207,7 @@ public class NewAdmin extends AppCompatActivity {
                 .addOnSuccessListener(unused -> {
                     Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
                     notificarImportanceDefault(listElement.getName() + " " + listElement.getLastname(), listElement.getFechaCreacion());
-                    Intent intent3 = new Intent(NewAdmin.this, MainActivity_1_Users_UserDetails.class);
+                    Intent intent3 = new Intent(NewAdmin.this, UserDetais.class);
                     intent3.putExtra("ListElement", listElement);
                     startActivity(intent3);
                 })
@@ -234,9 +230,8 @@ public class NewAdmin extends AppCompatActivity {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String fechaCreacion = fechaActual.format(formatter);
             Integer primerInicio = 0;
-            String sitiosAsignados = "";
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
+            ListElementSuperAdminUser listElement = new ListElementSuperAdminUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "");
             uploadImageAndSaveUser(listElement, false);
         }
     }
@@ -255,9 +250,8 @@ public class NewAdmin extends AppCompatActivity {
             String status = "Activo";
             String fechaCreacion = editFechaCreacion.getText().toString();
             Integer primerInicio = Integer.parseInt(editPrimerInicio.getText().toString());
-            String sitiosAsignados = element.getSitiosAsignados();
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
+            ListElementSuperAdminUser listElement = new ListElementSuperAdminUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "");
             uploadImageAndSaveUser(listElement, true);
         }
     }
@@ -279,12 +273,9 @@ public class NewAdmin extends AppCompatActivity {
         editAddress.setText(element.getAddress());
         editPhone.setText(element.getPhone());
         editFechaCreacion.setText(element.getFechaCreacion());
-        //editPrimerInicio.setText(element.getPrimerInicio());
-        // Implementa la lógica para mostrar la imagen de perfil
         selectTypeUser.setText(element.getUser(), false);
 
         if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
-            // Usar Glide para cargar la imagen desde Firebase Storage utilizando la ruta de acceso
             StorageReference imageRef = storageReference.child(element.getImageUrl());
             Glide.with(this)
                     .load(imageRef)
@@ -320,7 +311,7 @@ public class NewAdmin extends AppCompatActivity {
     public void notificarImportanceDefault(String fullname, String fechaCreacion) {
         //Crear notificación
         //Agregar información a la notificación que luego sea enviada a la actividad que se abre
-        Intent intent = new Intent(this, MainActivity_0_NavigationAdmin.class);
+        Intent intent = new Intent(this, MainActivity_navigation_SuperAdmin.class);
         intent.putExtra("pid", 4616);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         //
