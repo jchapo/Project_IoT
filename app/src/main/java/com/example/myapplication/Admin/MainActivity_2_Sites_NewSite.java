@@ -17,6 +17,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.content.Intent;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
@@ -41,13 +43,21 @@ import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
     String canal1 = "importanteDefault3";
@@ -62,6 +72,9 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
     private Uri imageUri;
     private MaterialAutoCompleteTextView selectDepartment, selectProvince, selectZoneType, selectSiteType;
     ArrayAdapter<String> departmentAdapter, provinceAdapter, zoneTypeAdapter, siteTypeAdapter;
+    FirebaseStorage storage;
+    StorageReference storageReference;
+
 
     String[] departmentOptions = {
             "Amazonas", "Áncash","Apurímac","Arequipa","Ayacucho","Cajamarca","Callao","Cusco","Huancavelica","Huánuco","Ica","Junín","La Libertad","Lambayeque","Lima","Loreto","Madre de Dios","Moquegua","Pasco","Piura",
@@ -78,13 +91,15 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_new_site);
-        // Inicializar los Maps
-        initializeLocationData();
 
+        isEditing = getIntent().getBooleanExtra("isEditing", false);
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
         LinearLayout layoutDepartamento = findViewById(R.id.layoutDepartmento);
         LinearLayout layoutProvincia = findViewById(R.id.layoutProvincia);
         LinearLayout layoutDistrito = findViewById(R.id.layoutDistrito);
-
+        initializeLocationData();
 
         // Encuentra las referencias a los campos de autocompletado
         selectDepartment = findViewById(R.id.selectDepartment);
@@ -119,19 +134,26 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == RESULT_OK && result.getData() != null){
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         imageUri = result.getData().getData();
-                        imageView.setImageURI(imageUri);
-                        isImageAdded = true; // Actualizar la variable cuando se selecciona una imagen
+                        try {
+                            // Usar Glide para mostrar la imagen seleccionada en el ImageView
+                            Glide.with(this)
+                                    .load(imageUri)
+                                    .into(imageView);
+                            isImageAdded = true; // Actualizar la variable cuando se selecciona una imagen
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                });
+                }
+        );
 
         db = FirebaseFirestore.getInstance();
 
         TextInputLayout textInputLayout = findViewById(R.id.textInputLayoutLongitud);
 
         // Obtener el indicador de si se está editando desde el Intent
-        isEditing = getIntent().getBooleanExtra("isEditing", false);
 
         imageView = findViewById(R.id.imageViewNewSite);
         imageView.setOnClickListener(v -> openFileChooser());
@@ -231,20 +253,57 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
     }
 
     private void uploadImageAndSaveSite(ListElementSite listElement, boolean isEditing) {
-        // Obtener el bitmap desde el ImageView
-        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        if (imageUri != null) {
+            try {
+                Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                Bitmap resizedBitmap = getResizedBitmap(bitmap, 600); // Redimensionar a 300x300 píxeles
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos); // Comprimir con calidad del 80%
+                byte[] imageBytes = baos.toByteArray();
 
-        // Convertir el bitmap a byte array
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
+                String storagePath = "siteimages/" + listElement.getName() + ".jpg";
+                ArrayList<String> selectedImages = new ArrayList<>();
+                if (selectedImages.isEmpty()) {
+                    selectedImages.add(storagePath);
+                } else {
+                    selectedImages.add(0, storagePath);
+                }
+                Set<String> updatedImages = new HashSet<>(selectedImages);
+                String updatedSitesJson = new JSONArray(updatedImages).toString();
 
-        // Convertir byte array a base64
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        listElement.setImageUrl(encodedImage);
-
-        saveSiteToFirestore(listElement, isEditing);
+                StorageReference ref = storageReference.child(storagePath);
+                ref.putBytes(imageBytes)
+                        .addOnSuccessListener(taskSnapshot -> {
+                            ref.getDownloadUrl().addOnSuccessListener(uri -> {
+                                listElement.setImageUrl(updatedSitesJson);
+                                saveSiteToFirestore(listElement, isEditing);
+                            });
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(MainActivity_2_Sites_NewSite.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            saveSiteToFirestore(listElement, isEditing);
+        }
     }
+    private Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
 
     private void saveSiteToFirestore(ListElementSite listElement, boolean isEditing) {
         Log.d("msg-test", "entro a saveSiteToFirestore");
@@ -303,8 +362,9 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String fechaCreacion = fechaActual.format(formatter);
             String imagen = "";
+            String supervisoresAsignados = "";
 
-            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion, imagen);
+            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion, imagen, supervisoresAsignados);
             uploadImageAndSaveSite(listElement, false);
         }
     }
@@ -325,14 +385,16 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
             String coordenadas = (latitude != 0.0 && longitude != 0.0) ? coordenadas_edit : element.getCoordenadas();
             String name = element.getName();
             String address = editAddress.getText().toString();
-            String status = "Activo";
+            String status = element.getStatus();
             String ubigeo = editUbigeo.getText().toString();
             LocalDate fechaActual = LocalDate.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String fechaCreacion = fechaActual.format(formatter);
             String imagen = "";
+            String supervisoresAsignados = element.getSuperAsignados();
 
-            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion, imagen);
+
+            ListElementSite listElement = new ListElementSite(department, name, status, province, district, address, location, ubigeo, zonetype, sitetype, latitud, longitud, coordenadas, fechaCreacion, imagen, supervisoresAsignados);
             uploadImageAndSaveSite(listElement, true);
         }
     }
@@ -378,11 +440,31 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
         editSiteCoordenadas.setText(element.getCoordenadas());
 
         // Si hay una imagen existente, decodificarla y mostrarla
-        if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
-            byte[] decodedString = Base64.decode(element.getImageUrl(), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            imageView.setImageBitmap(decodedByte);
-            isImageAdded = true; // Actualizar la variable cuando se rellena una imagen existente
+        String imageUrlJson = element.getImageUrl();
+
+        try {
+            // Convertir la cadena JSON a un conjunto de cadenas (rutas de imágenes)
+            Set<String> imageUrls = new HashSet<>();
+            JSONArray jsonArray = new JSONArray(imageUrlJson);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                imageUrls.add(jsonArray.getString(i));
+            }
+
+            // Aquí puedes manejar el conjunto de URLs de imágenes como desees,
+            // por ejemplo, mostrarlas en una lista o cargar una de ellas en un ImageView.
+            if (!imageUrls.isEmpty()) {
+                // Supongamos que quieres cargar la primera imagen en un ImageView
+                String firstImageUrl = imageUrls.iterator().next();
+                StorageReference imageRef = storageReference.child(firstImageUrl);
+
+                Glide.with(this)
+                        .load(imageRef)
+                        .into(imageView);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            // Manejar el error al parsear el JSON
         }
     }
 

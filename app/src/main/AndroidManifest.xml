@@ -32,7 +32,7 @@
             android:name=".Supervisor.EditarEquipo"
             android:exported="false" />
         <activity
-            android:name=".Sistem.LoginActivityFirstTime"
+            android:name=".Sistem.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,9 +41,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Sistem.LoginActivity"
-            android:exported="true" />
-        <activity
             android:name=".Sistem.MainActivityCambiarPrimeraContra"
             android:exported="false" />
         <activity
@@ -51,6 +48,9 @@
             android:exported="false" />
         <activity
             android:name=".Admin.MainActivity_2_SiteLocation"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.MainActivity_2_Sites_SiteImages"
             android:exported="false" />
         <activity
             android:name=".NavegacionInicial"
@@ -122,19 +122,16 @@
             android:name=".Supervisor.ImagenesSitio"
             android:exported="false" />
         <activity
+            android:name=".Supervisor.ImagenesEquipo"
+            android:exported="false" />
+        <activity
             android:name=".Supervisor.MasDetallesSitioSupervisor"
             android:exported="false" />
         <activity
             android:name=".Supervisor.NavegacionSupervisor"
             android:exported="true" />
         <activity
-            android:name=".Supervisor.CrearEquipo"
-            android:exported="false" />
-        <activity
             android:name=".Supervisor.CrearEquipo_2"
-            android:exported="false" />
-        <activity
-            android:name=".Supervisor.MasDetallesEquipos"
             android:exported="false" />
         <activity
             android:name=".Supervisor.MasDetallesEquipos_2"

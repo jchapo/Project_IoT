@@ -56,70 +56,32 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
     String canal1 = "importanteDefault";
     AdminActivityMainNavigationBinding binding;
     private DrawerLayout drawerLayout;
-    private BottomNavigationView bottomNavigationView;
-
-    FirebaseFirestore db;
     NavigationActivityViewModel navigationActivityViewModel;
-    private ArrayList<ListElementUser> activeUsers, inactiveUsers;
-    private ArrayList<ListElementSite> activeSites, inactiveSites;
-    public static final int REQUEST_CODE = 1;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.admin_activity_main_navigation);
         binding = AdminActivityMainNavigationBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        loadUsersFromFirestore();
+        loadSitesFromFirestore();
         crearCanalesNotificacion();
-        bottomNavigationView = binding.bottomNavigation;
         navigationActivityViewModel = new ViewModelProvider(this).get(NavigationActivityViewModel.class);
+        replaceFragment(new Fragment_1_Users());
 
-        // Recuperar el valor de inicio desde el Intent
-        String inicio = getIntent().getStringExtra("inicio");
-        if (inicio != null) {
-            navigationActivityViewModel.getInicio().setValue(inicio);
-        }
-
-        binding.topAppBarUserFragment.setTitle("Usuarios");
-        activeUsers = new ArrayList<>();
-        inactiveUsers = new ArrayList<>();
-        activeSites = new ArrayList<>();
-        inactiveSites = new ArrayList<>();
-
-        Toolbar toolbar = binding.topAppBarUserFragment;
-        MaterialToolbar topAppBar = findViewById(R.id.topAppBarUserFragment);
-
-        drawerLayout = binding.drawerLayout;
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                MainActivity_0_NavigationAdmin.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                binding.topAppBarUserFragment.setTitle("Usuarios");
-                replaceFragment(new Fragment_1_Users());
-            }
-        }, 1000); // 1000 milisegundos = 1 segundo
-
-
-
-
-        binding.bottomNavigation.setOnItemSelectedListener(item -> {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.usuarios_menu) {
-                binding.topAppBarUserFragment.setTitle("Usuarios");
                 replaceFragment(new Fragment_1_Users());
                 return true;
             } else if (item.getItemId() == R.id.sitios_menu) {
-                binding.topAppBarUserFragment.setTitle("Sitios");
                 replaceFragment(new Fragment_2_Sites());
                 return true;
             } else if (item.getItemId() == R.id.chat_menu) {
-                binding.topAppBarUserFragment.setTitle("Chats");
                 replaceFragment(new Fragment_3_Chat());
                 return true;
             } else if (item.getItemId() == R.id.notificaciones_menu) {
-                binding.topAppBarUserFragment.setTitle("Notificaciones");
                 replaceFragment(new Fragment_4_Notifications());
                 return true;
             }
@@ -137,35 +99,22 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadData();
-    }
-    private void loadData() {
-        // Limpiar las listas antes de cargar los datos
-        activeUsers.clear();
-        inactiveUsers.clear();
-        activeSites.clear();
-        inactiveSites.clear();
-        db = FirebaseFirestore.getInstance();
         loadUsersFromFirestore();
+        loadSitesFromFirestore();
     }
 
     private void loadUsersFromFirestore() {
-        Log.d("msg-test", "loadUsersFromFirestore called");
-
-        // Limpia las listas antes de agregar nuevos datos
-        activeUsers.clear();
-        inactiveUsers.clear();
-
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("usuarios")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d("msg-test", "Task is successful");
-
+                        ArrayList<ListElementUser> activeUsers = new ArrayList<>();
+                        ArrayList<ListElementUser> inactiveUsers = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             ListElementUser listElementUser = document.toObject(ListElementUser.class);
                             Log.d("msg-test", "Processing user: " + listElementUser.getName());
-
                             if ("Activo".equals(listElementUser.getStatus())) {
                                 activeUsers.add(listElementUser);
                             } else if ("Inactivo".equals(listElementUser.getStatus())) {
@@ -173,7 +122,6 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
                             }
                         }
 
-                        // Ordenar las listas alfabéticamente
                         Collections.sort(activeUsers, Comparator.comparing(ListElementUser::getName));
                         Collections.sort(inactiveUsers, Comparator.comparing(ListElementUser::getName));
 
@@ -184,26 +132,22 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
                         navigationActivityViewModel.getInactiveUsers().setValue(inactiveUsers);
                         DataHolder.getInstance().setActiveUsers(activeUsers);
                         DataHolder.getInstance().setInactiveUsers(inactiveUsers);
-                        // Una vez que se cargan los usuarios, cargar sitios desde Firestore
-                        db = FirebaseFirestore.getInstance();
-                        loadSitesFromFirestore();
                     } else {
                         Log.d("msg-test", "Error getting user documents: ", task.getException());
                     }
                 });
     }
-
-
-
     private void loadSitesFromFirestore() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("sitios")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        ArrayList<ListElementSite> activeSites = new ArrayList<>();
+                        ArrayList<ListElementSite> inactiveSites = new ArrayList<>();
                         for (QueryDocumentSnapshot document2 : task.getResult()) {
                             ListElementSite listElementSite = document2.toObject(ListElementSite.class);
                             Log.d("msg-test", "Active sites: " + listElementSite.getName());
-
                             if ("Activo".equals(listElementSite.getStatus())) {
                                 activeSites.add(listElementSite);
                             } else if ("Inactivo".equals(listElementSite.getStatus())) {
@@ -226,10 +170,6 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
                     }
                 });
     }
-
-
-
-
     public void crearCanalesNotificacion() {
 
         NotificationChannel channel = new NotificationChannel(canal1,

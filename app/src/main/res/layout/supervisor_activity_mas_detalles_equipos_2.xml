@@ -5,20 +5,19 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Supervisor.MasDetallesEquipos">
+    tools:context=".Supervisor.MasDetallesEquipos_2">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:elevation="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/md_theme_inverseOnSurface"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"            app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBarSitePerfilSuper"
+            android:id="@+id/topAppBarEquipoPerfilSuper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
@@ -43,30 +42,29 @@
             android:layout_height="200dp"
             android:scaleType="centerCrop"
             android:src="@mipmap/equipo" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <LinearLayout
                 android:id="@+id/imageView"
                 android:layout_width="80dp"
+                android:layout_marginLeft="16dp"
                 android:layout_height="80dp"
                 android:background="@color/md_theme_tertiaryFixedDim"
                 android:gravity="center"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/imageViewProfileEquipo"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/ic_equipos"
                     android:layout_gravity="center"
-                    android:scaleType="fitCenter" />
+                    android:scaleType="centerCrop" />
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -82,35 +80,55 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textSize="16dp"
+                    android:textSize="18dp"
                     android:text="Nombre del equipo" />
 
-                <TextView
-                    android:id="@+id/Datosdevice"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12dp"
-                    android:text="Marca / Modelo / SKU" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/marcaTextViewEquipo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:text="Marca" />
+                    <TextView
+                        android:id="@+id/modeloTextViewEquipo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:text="Modelo" />
+                    <TextView
+                        android:id="@+id/skuTextViewEquipo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:text="SKU" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <ImageButton
-                android:id="@+id/buttonImagesSiteSuper"
+                android:id="@+id/buttonImagesEquipoSuper"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:background="@color/white"
+                android:layout_marginRight="16dp"
+                android:background="@android:color/transparent"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_photo_outline" />
 
             <ImageButton
-                android:id="@+id/botonQR"
+                android:id="@+id/buttonQR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:background="@android:color/transparent"
                 android:layout_gravity="center"
-
-                android:layout_margin="16dp"
-                android:background="@color/white"
                 android:src="@drawable/icon_qrmas" />
+
+
         </LinearLayout>
     </LinearLayout>
 
@@ -262,6 +280,7 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/deviderSuperEquipos"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray"
@@ -291,7 +310,6 @@
                 android:id="@+id/textViewEliminarEquipo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Eliminar Equipo"
                 android:textColor="@android:color/holo_red_dark"
                 android:clickable="true"
                 android:onClick="showConfirmationDialogDevice"/>

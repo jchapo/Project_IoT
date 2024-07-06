@@ -1,0 +1,102 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.firebaseui",
+    "module": "firebase-ui-storage",
+    "version": "8.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.0.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "com.github.bumptech.glide",
+          "module": "glide",
+          "version": {
+            "requires": "4.11.0"
+          }
+        },
+        {
+          "group": "com.google.firebase",
+          "module": "firebase-storage"
+        }
+      ],
+      "files": [
+        {
+          "name": "firebase-ui-storage-8.0.0.aar",
+          "url": "firebase-ui-storage-8.0.0.aar",
+          "size": 7397,
+          "sha512": "8e25db7164a5e9f862d4cd8a51af0421649918856b107db0b02c1e466c5b4afb26ebac200d11241c83b78243e42fd4ec41ad176c33a2adfe7a1302cfe1df8121",
+          "sha256": "fa1f0415fc25bd459d45e32047e860de437e3c5624d86a37411eb53c977bc6a0",
+          "sha1": "6b939bb9fe4ed2dae1f7453dd2f15a25d62ceaf2",
+          "md5": "10dbfdffa179a17fb0ca3a1f792219cb"
+        }
+      ]
+    },
+    {
+      "name": "releaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.firebase",
+          "module": "firebase-bom",
+          "version": {
+            "requires": "28.2.0"
+          },
+          "attributes": {
+            "org.gradle.category": "platform"
+          },
+          "endorseStrictVersions": true
+        },
+        {
+          "group": "androidx.legacy",
+          "module": "legacy-support-v4",
+          "version": {
+            "requires": "1.0.0"
+          }
+        },
+        {
+          "group": "com.github.bumptech.glide",
+          "module": "glide",
+          "version": {
+            "requires": "4.11.0"
+          }
+        },
+        {
+          "group": "com.google.firebase",
+          "module": "firebase-storage"
+        }
+      ],
+      "files": [
+        {
+          "name": "firebase-ui-storage-8.0.0.aar",
+          "url": "firebase-ui-storage-8.0.0.aar",
+          "size": 7397,
+          "sha512": "8e25db7164a5e9f862d4cd8a51af0421649918856b107db0b02c1e466c5b4afb26ebac200d11241c83b78243e42fd4ec41ad176c33a2adfe7a1302cfe1df8121",
+          "sha256": "fa1f0415fc25bd459d45e32047e860de437e3c5624d86a37411eb53c977bc6a0",
+          "sha1": "6b939bb9fe4ed2dae1f7453dd2f15a25d62ceaf2",
+          "md5": "10dbfdffa179a17fb0ca3a1f792219cb"
+        }
+      ]
+    }
+  ]
+}
