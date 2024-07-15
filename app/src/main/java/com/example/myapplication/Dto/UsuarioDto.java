@@ -15,6 +15,7 @@ public class UsuarioDto {
     private Integer primerInicio;
     private String fechaCreacion;
 
+
     public String getNombre() {
         return nombre;
     }

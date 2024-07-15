@@ -52,11 +52,15 @@
         <activity
             android:name=".Admin.MainActivity_2_Sites_SiteImages"
             android:exported="false" />
+
+        <activity
+            android:name=".Sistem.MainActivity_notificacion_user"
+            android:exported="false" />
         <activity
             android:name=".NavegacionInicial"
             android:exported="true" />
         <activity
-            android:name=".Sistem.MainActivity_notificacion_user"
+            android:name=".Sistem.MailSender"
 
             android:exported="false" />
 

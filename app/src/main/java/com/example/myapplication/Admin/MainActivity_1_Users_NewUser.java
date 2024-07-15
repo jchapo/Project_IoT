@@ -10,7 +10,6 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -34,8 +33,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
+import com.example.myapplication.Sistem.MailSender;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.appcheck.FirebaseAppCheck;
+//import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -44,6 +47,9 @@ import com.google.firebase.storage.StorageReference;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
+
+import javax.mail.MessagingException;
 
 public class MainActivity_1_Users_NewUser extends AppCompatActivity {
     String canal1 = "importanteDefault2";
@@ -76,6 +82,13 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
 
         imageView = findViewById(R.id.imageViewProfile);
         imageView.setOnClickListener(v -> openFileChooser());
+
+        FirebaseApp.initializeApp(this);
+
+        // Inicializar App Check con SafetyNet
+        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+        //firebaseAppCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance());
+
 
         // ActivityResultLauncher for opening file chooser
         activityResultLauncher = registerForActivityResult(
@@ -237,11 +250,34 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String fechaCreacion = fechaActual.format(formatter);
             Integer primerInicio = 0;
             String sitiosAsignados = "";
+            String password = generateRandomPassword();
 
             ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
             uploadImageAndSaveUser(listElement, false);
+
+            // Enviar correo al nuevo usuario
+            String senderEmail = "diegocorcuera1989@gmail.com";
+            MailSender mailSender = new MailSender(senderEmail, "siathegreatest12");
+
+            // Imprimir los datos
+            Log.d("EmailDetails", "Remitente: " + senderEmail);
+            Log.d("EmailDetails", "Destinatario: " + mail);
+            Log.d("EmailDetails", "Contenido del correo: " + password); // Aquí puedes personalizar el contenido
+
+            new Thread(() -> {
+                try {
+                    mailSender.sendEmail(mail, password);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> Toast.makeText(MainActivity_1_Users_NewUser.this, "Error al enviar el correo", Toast.LENGTH_SHORT).show());
+                }
+            }).start();
         }
     }
+
+
+
+
 
     private void updateExistingUser() {
         if (areFieldsEmpty()) {
@@ -343,5 +379,14 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             notificationManager.notify(1, notification);
         }
+    }
+    private String generateRandomPassword() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        StringBuilder password = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 5; i++) {
+            password.append(characters.charAt(random.nextInt(characters.length())));
+        }
+        return password.toString();
     }
 }

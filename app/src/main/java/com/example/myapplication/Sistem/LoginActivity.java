@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.NavegacionInicial;
+import com.example.myapplication.Admin.MainActivity_0_NavigationAdmin;
 import com.example.myapplication.R;
+import com.example.myapplication.SuperAdmin.MainActivity_navigation_SuperAdmin;
+import com.example.myapplication.Supervisor.NavegacionSupervisor;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -18,10 +21,13 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +35,22 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.sistema_activity_main_login_users);
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         Button buttonLogin = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signIn();
+            }
+        });
+
+        TextView textFirstTimeLogin = findViewById(R.id.textFirstTimeLogin);
+        textFirstTimeLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, MainActivityCambiarPrimeraContra.class);
+                startActivity(intent);
             }
         });
     }
@@ -46,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
         TextInputEditText editTextEmail = (TextInputEditText) textInputLayoutEmail.getEditText();
         TextInputEditText editTextPassword = (TextInputEditText) textInputLayoutPassword.getEditText();
 
-
         if (editTextEmail != null && editTextPassword != null) {
             String email = editTextEmail.getText().toString();
             String password = editTextPassword.getText().toString();
@@ -56,22 +71,59 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                startActivity(new Intent(LoginActivity.this, NavegacionInicial.class));
-                                finish();
+                                if (user != null) {
+                                    checkUserRole(user.getEmail());
+                                }
                             } else {
-                                // If sign in fails, display a message to the user.
-                                Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
         } else {
-            // Handle the case where editTextEmail or editTextPassword is null
-            Toast.makeText(LoginActivity.this, "EditText is null.",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "EditText is null.", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void checkUserRole(String email) {
+        db.collection("usuarios")
+                .whereEqualTo("mail", email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<com.google.firebase.firestore.QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<com.google.firebase.firestore.QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (!task.getResult().isEmpty()) {
+                                DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                                String userRole = document.getString("user");
+                                navigateBasedOnRole(userRole);
+                            } else {
+                                Toast.makeText(LoginActivity.this, "No user found with this email.", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Failed to retrieve user role.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void navigateBasedOnRole(String role) {
+        Intent intent;
+        switch (role) {
+            case "Supervisor":
+                intent = new Intent(LoginActivity.this, NavegacionSupervisor.class);
+                break;
+            case "Administrador":
+                intent = new Intent(LoginActivity.this, MainActivity_0_NavigationAdmin.class);
+                break;
+            case "Superadministrador":
+                intent = new Intent(LoginActivity.this, MainActivity_navigation_SuperAdmin.class);
+                break;
+            default:
+                Toast.makeText(this, "Unknown role.", Toast.LENGTH_SHORT).show();
+                return;
+        }
+        startActivity(intent);
+        finish();
+    }
 }
