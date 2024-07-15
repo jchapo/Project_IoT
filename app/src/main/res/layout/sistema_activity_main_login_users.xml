@@ -84,7 +84,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="¿Olvidaste tu contraseña?"
-                android:textStyle="italic" />
+                android:textStyle="italic"
+                android:paddingTop="16dp"
+                android:clickable="true"
+                android:focusable="true" />
 
             <TextView
                 android:id="@+id/textFirstTimeLogin"
@@ -97,5 +100,4 @@
 
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

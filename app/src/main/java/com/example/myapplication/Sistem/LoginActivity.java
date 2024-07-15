@@ -53,6 +53,15 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        TextView textForgotPassword = findViewById(R.id.textForgotPassword);
+        textForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RecuperarContraActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void signIn() {
@@ -63,8 +72,22 @@ public class LoginActivity extends AppCompatActivity {
         TextInputEditText editTextPassword = (TextInputEditText) textInputLayoutPassword.getEditText();
 
         if (editTextEmail != null && editTextPassword != null) {
-            String email = editTextEmail.getText().toString();
-            String password = editTextPassword.getText().toString();
+            String email = editTextEmail.getText().toString().trim();
+            String password = editTextPassword.getText().toString().trim();
+
+            if (email.isEmpty()) {
+                textInputLayoutEmail.setError("Email is required.");
+                return;
+            } else {
+                textInputLayoutEmail.setError(null);
+            }
+
+            if (password.isEmpty()) {
+                textInputLayoutPassword.setError("Password is required.");
+                return;
+            } else {
+                textInputLayoutPassword.setError(null);
+            }
 
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -85,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
     private void checkUserRole(String email) {
         db.collection("usuarios")
                 .whereEqualTo("mail", email)
@@ -96,9 +120,9 @@ public class LoginActivity extends AppCompatActivity {
                             if (!task.getResult().isEmpty()) {
                                 DocumentSnapshot document = task.getResult().getDocuments().get(0);
                                 String userRole = document.getString("user");
-                                String userName = document.getString("name");  // Suponiendo que el nombre del usuario está almacenado con la clave "name"
+                                String userName = document.getString("name");
                                 String userLastName = document.getString("lastname");
-                                String userPhone = document.getString("phone");  // Suponiendo que el teléfono del usuario está almacenado con la clave "phone"
+                                String userPhone = document.getString("phone");
                                 navigateBasedOnRole(userRole, userName, userLastName, email, userPhone);
                             } else {
                                 Toast.makeText(LoginActivity.this, "No user found with this email.", Toast.LENGTH_SHORT).show();
