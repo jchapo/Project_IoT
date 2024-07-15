@@ -96,7 +96,10 @@ public class LoginActivity extends AppCompatActivity {
                             if (!task.getResult().isEmpty()) {
                                 DocumentSnapshot document = task.getResult().getDocuments().get(0);
                                 String userRole = document.getString("user");
-                                navigateBasedOnRole(userRole);
+                                String userName = document.getString("name");  // Suponiendo que el nombre del usuario está almacenado con la clave "name"
+                                String userLastName = document.getString("lastname");
+                                String userPhone = document.getString("phone");  // Suponiendo que el teléfono del usuario está almacenado con la clave "phone"
+                                navigateBasedOnRole(userRole, userName, userLastName, email, userPhone);
                             } else {
                                 Toast.makeText(LoginActivity.this, "No user found with this email.", Toast.LENGTH_SHORT).show();
                             }
@@ -107,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void navigateBasedOnRole(String role) {
+    private void navigateBasedOnRole(String role, String name, String lastname, String email, String phone) {
         Intent intent;
         switch (role) {
             case "Supervisor":
@@ -123,6 +126,13 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Unknown role.", Toast.LENGTH_SHORT).show();
                 return;
         }
+
+        // Pasar los datos del usuario al siguiente Activity
+        intent.putExtra("USER_NAME", name);
+        intent.putExtra("USER_LASTNAME", lastname);
+        intent.putExtra("USER_EMAIL", email);
+        intent.putExtra("USER_PHONE", phone);
+
         startActivity(intent);
         finish();
     }
