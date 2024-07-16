@@ -236,7 +236,7 @@ public class NewAdmin extends AppCompatActivity {
             Integer primerInicio = 0;
             String sitiosAsignados = "";
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados,"");
             uploadImageAndSaveUser(listElement, false);
         }
     }
@@ -257,7 +257,7 @@ public class NewAdmin extends AppCompatActivity {
             Integer primerInicio = Integer.parseInt(editPrimerInicio.getText().toString());
             String sitiosAsignados = element.getSitiosAsignados();
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados,"");
             uploadImageAndSaveUser(listElement, true);
         }
     }
