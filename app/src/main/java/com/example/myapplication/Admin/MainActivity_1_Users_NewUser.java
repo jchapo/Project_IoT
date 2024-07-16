@@ -10,7 +10,6 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -34,24 +33,27 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
-import com.example.myapplication.Sistem.EmailSender;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.appcheck.FirebaseAppCheck;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
 
 import java.security.SecureRandom;
-import java.util.HashMap;
 
 
+import java.security.SecureRandom;
 
 
 public class MainActivity_1_Users_NewUser extends AppCompatActivity {
@@ -85,6 +87,13 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
 
         imageView = findViewById(R.id.imageViewProfile);
         imageView.setOnClickListener(v -> openFileChooser());
+
+        FirebaseApp.initializeApp(this);
+
+        // Inicializar App Check con SafetyNet
+        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+        //firebaseAppCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance());
+
 
         // ActivityResultLauncher for opening file chooser
         activityResultLauncher = registerForActivityResult(
@@ -222,9 +231,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                 .addOnSuccessListener(unused -> {
                     Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
                     notificarImportanceDefault(listElement.getName() + " " + listElement.getLastname(), listElement.getFechaCreacion());
-                    Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetails.class);
-                    intent3.putExtra("ListElement", listElement);
-                    startActivity(intent3);
+                    finish();
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
     }
@@ -256,7 +263,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
                             // Usuario creado exitosamente, enviar correo
-                            sendEmailWithPassword(mail, password);
+                            //sendEmailWithPassword(mail, password);
                         } else {
                             // Si falla la creación del usuario, muestra un mensaje al usuario.
                             Toast.makeText(MainActivity_1_Users_NewUser.this, "Fallo la autenticación.", Toast.LENGTH_SHORT).show();
@@ -266,13 +273,6 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             uploadImageAndSaveUser(listElement, false);
         }
     }
-
-    private void sendEmailWithPassword(String toEmail, String password) {
-        String subject = "Bienvenido a Telesolver";
-        String body = "Tu contraseña para acceder es: " + password + ". Ingresa a la aplicación para poder cambiarla";
-        EmailSender.sendEmail(this,toEmail, subject, body);
-    }
-
 
     public static String generatePassword() {
         String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -391,4 +391,5 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             notificationManager.notify(1, notification);
         }
     }
+
 }

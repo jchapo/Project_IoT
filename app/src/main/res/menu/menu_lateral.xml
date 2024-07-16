@@ -4,17 +4,17 @@
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_perfil_outline"
-            android:title="Diego Corcuera Lamo" />
+            android:title="Nombre del Usuario" />
 
         <item
             android:id="@+id/nav_email"
             android:icon="@drawable/ic_email_outline"
-            android:title="djcll_2015@hotmail.com" />
+            android:title="Correo Electrónico" />
 
         <item
             android:id="@+id/nav_phone"
             android:icon="@drawable/ic_phone_outline"
-            android:title="986492338" />
+            android:title="Número de Teléfono" />
 
         <item
             android:id="@+id/nav_change_password"
@@ -28,4 +28,3 @@
             android:title="Cerrar Sesión" />
     </group>
 </menu>
-
