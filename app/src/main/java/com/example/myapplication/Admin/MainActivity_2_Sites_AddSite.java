@@ -32,6 +32,7 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
     private ListAdapterAddSite listAdapter;
     private RecyclerView recyclerView;
     private String idDNI;
+    private String idDNIName;
     private List<ListElementSite> elements;
     private CircularProgressIndicator progressIndicator;
     private FirebaseFirestore db;
@@ -41,6 +42,7 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_add_site_admin);
         idDNI = getIntent().getStringExtra("idDNI");
+        idDNIName = getIntent().getStringExtra("idDNIName");
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBarAddSiteUser);
         topAppBar.inflateMenu(R.menu.top_app_bar_select);
@@ -97,7 +99,13 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
                 String updatedSitesJson = new JSONArray(updatedSites).toString();
 
                 userRef.update("sitiosAsignados", updatedSitesJson)
-                        .addOnSuccessListener(aVoid -> sendUserBackToUserDetails())
+                        .addOnSuccessListener(aVoid -> {
+                            // Update each site document with the user's ID
+                            for (String siteName : updatedSites) {
+                                updateSiteWithUser(siteName, idDNIName);
+                            }
+                            sendUserBackToUserDetails();
+                        })
                         .addOnFailureListener(e -> {
                             Toast.makeText(MainActivity_2_Sites_AddSite.this, "Error guardando sitios", Toast.LENGTH_SHORT).show();
                             Log.w("MainActivity_2_Sites_AddSite", "Error updating document", e);
@@ -108,6 +116,42 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
             Toast.makeText(MainActivity_2_Sites_AddSite.this, "Error obteniendo usuario", Toast.LENGTH_SHORT).show();
             Log.w("MainActivity_2_Sites_AddSite", "Error getting document", e);
             progressIndicator.setVisibility(View.GONE);
+        });
+    }
+
+    private void updateSiteWithUser(String siteName, String userId) {
+        DocumentReference siteRef = db.collection("sitios").document(siteName);
+
+        siteRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                String existingUsersJson = documentSnapshot.getString("superAsignados");
+
+                Set<String> updatedUsers = new HashSet<>();
+                if (existingUsersJson != null && !existingUsersJson.isEmpty()) {
+                    try {
+                        JSONArray existingUsersArray = new JSONArray(existingUsersJson);
+                        for (int i = 0; i < existingUsersArray.length(); i++) {
+                            updatedUsers.add(existingUsersArray.getString(i));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        // Handle invalid JSON
+                    }
+                }
+
+                updatedUsers.add(userId);
+
+                String updatedUsersJson = new JSONArray(updatedUsers).toString();
+
+                siteRef.update("superAsignados", updatedUsersJson)
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(MainActivity_2_Sites_AddSite.this, "Error actualizando sitio", Toast.LENGTH_SHORT).show();
+                            Log.w("MainActivity_2_Sites_AddSite", "Error updating site document", e);
+                        });
+            }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(MainActivity_2_Sites_AddSite.this, "Error obteniendo sitio", Toast.LENGTH_SHORT).show();
+            Log.w("MainActivity_2_Sites_AddSite", "Error getting site document", e);
         });
     }
 
@@ -129,25 +173,6 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
                     Toast.makeText(MainActivity_2_Sites_AddSite.this, "Error obteniendo usuario", Toast.LENGTH_SHORT).show();
                     Log.w("MainActivity_2_Sites_AddSite", "Error getting document", e);
                     progressIndicator.setVisibility(View.GONE);
-                });
-    }
-    private void sendUserToNextActivity() {
-        db.collection("usuarios").document(idDNI).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        ListElementUser user = documentSnapshot.toObject(ListElementUser.class);
-                        Intent intent = new Intent(MainActivity_2_Sites_AddSite.this, MainActivity_1_Users_UserDetails.class);
-                        intent.putExtra("ListElement", user);
-                        startActivity(intent);
-                        Toast.makeText(this, "Datos enviados", Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-                        Toast.makeText(MainActivity_2_Sites_AddSite.this, "Usuario no encontrado", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(MainActivity_2_Sites_AddSite.this, "Error obteniendo usuario", Toast.LENGTH_SHORT).show();
-                    Log.w("MainActivity_2_Sites_AddSite", "Error getting document", e);
                 });
     }
 

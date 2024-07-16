@@ -36,6 +36,10 @@ import com.example.myapplication.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.appcheck.FirebaseAppCheck;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -44,6 +48,10 @@ import com.google.firebase.storage.StorageReference;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
+
+import java.security.SecureRandom;
+
 
 import java.security.SecureRandom;
 
@@ -79,6 +87,13 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
 
         imageView = findViewById(R.id.imageViewProfile);
         imageView.setOnClickListener(v -> openFileChooser());
+
+        FirebaseApp.initializeApp(this);
+
+        // Inicializar App Check con SafetyNet
+        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+        //firebaseAppCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance());
+
 
         // ActivityResultLauncher for opening file chooser
         activityResultLauncher = registerForActivityResult(
@@ -216,9 +231,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                 .addOnSuccessListener(unused -> {
                     Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
                     notificarImportanceDefault(listElement.getName() + " " + listElement.getLastname(), listElement.getFechaCreacion());
-                    Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetails.class);
-                    intent3.putExtra("ListElement", listElement);
-                    startActivity(intent3);
+                    finish();
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
     }
@@ -260,7 +273,6 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             uploadImageAndSaveUser(listElement, false);
         }
     }
-
 
     public static String generatePassword() {
         String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -379,4 +391,5 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             notificationManager.notify(1, notification);
         }
     }
+
 }
