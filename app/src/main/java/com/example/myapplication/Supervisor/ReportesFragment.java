@@ -58,7 +58,7 @@ public class ReportesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // Iniciar la actividad Crear Reporte
-                Intent intent = new Intent(getContext(), CrearReporte.class);
+                Intent intent = new Intent(getContext(), CrearReporte_previo.class);
                 startActivity(intent);
             }
         });

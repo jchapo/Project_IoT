@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -18,10 +19,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
+        <activity
+            android:name=".Supervisor.CrearReporte_previo"
+            android:exported="false" />
+        <activity
+            android:name=".Supervisor.CrearReporte_2_Equipo"
+            android:exported="false" />
+        <activity
+            android:name=".Supervisor.CrearReporte_2_Sitio"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAExTORfkCED6S7JMtHAnYKhJVJ5J9inaw" />
+
         <activity
             android:name=".Supervisor.EquiposDeSitios"
             android:exported="false" />
@@ -65,12 +76,8 @@
             android:name=".NavegacionInicial"
             android:exported="true" />
         <activity
-            android:name=".Sistem.MailSender"
-
-            android:exported="false" />
-
-        <!-- Actividades Super Admin -->
-
+            android:name=".Sistem.MainActivity_notificacion_user"
+            android:exported="false" /> <!-- Actividades Super Admin -->
         <activity
             android:name=".SuperAdmin.MainActivity_navigation_SuperAdmin"
             android:exported="false" />
@@ -86,7 +93,6 @@
         <activity
             android:name=".SuperAdmin.NewAdmin"
             android:exported="false" />
-
         <!-- Actividades Admin -->
         <activity
             android:name=".Admin.items.ListAdapterAddSuper"
@@ -115,9 +121,9 @@
         <activity
             android:name=".Admin.MainActivity_0_NavigationAdmin"
             android:exported="false" />
-      <activity
+        <activity
             android:name=".Admin.MainActivity_2_Sites_AddSite"
-            android:exported="false" /> 
+            android:exported="false" />
 
         <!-- Actividades Supervisor -->
         <activity
