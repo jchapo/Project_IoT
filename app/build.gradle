@@ -67,7 +67,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-storage:8.0.0'
     implementation 'com.google.zxing:core:3.3.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    //implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.algolia:algoliasearch-android:3.+'
     //implementation 'com.algolia:algoliasearch-core:3.16.5'
     //implementation 'com.algolia:algoliasearch-java-net:3.16.5'
@@ -75,15 +75,6 @@ dependencies {
 
 
 
-    implementation 'com.sun.mail:android-mail:1.6.7'
-    implementation 'com.sun.mail:android-activation:1.6.7'
-    implementation 'com.google.api-client:google-api-client:1.32.2'
-    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.32.1'
-    implementation 'com.google.apis:google-api-services-gmail:v1-rev20211019-1.32.1'
-
-    implementation 'com.google.api-client:google-api-client:2.6.0'
-    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.36.0'
-    implementation 'com.google.apis:google-api-services-gmail:v1-rev110-1.25.0'
 
 
 }

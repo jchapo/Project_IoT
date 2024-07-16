@@ -10,7 +10,6 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -34,13 +33,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
-import com.example.myapplication.Sistem.EmailSender;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -49,9 +46,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import java.security.SecureRandom;
-import java.util.HashMap;
-
-
 
 
 public class MainActivity_1_Users_NewUser extends AppCompatActivity {
@@ -256,7 +250,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
                             // Usuario creado exitosamente, enviar correo
-                            sendEmailWithPassword(mail, password);
+                            //sendEmailWithPassword(mail, password);
                         } else {
                             // Si falla la creación del usuario, muestra un mensaje al usuario.
                             Toast.makeText(MainActivity_1_Users_NewUser.this, "Fallo la autenticación.", Toast.LENGTH_SHORT).show();
@@ -265,12 +259,6 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
 
             uploadImageAndSaveUser(listElement, false);
         }
-    }
-
-    private void sendEmailWithPassword(String toEmail, String password) {
-        String subject = "Bienvenido a Telesolver";
-        String body = "Tu contraseña para acceder es: " + password + ". Ingresa a la aplicación para poder cambiarla";
-        EmailSender.sendEmail(this,toEmail, subject, body);
     }
 
 
