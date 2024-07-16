@@ -293,11 +293,6 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
     public static String generatePassword() {
         String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         int PASSWORD_LENGTH = 10;
