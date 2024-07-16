@@ -34,5 +34,5 @@ zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", ve
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 
 [plugins]
-androidApplication = { id = "com.android.application", version = "8.3.0" }
+androidApplication = { id = "com.android.application", version = "7.4.2" }
 

@@ -14,16 +14,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.algolia.search.saas.Client;
+import com.algolia.search.saas.Index;
 import com.example.myapplication.R;
 import com.example.myapplication.SuperAdmin.list.ListAdapterLog;
 import com.example.myapplication.SuperAdmin.list.ListElementLog;
 
 import com.example.myapplication.SuperAdmin.list.ListElementLog.*;
+import com.example.myapplication.SuperAdmin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.databinding.SuperadminFragmentLogBinding;
 import com.example.myapplication.databinding.SuperadminFragmentUsersBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,17 +38,26 @@ import java.util.Date;
 import java.util.List;
 
 public class LogFragment extends Fragment {
+    private Client client;
+    private Index logIndex;
 
-    private List<ListElementLog> activeLog;
-    private List<ListElementLog> inactiveLog;
+    private List<ListElementLog> activeLog= new ArrayList<>();
+    private List<ListElementLog> inactiveLog= new ArrayList<>();
     private ListAdapterLog listAdapterLog;
     SuperadminFragmentLogBinding binding;
     private RecyclerView recyclerViewLog;
+    private Toolbar toolbar;
+    private SearchView searchView;
+    private MenuItem menuItem;
+    private TabLayout tabLayout;
+    private NavigationActivityViewModel navigationActivityViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        client = new Client("3125VRFCOL", "017ff2e5dc660a066578d999fff272fb");
+        logIndex = client.getIndex("logs_index");
     }
 
     @Override
@@ -92,23 +105,24 @@ public class LogFragment extends Fragment {
         inactiveLog = new ArrayList<>();
 
         activeLog.add(new ListElementLog(new Date(), "Carlos", "Administrador", LogType.INFO, "Se ha creado un usuario"));
-        activeLog.add(new ListElementLog(new Date(), "Luis", "Supervisor", LogType.WARNING, "Se ha realizado una advertencia"));
+        activeLog.add(new ListElementLog(new Date(), "Luis", "Supervisor", LogType.ERROR, "Se ha realizado una error"));
         activeLog.add(new ListElementLog(new Date(), "Ana", "Administrador", LogType.ERROR, "Se ha encontrado un error"));
-        activeLog.add(new ListElementLog(new Date(), "Maria", "Supervisor", LogType.CRITICAL, "Se ha reportado un problema crítico"));
+        activeLog.add(new ListElementLog(new Date(), "Juan", "Supervisor", LogType.INFO, "Se ha creado un usuario"));
+
         activeLog.add(new ListElementLog(new Date(), "Carlos", "Administrador", LogType.INFO, "Se ha creado un usuario"));
-        activeLog.add(new ListElementLog(new Date(), "Luis", "Supervisor", LogType.WARNING, "Se ha realizado una advertencia"));
+        activeLog.add(new ListElementLog(new Date(), "Luis", "Supervisor", LogType.ERROR, "Se ha realizado una error"));
         activeLog.add(new ListElementLog(new Date(), "Ana", "Administrador", LogType.ERROR, "Se ha encontrado un error"));
-        activeLog.add(new ListElementLog(new Date(), "Maria", "Supervisor", LogType.CRITICAL, "Se ha reportado un problema crítico"));
+        activeLog.add(new ListElementLog(new Date(), "Juan", "Supervisor", LogType.INFO, "Se ha creado un usuario"));
 
         inactiveLog.add(new ListElementLog(new Date(), "Carlos", "Administrador", LogType.ERROR, "El administrador Carlos ha encontrado un error"));
-        inactiveLog.add(new ListElementLog(new Date(), "Luis", "Supervisor", LogType.CRITICAL, "El supervisor Luis ha reportado un problema crítico"));
-        inactiveLog.add(new ListElementLog(new Date(), "Ana", "Administrador", LogType.WARNING, "El administrador Ana ha emitido una advertencia"));
-        inactiveLog.add(new ListElementLog(new Date(), "Maria", "Supervisor", LogType.INFO, "El supervisor Maria ha realizado una acción"));
+        inactiveLog.add(new ListElementLog(new Date(), "Luis", "Supervisor", LogType.INFO, "El supervisor Luis ha realizado una acción"));
+        inactiveLog.add(new ListElementLog(new Date(), "Ana", "Administrador", LogType.ERROR, "El administrador Ana ha emitido una advertencia"));
+        inactiveLog.add(new ListElementLog(new Date(), "Juan", "Supervisor", LogType.INFO, "El administrador Juan ha creado un supervisor"));
 
-        inactiveLog.add(new ListElementLog(new Date(), "Carlos", "Administrador", LogType.ERROR, "El administrador Carlos ha encontrado un error"));
-        inactiveLog.add(new ListElementLog(new Date(), "Luis", "Supervisor", LogType.CRITICAL, "El supervisor Luis ha reportado un problema crítico"));
-        inactiveLog.add(new ListElementLog(new Date(), "Ana", "Administrador", LogType.WARNING, "El administrador Ana ha emitido una advertencia"));
-        inactiveLog.add(new ListElementLog(new Date(), "Maria", "Supervisor", LogType.INFO, "El supervisor Maria ha realizado una acción"));
+        inactiveLog.add(new ListElementLog(new Date(), "Carlos", "Administrador", LogType.ERROR, "El administrador Luis ha encontrado un error"));
+        inactiveLog.add(new ListElementLog(new Date(), "Luis", "Supervisor", LogType.INFO, "El supervisor Luis ha reportado un problema crítico"));
+        inactiveLog.add(new ListElementLog(new Date(), "Ana", "Administrador", LogType.ERROR, "El administrador Ana ha emitido una error"));
+        inactiveLog.add(new ListElementLog(new Date(), "Juan", "Supervisor", LogType.INFO, "El administrador Juan ha realizado una acción"));
 
         // Initialize the adapter and RecyclerView
         listAdapterLog = new ListAdapterLog(activeLog, getContext(), item -> moveToDescription(item));
