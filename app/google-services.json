@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "273771107851",
-    "project_id": "project-iot-ee350",
-    "storage_bucket": "project-iot-ee350.appspot.com"
+    "project_number": "205855490002",
+    "project_id": "iot-expo-final",
+    "storage_bucket": "iot-expo-final.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:273771107851:android:bc0471a7712a67cd45590e",
+        "mobilesdk_app_id": "1:205855490002:android:839cd669d8b9342175d20b",
         "android_client_info": {
           "package_name": "com.example.myapplication"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDKplj_3jl7PmytAHTdJunu3IJah7lJ3w0"
+          "current_key": "AIzaSyA2rHiH71gLoyUUvuhedTAc3ih-9V3HScQ"
         }
       ],
       "services": {

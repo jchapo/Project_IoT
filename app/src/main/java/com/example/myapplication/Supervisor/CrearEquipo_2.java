@@ -42,6 +42,7 @@ import com.example.myapplication.Supervisor.objetos.ListElementEquiposNuevo;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -61,6 +62,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CrearEquipo_2 extends AppCompatActivity {
@@ -69,7 +71,6 @@ public class CrearEquipo_2 extends AppCompatActivity {
     private MaterialAutoCompleteTextView selectTypeDevice, selectSite;
     ArrayAdapter<String> typeDeviceAdapter, typeSiteAdapter;
     String[] typeOptionsDevices = {"Router","Switch","Hub","Patch Pannel","Gateway"};
-    String[] typeOptionsSites = {"Por jalar"};
 
     private EditText editBrand, editModelo, editDescription, editSKU;
     private ImageView imageView;
@@ -120,8 +121,7 @@ public class CrearEquipo_2 extends AppCompatActivity {
         selectTypeDevice.setAdapter(typeDeviceAdapter);
 
         selectSite = findViewById(R.id.selectSite);
-        typeSiteAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, typeOptionsSites);
-        selectSite.setAdapter(typeSiteAdapter);
+
 
         db = FirebaseFirestore.getInstance();
 
@@ -168,7 +168,27 @@ public class CrearEquipo_2 extends AppCompatActivity {
         topAppBar.setNavigationOnClickListener(v -> {
             finish();
         });
+        loadSitiosParaEquiposFromFirestore();
     }
+
+    private void loadSitiosParaEquiposFromFirestore() {
+        db.collection("sitios").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<String> sitiosList = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String nombreSitio = document.getString("name");
+                    if (nombreSitio != null) {
+                        sitiosList.add(nombreSitio);
+                    }
+                }
+                typeSiteAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, sitiosList);
+                selectSite.setAdapter(typeSiteAdapter);
+            } else {
+                Toast.makeText(this, "Error al cargar sitios", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     private void createNewEquipment() {
         if (areFieldsEmpty() || !isImageAdded) {
