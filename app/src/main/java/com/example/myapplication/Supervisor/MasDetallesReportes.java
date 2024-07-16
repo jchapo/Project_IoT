@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.myapplication.Supervisor.objetos.ListElementReportes;
 import com.example.myapplication.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MasDetallesReportes extends AppCompatActivity {
 
@@ -22,7 +25,6 @@ public class MasDetallesReportes extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.supervisor_activity_mas_detalles_reportes);
-
         ListElementReportes element = (ListElementReportes) getIntent().getSerializableExtra("ListElementReporte");
         textViewdescripcion = findViewById(R.id.textViewdescripcion);
         textViewEquipo1 = findViewById(R.id.textViewEquipo1);
@@ -58,5 +60,24 @@ public class MasDetallesReportes extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton fabEdit = findViewById(R.id.fabGenerarReporte1);
+        fabEdit.setOnClickListener(v -> {
+            actualizarReporteInactivo(element.getNombre_reporte());
+        });
+
     }
+
+    private void actualizarReporteInactivo(String nombreReporte) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("reportes").document(nombreReporte)
+                .update("status", "Resuelto")
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(MasDetallesReportes.this, "Reporte actualizado a Resuelto", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(MasDetallesReportes.this, "Error al actualizar el reporte", Toast.LENGTH_SHORT).show();
+                });
+    }
+
 }

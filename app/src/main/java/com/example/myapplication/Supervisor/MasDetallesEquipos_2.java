@@ -175,7 +175,7 @@ public class MasDetallesEquipos_2 extends AppCompatActivity {
 
         FloatingActionButton fabEdit = findViewById(R.id.fabGenerarReporte);
         fabEdit.setOnClickListener(v -> {
-            Intent intent = new Intent(MasDetallesEquipos_2.this, CrearReporte.class);
+            Intent intent = new Intent(MasDetallesEquipos_2.this, CrearReporte_2_Equipo.class);
             startActivity(intent);
         });
     }

@@ -25,6 +25,7 @@ import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +36,8 @@ import java.util.Locale;
 
 public class ReportesFragment extends Fragment {
 
-    private List<ListElementReportes> elementsReportes = new ArrayList<>();
+    private List<ListElementReportes> pendingReports = new ArrayList<>();
+    private List<ListElementReportes> resolvedReports = new ArrayList<>();
     private RecyclerView recyclerView;
     private ListAdapterReportesSupervisor listAdapter;
     private NavigationActivityViewModel navigationActivityViewModel;
@@ -57,14 +59,20 @@ public class ReportesFragment extends Fragment {
         });
 
         observeViewModel();
+        setupTabs(view);
         return view;
     }
 
     private void observeViewModel() {
         if (navigationActivityViewModel != null) {
             navigationActivityViewModel.getActiveReports().observe(getViewLifecycleOwner(), activeReports -> {
-                elementsReportes.clear();
-                elementsReportes.addAll(activeReports);
+                pendingReports.clear();
+                pendingReports.addAll(activeReports);
+                listAdapter.notifyDataSetChanged();
+            });
+            navigationActivityViewModel.getResolvedReports().observe(getViewLifecycleOwner(), resolvedReportsList -> {
+                resolvedReports.clear();
+                resolvedReports.addAll(resolvedReportsList);
                 listAdapter.notifyDataSetChanged();
             });
         }
@@ -72,9 +80,34 @@ public class ReportesFragment extends Fragment {
 
     public void init(View view) {
         recyclerView = view.findViewById(R.id.listReportes);
-        listAdapter = new ListAdapterReportesSupervisor(elementsReportes, getContext(), this::moveToDescription);
+        listAdapter = new ListAdapterReportesSupervisor(pendingReports, getContext(), this::moveToDescription);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(listAdapter);
+    }
+
+    private void setupTabs(View view) {
+        TabLayout tabLayout = view.findViewById(R.id.tabLayoutReportes);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0: // Pendientes
+                        listAdapter.setItems(pendingReports);
+                        listAdapter.notifyDataSetChanged();
+                        break;
+                    case 1: // Resueltos
+                        listAdapter.setItems(resolvedReports);
+                        listAdapter.notifyDataSetChanged();
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
     }
 
     public void moveToDescription(ListElementReportes item) {
@@ -108,7 +141,7 @@ public class ReportesFragment extends Fragment {
 
     private void filterReportsByDateRange(Long startDate, Long endDate) {
         List<ListElementReportes> filteredReports = new ArrayList<>();
-        for (ListElementReportes report : elementsReportes) {
+        for (ListElementReportes report : pendingReports) {
             Long reportStartDate = convertDateToMillis(report.getFecha_creacion());
             Long reportEndDate = convertDateToMillis(report.getFecha_final());
             if ((reportStartDate >= startDate && reportStartDate <= endDate) ||
@@ -117,8 +150,9 @@ public class ReportesFragment extends Fragment {
             }
         }
         ListAdapterReportesSupervisor listAdapter = new ListAdapterReportesSupervisor(filteredReports, getContext(), item -> moveToDescription(item));
-        recyclerView.setAdapter(listAdapter);    }
-    
+        recyclerView.setAdapter(listAdapter);
+    }
+
     private Long convertDateToMillis(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
         try {
