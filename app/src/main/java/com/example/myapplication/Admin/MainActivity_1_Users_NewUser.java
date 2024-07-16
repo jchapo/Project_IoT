@@ -33,13 +33,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
+import com.example.myapplication.Sistem.MailSender;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.firebase.auth.FirebaseAuth;
-
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
-
+//import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -61,7 +61,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
     private MaterialAutoCompleteTextView selectTypeUser;
     ArrayAdapter<String> typeUserAdapter;
     String[] typeOptions = {"Supervisor"};
-    private EditText editFirstName, editLastName, editDNI, editPass, editMail, editAddress, editPhone, editFechaCreacion, editPrimerInicio;
+    private EditText editFirstName, editLastName, editDNI, editMail, editAddress, editPhone, editFechaCreacion, editPrimerInicio;
     private ImageView imageView;
     private boolean isEditing = false; // Indicador para editar o crear nuevo usuario
     private boolean isImageAdded = false; // Variable para indicar si se ha agregado una imagen
@@ -231,7 +231,9 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                 .addOnSuccessListener(unused -> {
                     Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
                     notificarImportanceDefault(listElement.getName() + " " + listElement.getLastname(), listElement.getFechaCreacion());
-                    finish();
+                    Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetails.class);
+                    intent3.putExtra("ListElement", listElement);
+                    startActivity(intent3);
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
     }
@@ -391,5 +393,13 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             notificationManager.notify(1, notification);
         }
     }
-
+    private String generateRandomPassword() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        StringBuilder password = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 5; i++) {
+            password.append(characters.charAt(random.nextInt(characters.length())));
+        }
+        return password.toString();
+    }
 }
