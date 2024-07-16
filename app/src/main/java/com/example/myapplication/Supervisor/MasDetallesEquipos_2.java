@@ -80,7 +80,6 @@ public class MasDetallesEquipos_2 extends AppCompatActivity {
         nameEquipo = findViewById(R.id.nameTextViewDevice);
         marca = findViewById(R.id.marcaTextViewEquipo);
         modelo = findViewById(R.id.modeloTextViewEquipo);
-        nameEquipo2 = findViewById(R.id.textViewNombreEquipo);
         marca2 = findViewById(R.id.textViewMarca);
         modelo2 = findViewById(R.id.textViewModelo);
         descripcionEquipo = findViewById(R.id.textViewDescripcion);
@@ -93,8 +92,8 @@ public class MasDetallesEquipos_2 extends AppCompatActivity {
 
         nameEquipo.setText(element.getNameEquipo());
         nameEquipo2.setText(element.getNameEquipo());
-        marca.setText(element.getMarca());
-        modelo.setText(element.getModelo());
+        marca2.setText(element.getMarca());
+        modelo2.setText(element.getModelo());
         descripcionEquipo.setText(element.getDescripcionEquipo());
         sku.setText(element.getSku());
         estado = element.getStatus();
