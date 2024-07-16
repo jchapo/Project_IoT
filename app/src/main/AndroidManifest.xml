@@ -86,6 +86,9 @@
         <activity
             android:name=".SuperAdmin.NewAdmin"
             android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.Log_Description"
+            android:exported="false"/>
 
         <!-- Actividades Admin -->
         <activity
