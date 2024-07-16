@@ -100,7 +100,7 @@ public class UserDetais extends AppCompatActivity {
         }
 
         Toolbar toolbar = findViewById(R.id.topAppBarUserPerfil);
-        toolbar.setTitle("Perfil " + element.getName().toUpperCase());
+        toolbar.setTitle("Perfil de " + element.getName());
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 

@@ -25,13 +25,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBarUserFragment"
+                android:id="@+id/topAppBarUserFragmentSuperAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:titleTextColor="@color/white"
                 android:background="?attr/colorPrimary"
                 app:title="Titulo fragmento"
-                app:menu="@menu/top_app_bar_admin_users"
+                app:menu="@menu/top_app_bar_superadmin_users"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>

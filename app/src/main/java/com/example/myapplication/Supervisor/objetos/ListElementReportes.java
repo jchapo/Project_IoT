@@ -15,8 +15,9 @@ public class ListElementReportes implements Serializable {
     private String supervisor_creador;
     private String equipo_objetivo;
     private String descripcion;
+    private String status;
 
-    public ListElementReportes(String nombre_reporte, String sitio, String fecha_creacion, String fecha_final, String supervisor_creador, String equipo_objetivo, String descripcion) {
+    public ListElementReportes(String nombre_reporte, String sitio, String fecha_creacion, String fecha_final, String supervisor_creador, String equipo_objetivo, String descripcion, String status) {
         this.nombre_reporte = nombre_reporte;
         this.sitio = sitio;
         this.fecha_creacion = fecha_creacion;
@@ -24,8 +25,11 @@ public class ListElementReportes implements Serializable {
         this.supervisor_creador = supervisor_creador;
         this.equipo_objetivo = equipo_objetivo;
         this.descripcion = descripcion;
+        this.status = status;
     }
 
+    public ListElementReportes() {
+    }
 
     public String getNombre_reporte() {
         return nombre_reporte;
@@ -35,7 +39,13 @@ public class ListElementReportes implements Serializable {
         this.nombre_reporte = nombre_reporte;
     }
 
+    public String getStatus() {
+        return status;
+    }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getFecha_creacion() {
         return fecha_creacion;

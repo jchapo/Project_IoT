@@ -5,6 +5,7 @@ import android.os.Bundle;
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.NotificationManager;
@@ -17,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.app.NotificationChannel;
 
@@ -38,13 +41,19 @@ import com.example.myapplication.Admin.MainActivity_0_NavigationAdmin;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
+import com.example.myapplication.Sistem.LoginActivity;
 import com.example.myapplication.Supervisor.objetos.ListElementEquiposNuevo;
+import com.example.myapplication.Supervisor.objetos.ListElementReportes;
 import com.example.myapplication.databinding.AdminActivityMainNavigationBinding;
 import com.example.myapplication.databinding.SupervisorActivityNavegacionBinding;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -75,6 +84,7 @@ public class NavegacionSupervisor extends AppCompatActivity {
         binding = SupervisorActivityNavegacionBinding.inflate(getLayoutInflater());
         loadSitesFromFirestore();
         loadEquipmentsFromFirestore();
+        loadReportsFromFirestore(); // Add this line
         crearCanalesNotificacion();
         navigationActivityViewModel = new ViewModelProvider(this).get(NavigationActivityViewModel.class);
         replaceFragment(new SitiosFragment());
@@ -109,6 +119,7 @@ public class NavegacionSupervisor extends AppCompatActivity {
         super.onResume();
         loadSitesFromFirestore();
         loadEquipmentsFromFirestore();
+        loadReportsFromFirestore(); // Add this line
     }
 
     private void loadSitesFromFirestore() {
@@ -162,6 +173,31 @@ public class NavegacionSupervisor extends AppCompatActivity {
                 });
     }
 
+    private void loadReportsFromFirestore() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("reportes")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        ArrayList<ListElementReportes> activeReports = new ArrayList<>();
+                        ArrayList<ListElementReportes> resolvedReports = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            ListElementReportes report = document.toObject(ListElementReportes.class);
+                            if ("Activo".equals(report.getStatus())) {
+                                activeReports.add(report);
+                            } else if ("Resuelto".equals(report.getStatus())) {
+                                resolvedReports.add(report);
+                            }
+                        }
+                        navigationActivityViewModel.setActiveReports(activeReports);
+                        navigationActivityViewModel.setResolvedReports(resolvedReports);
+                    } else {
+                        Log.d("msg-test", "Error getting reports: ", task.getException());
+                    }
+                });
+    }
+
+
     public void crearCanalesNotificacion() {
 
         NotificationChannel channel = new NotificationChannel(canal1,
@@ -186,7 +222,62 @@ public class NavegacionSupervisor extends AppCompatActivity {
     }
 
 
+    private void showChangePasswordDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.sistema_cambio_contra, null);
+        builder.setView(view);
 
+        EditText currentPassword = view.findViewById(R.id.et_current_password);
+        EditText newPassword = view.findViewById(R.id.et_new_password);
+        EditText confirmPassword = view.findViewById(R.id.et_confirm_password);
+        Button btnCancel = view.findViewById(R.id.btn_cancel);
+        Button btnChange = view.findViewById(R.id.btn_change);
+
+        AlertDialog dialog = builder.create();
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        btnChange.setOnClickListener(v -> {
+            String currentPass = currentPassword.getText().toString();
+            String newPass = newPassword.getText().toString();
+            String confirmPass = confirmPassword.getText().toString();
+
+            if (newPass.equals(confirmPass)) {
+                changePassword(currentPass, newPass, dialog);
+            } else {
+                Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void changePassword(String currentPass, String newPass, AlertDialog dialog) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPass);
+
+        user.reauthenticate(credential).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                user.updatePassword(newPass).addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+                        Toast.makeText(this, "Contraseña cambiada exitosamente", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(this, "Error al cambiar la contraseña", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                Toast.makeText(this, "Error de autenticación", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void logout() {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
 
 

@@ -10,8 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Admin.dataHolder.DataHolder;
-import com.example.myapplication.Admin.items.ListAdapterAddSite;
+import com.example.myapplication.dataHolder.DataHolder;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Admin.items.ListAdapterAddSuper;
