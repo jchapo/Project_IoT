@@ -120,6 +120,7 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity implements
     private void loadUsersFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("usuarios")
+                .whereEqualTo("user", "Supervisor")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

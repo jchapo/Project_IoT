@@ -227,9 +227,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                 .addOnSuccessListener(unused -> {
                     Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
                     notificarImportanceDefault(listElement.getName() + " " + listElement.getLastname(), listElement.getFechaCreacion());
-                    Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetails.class);
-                    intent3.putExtra("ListElement", listElement);
-                    startActivity(intent3);
+                    finish();
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
     }

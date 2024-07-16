@@ -138,6 +138,7 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
         btnAddSiteUserProfile.setOnClickListener(v -> {
             Intent intent7 = new Intent(this, MainActivity_2_Sites_AddSite.class);
             intent7.putExtra("idDNI", element.getDni());
+            intent7.putExtra("idDNIName", element.getName());
             startActivityForResult(intent7, 1); // UPDATED
         });
 
