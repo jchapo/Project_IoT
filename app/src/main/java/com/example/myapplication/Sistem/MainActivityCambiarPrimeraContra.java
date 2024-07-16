@@ -16,17 +16,24 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 
 public class MainActivityCambiarPrimeraContra extends AppCompatActivity {
 
+    private TextInputEditText editTextEmail;
     private TextInputEditText editTextNewPassword;
     private TextInputEditText editTextConfirmPassword;
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sistema_activity_cambiar_contrasena_first_time);
 
+        mAuth = FirebaseAuth.getInstance();
+
+        editTextEmail = findViewById(R.id.editTextEmail);
         editTextNewPassword = findViewById(R.id.editTextNewPassword);
         editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
 
@@ -35,27 +42,25 @@ public class MainActivityCambiarPrimeraContra extends AppCompatActivity {
         buttonAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String email = editTextEmail.getText().toString();
                 String newPassword = editTextNewPassword.getText().toString();
                 String confirmPassword = editTextConfirmPassword.getText().toString();
 
                 if (newPassword.equals(confirmPassword)) {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    if (user != null) {
-                        user.updatePassword(newPassword)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(MainActivityCambiarPrimeraContra.this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(MainActivityCambiarPrimeraContra.this, LoginActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        } else {
-                                            Toast.makeText(MainActivityCambiarPrimeraContra.this, "Error al actualizar la contraseña", Toast.LENGTH_SHORT).show();
-                                        }
+                    mAuth.createUserWithEmailAndPassword(email, newPassword)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(MainActivityCambiarPrimeraContra.this, "Se ha registrado con éxito", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(MainActivityCambiarPrimeraContra.this, LoginActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(MainActivityCambiarPrimeraContra.this, "Error al registrar el usuario", Toast.LENGTH_SHORT).show();
                                     }
-                                });
-                    }
+                                }
+                            });
                 } else {
                     Toast.makeText(MainActivityCambiarPrimeraContra.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
                 }

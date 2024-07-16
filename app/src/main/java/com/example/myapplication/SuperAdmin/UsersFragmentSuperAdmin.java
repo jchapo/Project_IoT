@@ -94,8 +94,7 @@ public class UsersFragmentSuperAdmin extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.d("SearchView", "Query text changed to: " + newText); // Añadir este log para depuración
-                System.out.println("hola: " + newText);
+                Log.d("SearchView", "Query text changed to: " + newText);
                 listAdapterSuperAdminUser.filter(newText);
                 return true;
             }

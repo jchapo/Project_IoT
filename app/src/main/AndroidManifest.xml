@@ -8,6 +8,7 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <application
+        android:name=".Sistem.MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -32,9 +33,6 @@
             android:name=".Supervisor.EditarEquipo"
             android:exported="false" />
         <activity
-            android:name=".Sistem.LoginActivityFirstTime"
-            android:exported="true"/>
-        <activity
             android:name=".Sistem.LoginActivity"
             android:exported="true">
             <intent-filter>
@@ -43,6 +41,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Sistem.RecuperarContraActivity"
+            android:exported="false" />
+
         <activity
             android:name=".Sistem.MainActivityCambiarPrimeraContra"
             android:exported="false" />
@@ -55,11 +57,15 @@
         <activity
             android:name=".Admin.MainActivity_2_Sites_SiteImages"
             android:exported="false" />
+
+        <activity
+            android:name=".Sistem.MainActivity_notificacion_user"
+            android:exported="false" />
         <activity
             android:name=".NavegacionInicial"
             android:exported="true" />
         <activity
-            android:name=".Sistem.MainActivity_notificacion_user"
+            android:name=".Sistem.MailSender"
 
             android:exported="false" />
 

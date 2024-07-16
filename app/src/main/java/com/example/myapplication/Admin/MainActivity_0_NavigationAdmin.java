@@ -18,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.app.NotificationChannel;
 
@@ -25,6 +27,7 @@ import android.app.NotificationChannel;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -37,6 +40,7 @@ import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.R;
+import com.example.myapplication.Sistem.LoginActivity;
 import com.example.myapplication.databinding.AdminActivityMainNavigationBinding;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -64,7 +68,22 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity_main_navigation);
         binding = AdminActivityMainNavigationBinding.inflate(getLayoutInflater());
-        //setSupportActionBar(binding.);
+
+        // Obtener los datos del usuario del Intent
+        Intent intent = getIntent();
+        String userName = intent.getStringExtra("USER_NAME");
+        String userLastName = intent.getStringExtra("USER_LASTNAME");
+        String userEmail = intent.getStringExtra("USER_EMAIL");
+        String userPhone = intent.getStringExtra("USER_PHONE");
+
+        // Configurar el NavigationView con los datos del usuario
+        NavigationView navigationView = findViewById(R.id.navView);
+        Menu menu = navigationView.getMenu();
+        menu.findItem(R.id.nav_profile).setTitle(userName + ' ' + userLastName);
+        menu.findItem(R.id.nav_email).setTitle(userEmail);
+        menu.findItem(R.id.nav_phone).setTitle(userPhone);
+
+        // El resto del código de tu onCreate
         loadUsersFromFirestore();
         loadSitesFromFirestore();
         crearCanalesNotificacion();
@@ -88,6 +107,9 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
             }
             return true;
         });
+
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -138,6 +160,7 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
                     }
                 });
     }
+
     private void loadSitesFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("sitios")
@@ -171,6 +194,7 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
                     }
                 });
     }
+
     public void crearCanalesNotificacion() {
 
         NotificationChannel channel = new NotificationChannel(canal1,
@@ -194,6 +218,74 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
 
+        if (id == R.id.nav_change_password) {
+            showChangePasswordDialog();
+        } else if (id == R.id.nav_logout) {
+            logout();
+        }
 
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void showChangePasswordDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.sistema_cambio_contra, null);
+        builder.setView(view);
+
+        EditText currentPassword = view.findViewById(R.id.et_current_password);
+        EditText newPassword = view.findViewById(R.id.et_new_password);
+        EditText confirmPassword = view.findViewById(R.id.et_confirm_password);
+        Button btnCancel = view.findViewById(R.id.btn_cancel);
+        Button btnChange = view.findViewById(R.id.btn_change);
+
+        AlertDialog dialog = builder.create();
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        btnChange.setOnClickListener(v -> {
+            String currentPass = currentPassword.getText().toString();
+            String newPass = newPassword.getText().toString();
+            String confirmPass = confirmPassword.getText().toString();
+
+            if (newPass.equals(confirmPass)) {
+                changePassword(currentPass, newPass, dialog);
+            } else {
+                Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void changePassword(String currentPass, String newPass, AlertDialog dialog) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPass);
+
+        user.reauthenticate(credential).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                user.updatePassword(newPass).addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+                        Toast.makeText(this, "Contraseña cambiada exitosamente", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(this, "Error al cambiar la contraseña", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                Toast.makeText(this, "Error de autenticación", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void logout() {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
