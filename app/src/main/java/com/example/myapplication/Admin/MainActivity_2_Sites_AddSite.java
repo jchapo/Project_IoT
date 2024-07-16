@@ -119,6 +119,7 @@ public class MainActivity_2_Sites_AddSite extends AppCompatActivity {
         });
     }
 
+
     private void updateSiteWithUser(String siteName, String userId) {
         DocumentReference siteRef = db.collection("sitios").document(siteName);
 
