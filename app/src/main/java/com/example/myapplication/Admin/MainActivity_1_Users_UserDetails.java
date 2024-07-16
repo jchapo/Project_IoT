@@ -243,7 +243,8 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
                     .addOnFailureListener(e -> {
                         // Manejo de error en caso de fallo
                         Toast.makeText(MainActivity_1_Users_UserDetails.this, "Error al actualizar el estado del usuario", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
+                        // Registrar el error en el log
+                        Log.e("UserDetails", "Error al actualizar el estado del usuario: " + e.getMessage(), e);
                     });
         });
 
@@ -317,21 +318,6 @@ public class MainActivity_1_Users_UserDetails extends AppCompatActivity {
             textoHabilitar.setTextColor(getResources().getColor(R.color.md_theme_primary, getTheme()));
             textoHabilitar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_outline_green, 0, 0, 0);
         }
-    }
-
-    public void showRemoveSiteConfirmationDialog(View view) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-        builder.setMessage("¿Está seguro de que desea remover este sitio?")
-                .setPositiveButton("Aceptar", (dialog, id) -> {
-                    // Eliminar el supervisor y mostrar el toast
-                    Toast.makeText(MainActivity_1_Users_UserDetails.this, "Sitio removido", Toast.LENGTH_SHORT).show();
-                    // Aquí debes agregar el código para eliminar el supervisor
-                })
-                .setNegativeButton("Cancelar", (dialog, id) -> {
-                    // No hacer nada, simplemente cerrar el diálogo
-                    dialog.dismiss();
-                });
-        builder.show();
     }
 
     // Método para abrir la aplicación de correo electrónico al hacer clic en el icono de correo

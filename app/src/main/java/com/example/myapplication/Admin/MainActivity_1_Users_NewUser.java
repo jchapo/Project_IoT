@@ -34,10 +34,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
+import com.example.myapplication.Sistem.EmailSender;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -45,12 +48,18 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import java.security.SecureRandom;
+import java.util.HashMap;
+
+
+
+
 public class MainActivity_1_Users_NewUser extends AppCompatActivity {
     String canal1 = "importanteDefault2";
     private MaterialAutoCompleteTextView selectTypeUser;
     ArrayAdapter<String> typeUserAdapter;
     String[] typeOptions = {"Supervisor"};
-    private EditText editFirstName, editLastName, editDNI, editMail, editAddress, editPhone, editFechaCreacion, editPrimerInicio;
+    private EditText editFirstName, editLastName, editDNI, editPass, editMail, editAddress, editPhone, editFechaCreacion, editPrimerInicio;
     private ImageView imageView;
     private boolean isEditing = false; // Indicador para editar o crear nuevo usuario
     private boolean isImageAdded = false; // Variable para indicar si se ha agregado una imagen
@@ -230,6 +239,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String dni = editDNI.getText().toString();
             String mail = editMail.getText().toString();
             String address = editAddress.getText().toString();
+            String password = generatePassword();
             String phone = editPhone.getText().toString();
             String status = "Activo";
             LocalDate fechaActual = LocalDate.now();
@@ -237,10 +247,45 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String fechaCreacion = fechaActual.format(formatter);
             Integer primerInicio = 0;
             String sitiosAsignados = "";
+            String imagenUrl = "";
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagenUrl, sitiosAsignados,password);
+
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            mAuth.createUserWithEmailAndPassword(mail, password)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Usuario creado exitosamente, enviar correo
+                            sendEmailWithPassword(mail, password);
+                        } else {
+                            // Si falla la creación del usuario, muestra un mensaje al usuario.
+                            Toast.makeText(MainActivity_1_Users_NewUser.this, "Fallo la autenticación.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
             uploadImageAndSaveUser(listElement, false);
         }
+    }
+
+    private void sendEmailWithPassword(String toEmail, String password) {
+        String subject = "Bienvenido a Telesolver";
+        String body = "Tu contraseña para acceder es: " + password + ". Ingresa a la aplicación para poder cambiarla";
+        EmailSender.sendEmail(this,toEmail, subject, body);
+    }
+
+
+    public static String generatePassword() {
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        int PASSWORD_LENGTH = 10;
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
+
+        for (int i = 0; i < PASSWORD_LENGTH; i++) {
+            int index = random.nextInt(CHARACTERS.length());
+            password.append(CHARACTERS.charAt(index));
+        }
+
+        return password.toString();
     }
 
     private void updateExistingUser() {
@@ -255,11 +300,13 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String address = editAddress.getText().toString();
             String phone = editPhone.getText().toString();
             String status = "Activo";
+            String password = element.getFirstpass();
             String fechaCreacion = editFechaCreacion.getText().toString();
             Integer primerInicio = Integer.parseInt(editPrimerInicio.getText().toString());
             String sitiosAsignados = element.getSitiosAsignados();
+            String imagenUrl = element.getImageUrl();
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagenUrl, sitiosAsignados,password);
             uploadImageAndSaveUser(listElement, true);
         }
     }
