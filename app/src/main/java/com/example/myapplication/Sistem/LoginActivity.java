@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private ProgressBar progressBar;
+    private Button buttonLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,9 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        Button buttonLogin = findViewById(R.id.buttonLogin);
+        progressBar = findViewById(R.id.progressBar);
+        buttonLogin = findViewById(R.id.buttonLogin);
+
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +94,9 @@ public class LoginActivity extends AppCompatActivity {
                 textInputLayoutPassword.setError(null);
             }
 
+            buttonLogin.setVisibility(View.GONE); // Ocultar el botón de login
+            progressBar.setVisibility(View.VISIBLE); // Mostrar el ProgressBar
+
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -99,6 +107,8 @@ public class LoginActivity extends AppCompatActivity {
                                     checkUserRole(user.getEmail());
                                 }
                             } else {
+                                buttonLogin.setVisibility(View.VISIBLE); // Mostrar el botón de login si falla la autenticación
+                                progressBar.setVisibility(View.GONE); // Ocultar el ProgressBar
                                 Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -107,7 +117,6 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, "EditText is null.", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     private void checkUserRole(String email) {
         db.collection("usuarios")
@@ -125,9 +134,13 @@ public class LoginActivity extends AppCompatActivity {
                                 String userPhone = document.getString("phone");
                                 navigateBasedOnRole(userRole, userName, userLastName, email, userPhone);
                             } else {
+                                buttonLogin.setVisibility(View.VISIBLE); // Mostrar el botón de login si no se encuentra el usuario
+                                progressBar.setVisibility(View.GONE); // Ocultar el ProgressBar
                                 Toast.makeText(LoginActivity.this, "No user found with this email.", Toast.LENGTH_SHORT).show();
                             }
                         } else {
+                            buttonLogin.setVisibility(View.VISIBLE); // Mostrar el botón de login si falla la consulta
+                            progressBar.setVisibility(View.GONE); // Ocultar el ProgressBar
                             Toast.makeText(LoginActivity.this, "Failed to retrieve user role.", Toast.LENGTH_SHORT).show();
                         }
                     }

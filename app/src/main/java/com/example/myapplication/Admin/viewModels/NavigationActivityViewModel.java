@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.myapplication.Admin.items.ListElementChat;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Supervisor.objetos.ListElementEquiposNuevo;
@@ -17,6 +18,8 @@ public class NavigationActivityViewModel extends ViewModel {
     private MutableLiveData<ArrayList<ListElementSite>> activeSites = new MutableLiveData<>();
     private MutableLiveData<ArrayList<ListElementEquiposNuevo>> activeEquipments = new MutableLiveData<>();
 
+    private MutableLiveData<ArrayList<ListElementChat>> usuarioChatAdmin = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<ListElementChat>> usuarioChatSupervisor = new MutableLiveData<>();
 
     private MutableLiveData<ArrayList<ListElementUser>> inactiveUsers = new MutableLiveData<>();
     private MutableLiveData<ArrayList<ListElementSite>> inactiveSites = new MutableLiveData<>();
@@ -56,6 +59,27 @@ public class NavigationActivityViewModel extends ViewModel {
         this.activeUsers = activeUsers;
     }
 
+
+
+    public MutableLiveData<ArrayList<ListElementChat>> getUsuarioChatAdmin() {
+        return usuarioChatAdmin;
+    }
+
+    public void setUsuarioChatAdmin(MutableLiveData<ArrayList<ListElementChat>> usuarioChatAdmin) {
+        this.usuarioChatAdmin = usuarioChatAdmin;
+    }
+
+
+    public MutableLiveData<ArrayList<ListElementChat>> getUsuarioChatSupervisor() {
+        return usuarioChatSupervisor;
+    }
+
+    public void setUsuarioChatSupervisor(MutableLiveData<ArrayList<ListElementChat>> usuarioChatSupervisor) {
+        this.usuarioChatSupervisor = usuarioChatSupervisor;
+    }
+
+
+
     public MutableLiveData<ArrayList<ListElementUser>> getInactiveUsers() {
         return inactiveUsers;
     }
@@ -79,4 +103,6 @@ public class NavigationActivityViewModel extends ViewModel {
     public void setInactiveEquipments(MutableLiveData<ArrayList<ListElementEquiposNuevo>> inactiveEquipments) {
         this.inactiveEquipments = inactiveEquipments;
     }
+
+
 }

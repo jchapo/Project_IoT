@@ -139,6 +139,7 @@ public class Fragment_1_Users extends Fragment {
     private void observeViewModel() {
         if (navigationActivityViewModel != null) {
             navigationActivityViewModel.getActiveUsers().observe(getViewLifecycleOwner(), usuarioActivos -> {
+                Log.d("Fragment_1_Users", "Active users updated: " + usuarioActivos.size());
                 activeUsers.clear();
                 activeUsers.addAll(usuarioActivos);
                 listAdapterUsers.notifyDataSetChanged();
