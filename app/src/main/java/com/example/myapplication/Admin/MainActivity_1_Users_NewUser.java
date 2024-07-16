@@ -255,23 +255,6 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
             uploadImageAndSaveUser(listElement, false);
 
-            // Enviar correo al nuevo usuario
-            String senderEmail = "diegocorcuera1989@gmail.com";
-            MailSender mailSender = new MailSender(senderEmail, "siathegreatest12");
-
-            // Imprimir los datos
-            Log.d("EmailDetails", "Remitente: " + senderEmail);
-            Log.d("EmailDetails", "Destinatario: " + mail);
-            Log.d("EmailDetails", "Contenido del correo: " + password); // Aquí puedes personalizar el contenido
-
-            new Thread(() -> {
-                try {
-                    mailSender.sendEmail(mail, password);
-                } catch (MessagingException e) {
-                    e.printStackTrace();
-                    runOnUiThread(() -> Toast.makeText(MainActivity_1_Users_NewUser.this, "Error al enviar el correo", Toast.LENGTH_SHORT).show());
-                }
-            }).start();
         }
     }
 
