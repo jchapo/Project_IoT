@@ -294,16 +294,14 @@ public class MainActivity_2_Sites_SiteDetails extends AppCompatActivity {
                 db.collection("sitios")
                         .document(nameTextViewSite.getText().toString())
                         .update(update)
-                        .addOnSuccessListener(aVoid -> {
-                            String toastMessage = newState.equals("Inactivo") ? "El sitio ha sido inhabilitado" : "El sitio ha sido habilitado";
-                            Toast.makeText(MainActivity_2_Sites_SiteDetails.this, toastMessage, Toast.LENGTH_SHORT).show();
-                            updateUIBasedOnState(newState);
-                            finish();
-                        })
                         .addOnFailureListener(e -> {
                             Toast.makeText(MainActivity_2_Sites_SiteDetails.this, "Error al actualizar el estado del sitio", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         });
+                String toastMessage = newState.equals("Inactivo") ? "El sitio ha sido inhabilitado" : "El sitio ha sido habilitado";
+                Toast.makeText(MainActivity_2_Sites_SiteDetails.this, toastMessage, Toast.LENGTH_SHORT).show();
+                updateUIBasedOnState(newState);
+                finish();
             }
         });
 

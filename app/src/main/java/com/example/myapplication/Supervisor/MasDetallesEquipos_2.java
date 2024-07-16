@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
@@ -27,6 +29,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.myapplication.Admin.MainActivity_0_NavigationAdmin;
 import com.example.myapplication.Admin.MainActivity_1_Users_NewUser;
 import com.example.myapplication.Admin.MainActivity_2_Sites_AddSite;
@@ -45,7 +49,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -189,21 +192,29 @@ public class MasDetallesEquipos_2 extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 ImageView imageView = new ImageView(MasDetallesEquipos_2.this);
-                Picasso.get().load(uri).into(imageView, new com.squareup.picasso.Callback() {
-                    @Override
-                    public void onSuccess() {
-                        new MaterialAlertDialogBuilder(MasDetallesEquipos_2.this)
-                                .setTitle("Imagen QR")
-                                .setView(imageView)
-                                .setPositiveButton("Cerrar", null)
-                                .show();
-                    }
+                Glide.with(MasDetallesEquipos_2.this)
+                        .load(uri)
+                        .into(new CustomTarget<Drawable>() {
+                            @Override
+                            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                imageView.setImageDrawable(resource);
+                                new MaterialAlertDialogBuilder(MasDetallesEquipos_2.this)
+                                        .setTitle("Imagen QR")
+                                        .setView(imageView)
+                                        .setPositiveButton("Cerrar", null)
+                                        .show();
+                            }
 
-                    @Override
-                    public void onError(Exception e) {
-                        Toast.makeText(MasDetallesEquipos_2.this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                                // This can be left empty
+                            }
+
+                            @Override
+                            public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                                Toast.makeText(MasDetallesEquipos_2.this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

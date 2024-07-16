@@ -15,15 +15,15 @@ public class ListElementUser implements Serializable {
     private String fechaCreacion;
     private String imageUrl;
     private String sitiosAsignados;
+    private String firstpass;
 
 
     public ListElementUser() {
     }
 
-    public ListElementUser(String name, String lastname, String user,
-                           String status, String dni, String mail,
-                           String phone, String address, Integer primerInicio,
-                           String fechaCreacion, String imageUrl, String sitiosAsignados) {
+    public ListElementUser(String name, String lastname, String user, String status, String dni,
+                           String mail, String phone, String address, Integer primerInicio,
+                           String fechaCreacion, String imageUrl, String sitiosAsignados, String firstpass) {
         this.name = name;
         this.lastname = lastname;
         this.user = user;
@@ -36,7 +36,15 @@ public class ListElementUser implements Serializable {
         this.fechaCreacion = fechaCreacion;
         this.imageUrl = imageUrl;
         this.sitiosAsignados = sitiosAsignados;
+        this.firstpass = firstpass;
+    }
 
+    public String getFirstpass() {
+        return firstpass;
+    }
+
+    public void setFirstpass(String firstpass) {
+        this.firstpass = firstpass;
     }
 
     public String getSitiosAsignados() {

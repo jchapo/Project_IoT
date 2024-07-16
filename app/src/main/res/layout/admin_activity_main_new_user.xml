@@ -183,9 +183,9 @@
                     android:id="@+id/iconMail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_mail_outline"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="8dp" />
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_mail_outline" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"

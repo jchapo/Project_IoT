@@ -1,5 +1,6 @@
 package com.example.myapplication.Admin.dataHolder;
 
+import com.example.myapplication.Admin.items.ListElementChat;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementUser;
 
@@ -10,6 +11,9 @@ public class DataHolder {
     private ArrayList<ListElementUser> inactiveUsers;
     private ArrayList<ListElementSite> activeSites;
     private ArrayList<ListElementSite> inactiveSites;
+
+    private ArrayList<ListElementChat> usuarioChatAdmin;
+    private ArrayList<ListElementChat> usuarioChatSupervisor;
     private String inicio;
 
     private static final DataHolder instance = new DataHolder();
@@ -20,6 +24,9 @@ public class DataHolder {
         inactiveUsers = new ArrayList<>();
         activeSites = new ArrayList<>();
         inactiveSites = new ArrayList<>();
+
+        usuarioChatAdmin = new ArrayList<>();
+        usuarioChatSupervisor = new ArrayList<>();
         inicio = new String();
     }
     public static DataHolder getInstance() {
@@ -41,6 +48,23 @@ public class DataHolder {
         this.inactiveUsers = inactiveUsers;
     }
 
+    public ArrayList<ListElementChat> getUsuarioChatAdmin() {
+        return usuarioChatAdmin;
+    }
+
+    public void setUsuarioChatAdmin(ArrayList<ListElementChat> usuarioChatAdmin) {
+        this.usuarioChatAdmin = usuarioChatAdmin;
+    }
+
+    public ArrayList<ListElementChat> getUsuarioChatSupervisor() {
+        return usuarioChatSupervisor;
+    }
+
+    public void setUsuarioChatSupervisor(ArrayList<ListElementChat> usuarioChatSupervisor) {
+        this.usuarioChatSupervisor = usuarioChatSupervisor;
+    }
+
+
     public ArrayList<ListElementSite> getActiveSites() {
         return activeSites;
     }
@@ -56,6 +80,11 @@ public class DataHolder {
     public void setInactiveSites(ArrayList<ListElementSite> inactiveSites) {
         this.inactiveSites = inactiveSites;
     }
+
+
+
+
+
 
     public String getInicio() {
         return inicio;

@@ -5,13 +5,17 @@ import static android.Manifest.permission.POST_NOTIFICATIONS;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,15 +23,20 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.app.NotificationChannel;
 
+
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.Admin.dataHolder.DataHolder;
+import com.example.myapplication.Admin.items.ListElementChat;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
@@ -35,6 +44,8 @@ import com.example.myapplication.R;
 import com.example.myapplication.Sistem.LoginActivity;
 import com.example.myapplication.databinding.AdminActivityMainNavigationBinding;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthCredential;
@@ -43,16 +54,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class MainActivity_0_NavigationAdmin extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     String canal1 = "importanteDefault";
     AdminActivityMainNavigationBinding binding;
     private DrawerLayout drawerLayout;
     NavigationActivityViewModel navigationActivityViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +89,10 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity implements
         menu.findItem(R.id.nav_phone).setTitle(userPhone);
 
         // El resto del código de tu onCreate
+        //setSupportActionBar(binding.);
         loadUsersFromFirestore();
         loadSitesFromFirestore();
+        loadUsersChatFromFirestore();
         crearCanalesNotificacion();
         navigationActivityViewModel = new ViewModelProvider(this).get(NavigationActivityViewModel.class);
         replaceFragment(new Fragment_1_Users());
@@ -101,6 +117,10 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity implements
 
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+
+
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -115,6 +135,7 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity implements
         super.onResume();
         loadUsersFromFirestore();
         loadSitesFromFirestore();
+        loadUsersChatFromFirestore();
     }
 
     private void loadUsersFromFirestore() {
@@ -123,10 +144,12 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity implements
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        Log.d("msg-test", "Task is successful");
                         ArrayList<ListElementUser> activeUsers = new ArrayList<>();
                         ArrayList<ListElementUser> inactiveUsers = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             ListElementUser listElementUser = document.toObject(ListElementUser.class);
+                            Log.d("msg-test", "Processing user: " + listElementUser.getName());
                             if ("Activo".equals(listElementUser.getStatus())) {
                                 activeUsers.add(listElementUser);
                             } else if ("Inactivo".equals(listElementUser.getStatus())) {
@@ -137,6 +160,9 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity implements
                         Collections.sort(activeUsers, Comparator.comparing(ListElementUser::getName));
                         Collections.sort(inactiveUsers, Comparator.comparing(ListElementUser::getName));
 
+                        Log.d("msg-test", "Active users count: " + activeUsers.size());
+                        Log.d("msg-test", "Inactive users count: " + inactiveUsers.size());
+
                         navigationActivityViewModel.getActiveUsers().setValue(activeUsers);
                         navigationActivityViewModel.getInactiveUsers().setValue(inactiveUsers);
                         DataHolder.getInstance().setActiveUsers(activeUsers);
@@ -146,7 +172,6 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity implements
                     }
                 });
     }
-
     private void loadSitesFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("sitios")
@@ -155,8 +180,9 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity implements
                     if (task.isSuccessful()) {
                         ArrayList<ListElementSite> activeSites = new ArrayList<>();
                         ArrayList<ListElementSite> inactiveSites = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            ListElementSite listElementSite = document.toObject(ListElementSite.class);
+                        for (QueryDocumentSnapshot document2 : task.getResult()) {
+                            ListElementSite listElementSite = document2.toObject(ListElementSite.class);
+                            Log.d("msg-test", "Active sites: " + listElementSite.getName());
                             if ("Activo".equals(listElementSite.getStatus())) {
                                 activeSites.add(listElementSite);
                             } else if ("Inactivo".equals(listElementSite.getStatus())) {
@@ -164,20 +190,62 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity implements
                             }
                         }
 
+                        // Ordenar las listas alfabéticamente
                         Collections.sort(activeSites, Comparator.comparing(ListElementSite::getName));
                         Collections.sort(inactiveSites, Comparator.comparing(ListElementSite::getName));
 
+                        // Una vez que se cargan los sitios, actualizar el ViewModel con los datos
                         navigationActivityViewModel.getActiveSites().setValue(activeSites);
                         navigationActivityViewModel.getInactiveSites().setValue(inactiveSites);
                         DataHolder.getInstance().setActiveSites(activeSites);
                         DataHolder.getInstance().setInactiveSites(inactiveSites);
+
                     } else {
                         Log.d("msg-test", "Error getting site documents: ", task.getException());
                     }
                 });
     }
 
+
+    private void loadUsersChatFromFirestore() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("usuarios")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("msg-test", "Task is successful");
+                        ArrayList<ListElementChat> chatUserAdmin = new ArrayList<>();
+                        ArrayList<ListElementChat> chatUserSupervisor = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            ListElementChat listElementChat = document.toObject(ListElementChat.class);
+                            Log.d("msg-test", "Processing user: " + listElementChat.getUsuarioChatName());
+                            if ("Administrador".equals(listElementChat.getRole())) {
+                                chatUserAdmin.add(listElementChat);
+                            } else if ("Supervisor".equals(listElementChat.getRole())) {
+                                chatUserSupervisor.add(listElementChat);
+                            }
+                        }
+
+                        Collections.sort(chatUserAdmin, Comparator.comparing(ListElementChat::getUsuarioChatName));
+                        Collections.sort(chatUserSupervisor, Comparator.comparing(ListElementChat::getUsuarioChatName));
+
+                        Log.d("msg-test", "Admin users count: " + chatUserAdmin.size());
+                        Log.d("msg-test", "Supervisor users count: " + chatUserSupervisor.size());
+
+                        navigationActivityViewModel.getUsuarioChatAdmin().setValue(chatUserAdmin);
+                        navigationActivityViewModel.getUsuarioChatSupervisor().setValue(chatUserSupervisor);
+                        DataHolder.getInstance().setUsuarioChatAdmin(chatUserAdmin);
+                        DataHolder.getInstance().setUsuarioChatSupervisor(chatUserSupervisor);
+                    } else {
+                        Log.d("msg-test", "Error getting user documents: ", task.getException());
+                    }
+                });
+    }
+
+
+
     public void crearCanalesNotificacion() {
+
         NotificationChannel channel = new NotificationChannel(canal1,
                 "Canal notificaciones default",
                 NotificationManager.IMPORTANCE_DEFAULT);
@@ -191,8 +259,10 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity implements
     }
 
     public void pedirPermisos() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+        // TIRAMISU = 33
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                 ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
+
             ActivityCompat.requestPermissions(MainActivity_0_NavigationAdmin.this, new String[]{POST_NOTIFICATIONS}, 101);
         }
     }
@@ -267,4 +337,28 @@ public class MainActivity_0_NavigationAdmin extends AppCompatActivity implements
         startActivity(intent);
         finish();
     }
+
+
+    private void openChatActivity() {
+        Intent intent = new Intent(MainActivity_0_NavigationAdmin.this, MainActivity_3_Chat_ChatAdmin.class);
+        // Obtener los datos del Intent que inició esta actividad
+        Intent currentIntent = getIntent();
+        String userEmail = currentIntent.getStringExtra("USER_EMAIL");
+        String userName = currentIntent.getStringExtra("USER_NAME");
+        String userLastName = currentIntent.getStringExtra("USER_LASTNAME");
+
+        // Verificar si los datos están presentes
+        if (userEmail != null && userName != null && userLastName != null) {
+            // Pasar los datos al siguiente Activity
+            intent.putExtra("USER_EMAIL", userEmail);
+            intent.putExtra("USER_NAME", userName);
+            intent.putExtra("USER_LASTNAME", userLastName);
+        } else {
+            Log.d("MainActivity_0_NavigationAdmin", "Error: Datos del usuario no recibidos en MainActivity_0_NavigationAdmin.");
+        }
+
+        startActivity(intent);
+    }
+
+
 }

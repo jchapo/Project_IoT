@@ -33,12 +33,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
-import com.example.myapplication.Sistem.MailSender;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.google.firebase.auth.FirebaseAuth;
+
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
-//import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -49,14 +50,18 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
-import javax.mail.MessagingException;
+import java.security.SecureRandom;
+
+
+import java.security.SecureRandom;
+
 
 public class MainActivity_1_Users_NewUser extends AppCompatActivity {
     String canal1 = "importanteDefault2";
     private MaterialAutoCompleteTextView selectTypeUser;
     ArrayAdapter<String> typeUserAdapter;
     String[] typeOptions = {"Supervisor"};
-    private EditText editFirstName, editLastName, editDNI, editMail, editAddress, editPhone, editFechaCreacion, editPrimerInicio;
+    private EditText editFirstName, editLastName, editDNI, editPass, editMail, editAddress, editPhone, editFechaCreacion, editPrimerInicio;
     private ImageView imageView;
     private boolean isEditing = false; // Indicador para editar o crear nuevo usuario
     private boolean isImageAdded = false; // Variable para indicar si se ha agregado una imagen
@@ -226,9 +231,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
                 .addOnSuccessListener(unused -> {
                     Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
                     notificarImportanceDefault(listElement.getName() + " " + listElement.getLastname(), listElement.getFechaCreacion());
-                    Intent intent3 = new Intent(MainActivity_1_Users_NewUser.this, MainActivity_1_Users_UserDetails.class);
-                    intent3.putExtra("ListElement", listElement);
-                    startActivity(intent3);
+                    finish();
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
     }
@@ -243,6 +246,7 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String dni = editDNI.getText().toString();
             String mail = editMail.getText().toString();
             String address = editAddress.getText().toString();
+            String password = generatePassword();
             String phone = editPhone.getText().toString();
             String status = "Activo";
             LocalDate fechaActual = LocalDate.now();
@@ -250,34 +254,39 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String fechaCreacion = fechaActual.format(formatter);
             Integer primerInicio = 0;
             String sitiosAsignados = "";
-            String password = generateRandomPassword();
+            String imagenUrl = "";
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagenUrl, sitiosAsignados,password);
+
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            mAuth.createUserWithEmailAndPassword(mail, password)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Usuario creado exitosamente, enviar correo
+                            //sendEmailWithPassword(mail, password);
+                        } else {
+                            // Si falla la creación del usuario, muestra un mensaje al usuario.
+                            Toast.makeText(MainActivity_1_Users_NewUser.this, "Fallo la autenticación.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
             uploadImageAndSaveUser(listElement, false);
-
-            // Enviar correo al nuevo usuario
-            String senderEmail = "diegocorcuera1989@gmail.com";
-            MailSender mailSender = new MailSender(senderEmail, "siathegreatest12");
-
-            // Imprimir los datos
-            Log.d("EmailDetails", "Remitente: " + senderEmail);
-            Log.d("EmailDetails", "Destinatario: " + mail);
-            Log.d("EmailDetails", "Contenido del correo: " + password); // Aquí puedes personalizar el contenido
-
-            new Thread(() -> {
-                try {
-                    mailSender.sendEmail(mail, password);
-                } catch (MessagingException e) {
-                    e.printStackTrace();
-                    runOnUiThread(() -> Toast.makeText(MainActivity_1_Users_NewUser.this, "Error al enviar el correo", Toast.LENGTH_SHORT).show());
-                }
-            }).start();
         }
     }
 
+    public static String generatePassword() {
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        int PASSWORD_LENGTH = 10;
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
 
+        for (int i = 0; i < PASSWORD_LENGTH; i++) {
+            int index = random.nextInt(CHARACTERS.length());
+            password.append(CHARACTERS.charAt(index));
+        }
 
-
+        return password.toString();
+    }
 
     private void updateExistingUser() {
         if (areFieldsEmpty()) {
@@ -291,11 +300,13 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             String address = editAddress.getText().toString();
             String phone = editPhone.getText().toString();
             String status = "Activo";
+            String password = element.getFirstpass();
             String fechaCreacion = editFechaCreacion.getText().toString();
             Integer primerInicio = Integer.parseInt(editPrimerInicio.getText().toString());
             String sitiosAsignados = element.getSitiosAsignados();
+            String imagenUrl = element.getImageUrl();
 
-            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "", sitiosAsignados);
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, imagenUrl, sitiosAsignados,password);
             uploadImageAndSaveUser(listElement, true);
         }
     }
@@ -380,13 +391,5 @@ public class MainActivity_1_Users_NewUser extends AppCompatActivity {
             notificationManager.notify(1, notification);
         }
     }
-    private String generateRandomPassword() {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        StringBuilder password = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < 5; i++) {
-            password.append(characters.charAt(random.nextInt(characters.length())));
-        }
-        return password.toString();
-    }
+
 }

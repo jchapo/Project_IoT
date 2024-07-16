@@ -3,41 +3,41 @@ package com.example.myapplication.Admin.items;
 import java.io.Serializable;
 
 public class ListElementChat implements Serializable {
-    public String usuario;
-    public String mensaje;
-    public String fecha;
+    private String usuarioChatName;
+    private String role;
+    private String id; // Añadir este campo
 
-
-    public ListElementChat(String usuario, String mensaje, String fecha) {
-        this.usuario = usuario;
-        this.mensaje = mensaje;
-        this.fecha = fecha;
+    public ListElementChat() {
     }
 
-
-
-    public String getUsuario() {
-        return usuario;
+    // Constructor, getters y setters
+    public ListElementChat(String usuarioChatName, String role, String id) {
+        this.usuarioChatName = usuarioChatName;
+        this.role = role;
+        this.id = id;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public String getUsuarioChatName() {
+        return usuarioChatName;
     }
 
-    public String getMensaje() {
-        return mensaje;
+    public void setUsuarioChatName(String usuarioChatName) {
+        this.usuarioChatName = usuarioChatName;
     }
 
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
+    public String getRole() {
+        return role;
     }
 
-    public String getFecha() {
-        return fecha;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
+    public String getId() {
+        return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 }

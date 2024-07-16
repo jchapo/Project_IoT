@@ -52,20 +52,18 @@ public class ListAdapterChat extends RecyclerView.Adapter<ListAdapterChat.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView iconImage;
-        TextView usuario, lastMessage, fecha;
+        TextView name, role;
 
         ViewHolder(View itemView){
             super(itemView);
             iconImage = itemView.findViewById(R.id.iconImageView);
-            usuario = itemView.findViewById(R.id.usuarioTextView);
-            lastMessage = itemView.findViewById(R.id.lastMessageTextView);
-            fecha = itemView.findViewById(R.id.fechaTextView);
+            name = itemView.findViewById(R.id.usuarioTextView);
+            role = itemView.findViewById(R.id.roleTextView);
         }
 
         void bindDataChat(final ListElementChat item){
-            usuario.setText(item.getUsuario());
-            lastMessage.setText(item.getMensaje());
-            fecha.setText(item.getFecha());
+            name.setText(item.getUsuarioChatName());
+            role.setText(item.getRole());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

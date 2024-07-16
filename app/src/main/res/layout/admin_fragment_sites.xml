@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBarUserFragment"
+                android:id="@+id/topAppBarSiteFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:titleTextColor="@color/white"
