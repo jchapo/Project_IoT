@@ -20,6 +20,9 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
+            android:name=".Supervisor.ScanQRActivity"
+            android:exported="false" />
+        <activity
             android:name=".Supervisor.CrearReporte_previo"
             android:exported="false" />
         <activity
@@ -36,7 +39,6 @@
         <activity
             android:name=".Supervisor.EquiposDeSitios"
             android:exported="false" />
-
         <activity
             android:name=".Admin.MainActivity_2_Sites_MappChooser"
             android:exported="false" />
@@ -55,7 +57,6 @@
         <activity
             android:name=".Sistem.RecuperarContraActivity"
             android:exported="false" />
-
         <activity
             android:name=".Sistem.MainActivityCambiarPrimeraContra"
             android:exported="false" />
@@ -68,7 +69,6 @@
         <activity
             android:name=".Admin.MainActivity_2_Sites_SiteImages"
             android:exported="false" />
-
         <activity
             android:name=".Sistem.MainActivity_notificacion_user"
             android:exported="false" />
@@ -92,8 +92,7 @@
             android:exported="false" />
         <activity
             android:name=".SuperAdmin.NewAdmin"
-            android:exported="false" />
-        <!-- Actividades Admin -->
+            android:exported="false" /> <!-- Actividades Admin -->
         <activity
             android:name=".Admin.items.ListAdapterAddSuper"
             android:exported="false" />
@@ -123,9 +122,7 @@
             android:exported="false" />
         <activity
             android:name=".Admin.MainActivity_2_Sites_AddSite"
-            android:exported="false" />
-
-        <!-- Actividades Supervisor -->
+            android:exported="false" /> <!-- Actividades Supervisor -->
         <activity
             android:name=".Supervisor.CrearReporte"
             android:exported="false"

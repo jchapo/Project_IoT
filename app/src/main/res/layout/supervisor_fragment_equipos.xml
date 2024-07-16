@@ -41,7 +41,7 @@
                         android:id="@+id/toolbar_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Lista de Equipos"
+                        android:text="Equipos"
                         android:textColor="@android:color/white"
                         android:textSize="25dp"
                         android:layout_centerVertical="true"
@@ -53,11 +53,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_escaner_qr"
-                        android:contentDescription="Escanear QR"
                         android:onClick="scanQR"
                         android:layout_centerVertical="true"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="16dp" />
+
                 </RelativeLayout>
 
             </com.google.android.material.appbar.MaterialToolbar>
