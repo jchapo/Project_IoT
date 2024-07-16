@@ -3,23 +3,17 @@ package com.example.myapplication.SuperAdmin;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.Admin.Fragment_3_Chat;
-import com.example.myapplication.Admin.dataHolder.DataHolder;
-import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.SuperAdmin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.R;
 import com.example.myapplication.SuperAdmin.list.ListElementSuperAdminUser;
 import com.example.myapplication.databinding.SuperadminActivityMainNavigationBinding;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -27,7 +21,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 public class MainActivity_navigation_SuperAdmin extends AppCompatActivity {
     String canal1 = "importanteDefault";

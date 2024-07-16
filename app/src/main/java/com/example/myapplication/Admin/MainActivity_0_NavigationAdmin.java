@@ -6,16 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,18 +21,15 @@ import android.widget.Toast;
 import android.app.NotificationChannel;
 
 
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.myapplication.Admin.dataHolder.DataHolder;
+import com.example.myapplication.dataHolder.DataHolder;
 import com.example.myapplication.Admin.items.ListElementChat;
 import com.example.myapplication.Admin.items.ListElementSite;
 import com.example.myapplication.Admin.items.ListElementUser;
@@ -43,9 +37,6 @@ import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.R;
 import com.example.myapplication.Sistem.LoginActivity;
 import com.example.myapplication.databinding.AdminActivityMainNavigationBinding;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthCredential;
@@ -54,12 +45,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 public class MainActivity_0_NavigationAdmin extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     String canal1 = "importanteDefault";

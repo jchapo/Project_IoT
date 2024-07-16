@@ -1,4 +1,4 @@
-package com.example.myapplication.Admin.dataHolder;
+package com.example.myapplication.dataHolder;
 
 import com.example.myapplication.Admin.items.ListElementChat;
 import com.example.myapplication.Admin.items.ListElementSite;
