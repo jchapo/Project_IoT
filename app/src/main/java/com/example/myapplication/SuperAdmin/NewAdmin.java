@@ -212,9 +212,10 @@ public class NewAdmin extends AppCompatActivity {
                 .addOnSuccessListener(unused -> {
                     Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
                     notificarImportanceDefault(listElement.getName() + " " + listElement.getLastname(), listElement.getFechaCreacion());
-                    Intent intent3 = new Intent(NewAdmin.this, MainActivity_1_Users_UserDetails.class);
-                    intent3.putExtra("ListElement", listElement);
-                    startActivity(intent3);
+                    //Intent intent3 = new Intent(NewAdmin.this, MainActivity_1_Users_UserDetails.class);
+                    //intent3.putExtra("ListElement", listElement);
+                    //startActivity(intent3);
+                    finish();
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
     }
