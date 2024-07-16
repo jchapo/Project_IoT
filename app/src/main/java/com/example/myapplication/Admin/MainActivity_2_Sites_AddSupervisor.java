@@ -37,7 +37,6 @@ public class MainActivity_2_Sites_AddSupervisor extends AppCompatActivity {
     private CircularProgressIndicator progressIndicator;
     private FirebaseFirestore db;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,8 +53,8 @@ public class MainActivity_2_Sites_AddSupervisor extends AppCompatActivity {
 
         topAppBar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.chooseElement) {
-                ArrayList<String> selectedSuperNames = getSelectedSuperNames();
-                saveSuperToFirebase(selectedSuperNames);
+                SelectedSupervisors selectedSupervisors = getSelectedSupervisors();
+                saveSuperToFirebase(selectedSupervisors);
             } else {
                 return false;
             }
@@ -65,23 +64,36 @@ public class MainActivity_2_Sites_AddSupervisor extends AppCompatActivity {
             finish();
         });
     }
-    private ArrayList<String> getSelectedSuperNames() {
-        ArrayList<String> selectedNames = new ArrayList<>();
-        for (ListElementUser supervisor : listAdapter.getSelectedItems()) {
-            selectedNames.add(supervisor.getName() + " " + supervisor.getLastname());
+
+    private class SelectedSupervisors {
+        ArrayList<String> names;
+        ArrayList<String> dnis;
+
+        SelectedSupervisors(ArrayList<String> names, ArrayList<String> dnis) {
+            this.names = names;
+            this.dnis = dnis;
         }
-        return selectedNames;
     }
 
-    private void saveSuperToFirebase(ArrayList<String> selectedSuperNames) {
-        progressIndicator.setVisibility(View.VISIBLE);
-        DocumentReference userRef = db.collection("sitios").document(siteName);
+    private SelectedSupervisors getSelectedSupervisors() {
+        ArrayList<String> selectedNames = new ArrayList<>();
+        ArrayList<String> selectedDNIs = new ArrayList<>();
+        for (ListElementUser supervisor : listAdapter.getSelectedItems()) {
+            selectedNames.add(supervisor.getName() + " " + supervisor.getLastname());
+            selectedDNIs.add(supervisor.getDni());
+        }
+        return new SelectedSupervisors(selectedNames, selectedDNIs);
+    }
 
-        userRef.get().addOnSuccessListener(documentSnapshot -> {
+    private void saveSuperToFirebase(SelectedSupervisors selectedSupervisors) {
+        progressIndicator.setVisibility(View.VISIBLE);
+        DocumentReference siteRef = db.collection("sitios").document(siteName);
+
+        siteRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 String existingSuperJson = documentSnapshot.getString("superAsignados");
 
-                Set<String> updatedSuper = new HashSet<>(selectedSuperNames);
+                Set<String> updatedSuper = new HashSet<>(selectedSupervisors.names);
 
                 if (existingSuperJson != null && !existingSuperJson.isEmpty()) {
                     try {
@@ -95,13 +107,19 @@ public class MainActivity_2_Sites_AddSupervisor extends AppCompatActivity {
                     }
                 }
 
-                String updatedSitesJson = new JSONArray(updatedSuper).toString();
+                String updatedSuperJson = new JSONArray(updatedSuper).toString();
 
-                userRef.update("superAsignados", updatedSitesJson)
-                        .addOnSuccessListener(aVoid -> sendUserBackToUserDetails())
+                siteRef.update("superAsignados", updatedSuperJson)
+                        .addOnSuccessListener(aVoid -> {
+                            // Update each user document with the site name
+                            for (String supervisorDNI : selectedSupervisors.dnis) {
+                                updateUserWithSite(supervisorDNI, siteName);
+                            }
+                            sendUserBackToUserDetails();
+                        })
                         .addOnFailureListener(e -> {
                             Toast.makeText(MainActivity_2_Sites_AddSupervisor.this, "Error guardando supervisores", Toast.LENGTH_SHORT).show();
-                            Log.w("MainActivity_2_Sites_AddSupervisor ", "Error updating document", e);
+                            Log.w("MainActivity_2_Sites_AddSupervisor", "Error updating document", e);
                             progressIndicator.setVisibility(View.GONE);
                         });
             }
@@ -111,6 +129,43 @@ public class MainActivity_2_Sites_AddSupervisor extends AppCompatActivity {
             progressIndicator.setVisibility(View.GONE);
         });
     }
+
+    private void updateUserWithSite(String userDNI, String siteName) {
+        DocumentReference userRef = db.collection("usuarios").document(userDNI);
+
+        userRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                String existingSitesJson = documentSnapshot.getString("sitiosAsignados");
+
+                Set<String> updatedSites = new HashSet<>();
+                if (existingSitesJson != null && !existingSitesJson.isEmpty()) {
+                    try {
+                        JSONArray existingSitesArray = new JSONArray(existingSitesJson);
+                        for (int i = 0; i < existingSitesArray.length(); i++) {
+                            updatedSites.add(existingSitesArray.getString(i));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        // Handle invalid JSON
+                    }
+                }
+
+                updatedSites.add(siteName);
+
+                String updatedSitesJson = new JSONArray(updatedSites).toString();
+
+                userRef.update("sitiosAsignados", updatedSitesJson)
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(MainActivity_2_Sites_AddSupervisor.this, "Error actualizando usuario", Toast.LENGTH_SHORT).show();
+                            Log.w("MainActivity_2_Sites_AddSupervisor", "Error updating user document", e);
+                        });
+            }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(MainActivity_2_Sites_AddSupervisor.this, "Error obteniendo usuario", Toast.LENGTH_SHORT).show();
+            Log.w("MainActivity_2_Sites_AddSupervisor", "Error getting user document", e);
+        });
+    }
+
     private void sendUserBackToUserDetails() {
         db.collection("sitios").document(siteName).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -151,5 +206,4 @@ public class MainActivity_2_Sites_AddSupervisor extends AppCompatActivity {
             Toast.makeText(MainActivity_2_Sites_AddSupervisor.this, "No active super found", Toast.LENGTH_SHORT).show();
         }
     }
-
 }

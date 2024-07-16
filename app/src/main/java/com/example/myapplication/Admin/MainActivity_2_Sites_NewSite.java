@@ -337,8 +337,9 @@ public class MainActivity_2_Sites_NewSite extends AppCompatActivity {
     private void openSiteDetailsActivity(ListElementSite listElement) {
         Log.d("msg-test", "Abriendo MainActivity_2_Sites_SiteDetails con ListElementSite: " + listElement.getName());
         Intent intent = new Intent(MainActivity_2_Sites_NewSite.this, MainActivity_2_Sites_SiteDetails.class);
-        intent.putExtra("ListElementSite", listElement);
-        startActivity(intent);
+        //intent.putExtra("ListElementSite", listElement);
+        //startActivity(intent);
+        finish();
     }
 
     private void createNewSite() {

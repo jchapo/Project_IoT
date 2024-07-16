@@ -31,6 +31,10 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.myapplication.Admin.MainActivity_0_NavigationAdmin;
+import com.example.myapplication.Admin.MainActivity_1_Users_NewUser;
+import com.example.myapplication.Admin.MainActivity_1_Users_UserDetails;
+import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.R;
 import com.example.myapplication.SuperAdmin.list.ListElementSuperAdminUser;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -41,6 +45,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -57,7 +62,7 @@ public class NewAdmin extends AppCompatActivity {
     private Uri imageUri;
     FirebaseStorage storage;
     StorageReference storageReference;
-    ListElementSuperAdminUser element;
+    ListElementUser element;
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
@@ -171,7 +176,7 @@ public class NewAdmin extends AppCompatActivity {
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-    private void uploadImageAndSaveUser(ListElementSuperAdminUser listElement, boolean isEditing) {
+    private void uploadImageAndSaveUser(ListElementUser listElement, boolean isEditing) {
         if (imageUri != null) {
             try {
                 Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
@@ -199,7 +204,7 @@ public class NewAdmin extends AppCompatActivity {
         }
     }
 
-    private void saveUserToFirestore(ListElementSuperAdminUser listElement, boolean isEditing) {
+    private void saveUserToFirestore(ListElementUser listElement, boolean isEditing) {
         Log.d("msg-test", "entro a saveUserToFirestore");
         db.collection("usuarios")
                 .document(listElement.getDni())
@@ -207,7 +212,7 @@ public class NewAdmin extends AppCompatActivity {
                 .addOnSuccessListener(unused -> {
                     Log.d("msg-test", isEditing ? "Datos actualizados exitosamente" : "Data guardada exitosamente");
                     notificarImportanceDefault(listElement.getName() + " " + listElement.getLastname(), listElement.getFechaCreacion());
-                    Intent intent3 = new Intent(NewAdmin.this, UserDetais.class);
+                    Intent intent3 = new Intent(NewAdmin.this, MainActivity_1_Users_UserDetails.class);
                     intent3.putExtra("ListElement", listElement);
                     startActivity(intent3);
                 })
@@ -230,10 +235,27 @@ public class NewAdmin extends AppCompatActivity {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String fechaCreacion = fechaActual.format(formatter);
             Integer primerInicio = 0;
+            String password = generatePassword();
+            String sitiosAsignados = "";
 
-            ListElementSuperAdminUser listElement = new ListElementSuperAdminUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "");
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio,
+                    fechaCreacion, "", sitiosAsignados,password);
             uploadImageAndSaveUser(listElement, false);
         }
+    }
+
+    public static String generatePassword() {
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        int PASSWORD_LENGTH = 10;
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
+
+        for (int i = 0; i < PASSWORD_LENGTH; i++) {
+            int index = random.nextInt(CHARACTERS.length());
+            password.append(CHARACTERS.charAt(index));
+        }
+
+        return password.toString();
     }
 
     private void updateExistingUser() {
@@ -250,8 +272,11 @@ public class NewAdmin extends AppCompatActivity {
             String status = "Activo";
             String fechaCreacion = editFechaCreacion.getText().toString();
             Integer primerInicio = Integer.parseInt(editPrimerInicio.getText().toString());
+            String sitiosAsignados = element.getSitiosAsignados();
+            String password = element.getFirstpass();
 
-            ListElementSuperAdminUser listElement = new ListElementSuperAdminUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio, fechaCreacion, "");
+            ListElementUser listElement = new ListElementUser(firstName, lastName, typeUser, status, dni, mail, phone, address, primerInicio,
+                    fechaCreacion, "", sitiosAsignados,password);
             uploadImageAndSaveUser(listElement, true);
         }
     }
@@ -265,7 +290,6 @@ public class NewAdmin extends AppCompatActivity {
                 editPhone.getText().toString().isEmpty();
     }
     private void fillFields(ListElementSuperAdminUser element) {
-        System.out.println("vista de elementos: "+element);
         editFirstName.setText(element.getName());
         editLastName.setText(element.getLastname());
         editDNI.setText(element.getDni());
@@ -273,9 +297,12 @@ public class NewAdmin extends AppCompatActivity {
         editAddress.setText(element.getAddress());
         editPhone.setText(element.getPhone());
         editFechaCreacion.setText(element.getFechaCreacion());
+        //editPrimerInicio.setText(element.getPrimerInicio());
+        // Implementa la lógica para mostrar la imagen de perfil
         selectTypeUser.setText(element.getUser(), false);
 
         if (element.getImageUrl() != null && !element.getImageUrl().isEmpty()) {
+            // Usar Glide para cargar la imagen desde Firebase Storage utilizando la ruta de acceso
             StorageReference imageRef = storageReference.child(element.getImageUrl());
             Glide.with(this)
                     .load(imageRef)
@@ -311,7 +338,7 @@ public class NewAdmin extends AppCompatActivity {
     public void notificarImportanceDefault(String fullname, String fechaCreacion) {
         //Crear notificación
         //Agregar información a la notificación que luego sea enviada a la actividad que se abre
-        Intent intent = new Intent(this, MainActivity_navigation_SuperAdmin.class);
+        Intent intent = new Intent(this, MainActivity_0_NavigationAdmin.class);
         intent.putExtra("pid", 4616);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         //
