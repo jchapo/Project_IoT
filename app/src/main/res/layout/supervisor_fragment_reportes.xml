@@ -30,10 +30,8 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
-
                 app:menu="@menu/top_app_bar_supervisor_reportes"
-                app:title="Reportes"
-                />
+                app:title="Reportes" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
@@ -52,9 +50,7 @@
                     android:text="Resueltos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-
             </com.google.android.material.tabs.TabLayout>
-
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -74,7 +70,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:contentDescription="Agregar Reporte"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.drawerlayout.widget.DrawerLayout>

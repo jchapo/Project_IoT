@@ -110,7 +110,7 @@ public class CrearReporte_2_Sitio extends AppCompatActivity {
                 "",  // Puedes añadir más información si es necesario
                 "Pablo",  // Puedes ajustar esto según el usuario actual
                 "",  // Asigna un valor adecuado para 'equipo'
-                descripcion
+                descripcion,"Activo"
         );
 
         db.collection("reportes").document(nombreReporte).set(nuevoReporte).addOnSuccessListener(aVoid -> {

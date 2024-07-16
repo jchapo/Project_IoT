@@ -43,6 +43,7 @@ import com.example.myapplication.Admin.items.ListElementUser;
 import com.example.myapplication.Admin.viewModels.NavigationActivityViewModel;
 import com.example.myapplication.Sistem.LoginActivity;
 import com.example.myapplication.Supervisor.objetos.ListElementEquiposNuevo;
+import com.example.myapplication.Supervisor.objetos.ListElementReportes;
 import com.example.myapplication.databinding.AdminActivityMainNavigationBinding;
 import com.example.myapplication.databinding.SupervisorActivityNavegacionBinding;
 import com.google.android.gms.tasks.Task;
@@ -83,6 +84,7 @@ public class NavegacionSupervisor extends AppCompatActivity {
         binding = SupervisorActivityNavegacionBinding.inflate(getLayoutInflater());
         loadSitesFromFirestore();
         loadEquipmentsFromFirestore();
+        loadReportsFromFirestore(); // Add this line
         crearCanalesNotificacion();
         navigationActivityViewModel = new ViewModelProvider(this).get(NavigationActivityViewModel.class);
         replaceFragment(new SitiosFragment());
@@ -117,6 +119,7 @@ public class NavegacionSupervisor extends AppCompatActivity {
         super.onResume();
         loadSitesFromFirestore();
         loadEquipmentsFromFirestore();
+        loadReportsFromFirestore(); // Add this line
     }
 
     private void loadSitesFromFirestore() {
@@ -169,6 +172,31 @@ public class NavegacionSupervisor extends AppCompatActivity {
                     }
                 });
     }
+
+    private void loadReportsFromFirestore() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("reportes")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        ArrayList<ListElementReportes> activeReports = new ArrayList<>();
+                        ArrayList<ListElementReportes> resolvedReports = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            ListElementReportes report = document.toObject(ListElementReportes.class);
+                            if ("Activo".equals(report.getStatus())) {
+                                activeReports.add(report);
+                            } else if ("Resuelto".equals(report.getStatus())) {
+                                resolvedReports.add(report);
+                            }
+                        }
+                        navigationActivityViewModel.setActiveReports(activeReports);
+                        navigationActivityViewModel.setResolvedReports(resolvedReports);
+                    } else {
+                        Log.d("msg-test", "Error getting reports: ", task.getException());
+                    }
+                });
+    }
+
 
     public void crearCanalesNotificacion() {
 

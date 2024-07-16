@@ -111,7 +111,7 @@ public class CrearReporte_2_Equipo extends AppCompatActivity {
                 "",
                 "Pablo",
                 equipoObjetivo,
-                descripcion
+                descripcion,"Activo"
         );
 
         db.collection("reportes").document(nombreReporte).set(nuevoReporte).addOnSuccessListener(aVoid -> {
