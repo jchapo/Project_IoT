@@ -70,6 +70,7 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!--
             <Button
                 android:id="@+id/buttonLogin"
                 android:layout_width="match_parent"
@@ -77,6 +78,16 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:text="Ingresar" />
+
+                -->
+
+            <Button
+                android:id="@+id/buttonDemo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="Ingresar Demostración" />
 
             <ProgressBar
                 android:id="@+id/progressBar"

@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private ProgressBar progressBar;
     private Button buttonLogin;
+    private Button buttonDemo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +42,26 @@ public class LoginActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         progressBar = findViewById(R.id.progressBar);
-        buttonLogin = findViewById(R.id.buttonLogin);
+        // buttonLogin = findViewById(R.id.buttonLogin);
+        buttonDemo = findViewById(R.id.buttonDemo);
 
+        /*
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signIn();
             }
         });
+         */
+
+        buttonDemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity_0_NavigationAdmin.class);
+                startActivity(intent);
+            }
+        });
+
 
         TextView textFirstTimeLogin = findViewById(R.id.textFirstTimeLogin);
         textFirstTimeLogin.setOnClickListener(new View.OnClickListener() {
