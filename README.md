@@ -33,6 +33,7 @@ El sistema contempla la gestión de usuarios con diferentes roles, cada uno con 
 ## 📸 Capturas de Pantalla
 A continuación, se presentan algunas capturas de pantalla que muestran la interfaz y funcionalidades del sistema.
 
+![image](https://github.com/user-attachments/assets/eb2e2ddb-8b19-42c0-85db-587612562e01)
 ![image](https://github.com/user-attachments/assets/146c2158-3822-4f62-a6f6-1bb1138d1694)
 ![image](https://github.com/user-attachments/assets/3b754a55-37a7-4eec-b547-e7c2fd7fbbbd)
 ![image](https://github.com/user-attachments/assets/4a0b8cba-3d85-4fc6-92a9-8fff9652ee5b)
